@@ -22,9 +22,9 @@ Antes de entrar aquí, lee [`../../README.md`](../../README.md). Este índice es
 | 09 | [`09_CATALOGO_DE_FACTORES.md`](09_CATALOGO_DE_FACTORES.md) | ★ Todo lo que afecta un partido, por familia y por deporte, con definición y fuente | ✅ escrito |
 | 10 | [`10_INTELIGENCIA_ARTIFICIAL.md`](10_INTELIGENCIA_ARTIFICIAL.md) | El asistente: modelo, herramientas, reglas anti-invención, costo por consulta | ✅ escrito |
 | 11 | [`11_MODELOS_PREDICTIVOS.md`](11_MODELOS_PREDICTIVOS.md) | Features, entrenamiento, backtesting, métricas de calidad, explicación del pronóstico | 🟡 segunda pasada |
-| 12 | [`12_STACK_TECNOLOGICO.md`](12_STACK_TECNOLOGICO.md) | Tabla de stack, justificaciones, política de versiones y dependencias | 🟡 segunda pasada |
-| 13 | [`13_INFRAESTRUCTURA.md`](13_INFRAESTRUCTURA.md) | Supabase, contenedor del motor, CI/CD, respaldos, entornos | 🟡 segunda pasada |
-| 14 | [`14_SEGURIDAD.md`](14_SEGURIDAD.md) | RLS, roles, manejo de secretos, auditoría, superficie de ataque del asistente | 🟡 segunda pasada |
+| 12 | [`12_STACK_TECNOLOGICO.md`](12_STACK_TECNOLOGICO.md) | Tabla de stack con versiones, **lo que se descartó y por qué**, política de dependencias | ✅ escrito |
+| 13 | [`13_INFRAESTRUCTURA.md`](13_INFRAESTRUCTURA.md) | Entornos, requisitos de máquina **verificados**, despliegue, respaldos, observabilidad | ✅ escrito |
+| 14 | [`14_SEGURIDAD.md`](14_SEGURIDAD.md) | Aislamiento por RLS, **la superficie de ataque del asistente**, roles, secretos, auditoría | ✅ escrito |
 | 15 | [`15_LEGAL.md`](15_LEGAL.md) | ★ Qué permite cada fuente **hoy** y qué hay que sustituir para poder vender | ✅ escrito |
 | 16 | [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) | ★ La lista de Fase 3: los ocho puntos que convierten esto en producto vendible | ✅ escrito |
 | 17 | [`17_VISION_FUTURA.md`](17_VISION_FUTURA.md) | Todo lo que excede el alcance vive aquí, no en el plan de trabajo | ✅ escrito |
