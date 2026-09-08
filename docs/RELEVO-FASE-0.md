@@ -2,7 +2,9 @@
 
 > **Para quien abra este repositorio sin haber estado en la conversación que lo creó** — otra máquina, otro IDE, otro agente, o tú mismo dentro de tres meses.
 >
-> Estado al **8 de septiembre de 2026** · 11 commits en `main` · 48 archivos · ~35,600 palabras de documentación · 10 mockups navegables.
+> Estado al **8 de septiembre de 2026** · 14 commits · 60 archivos · ~35,600 palabras de documentación · 10 mockups navegables · el esquema ya es migración.
+>
+> ⚠️ **Los tres commits más recientes viven en la rama `fix/hallazgos-auditoria-esquema`, no en `main`.** Son los hallazgos de la auditoría, el entorno de desarrollo y la primera migración. No se fusionaron porque el repositorio todavía no está en GitHub y no hay dónde abrir el PR. **Si clonas y ves `main`, te falta todo eso**: `git checkout fix/hallazgos-auditoria-esquema`.
 
 ---
 
@@ -37,7 +39,9 @@ La suite completa está en [`motsport/`](motsport/), indexada en [`00_INDICE.md`
 
 Lo escribió **Codex** y lo auditó **Claude** de forma independiente (se intentó con Gemini, ver § 6). La auditoría está al final del propio documento, § 10.
 
-**Los cuatro hallazgos de la auditoría ya están aplicados** (8 de septiembre). El esquema pasó de 39 a 40 tablas y **está listo para la primera migración**; lo único que falta antes de escribirla es medir el rendimiento con datos, que es lo que la auditoría no podía juzgar leyendo SQL. Detalle en § 4.4.
+**Los cuatro hallazgos de la auditoría ya están aplicados** (8 de septiembre) y el esquema pasó de 39 a 40 tablas. Detalle en § 4.4.
+
+**Y ya es migración**, no solo documento: [`supabase/migrations/`](../supabase/migrations/) — escrita pero **sin aplicar todavía**, porque Docker no arranca. Ver § 4.5. Lo único que la auditoría no pudo juzgar sigue abierto: el rendimiento, que se mide con datos encima.
 
 ### Mockups · las 10 pantallas
 
@@ -158,7 +162,7 @@ Dos colocaciones que llaman la atención y tienen motivo: las funciones `plpgsql
 
 Fuera del `seed.sql` quedaron los ejemplos de eventos de §5.5: referencian partidos, equipos y jugadores que nadie inserta. Sirven para leer, no para sembrar.
 
-> ⚠️ **Nadie las ha corrido contra un Postgres.** Están verificadas solo de forma estática —paréntesis balanceados, cuerpos `$$` pares, cero residuos de Markdown, orden sin ciclos—. Eso da confianza, no certeza: **la primera corrida seguramente falla en algo**, se arregla y se quita el aviso del README.
+> ⚠️ **Nadie las ha corrido contra un Postgres.** Además del orden derivado de las llaves foráneas, la sintaxis se validó con `sqlglot` en dialecto postgres: 130 + 120 + 6 sentencias, cero errores. Pero `sqlglot` **no entiende** `CREATE POLICY`, `ROW LEVEL SECURITY` ni los cuerpos `plpgsql` —los deja pasar como texto opaco—, así que lo validado de verdad son las tablas, los índices y las vistas. Eso da confianza, no certeza: **es probable que la primera corrida falle en algo**, se arregla y se quita el aviso del README.
 
 ---
 

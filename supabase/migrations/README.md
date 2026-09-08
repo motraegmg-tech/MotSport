@@ -15,9 +15,17 @@ La semilla de catalogos esta en `../seed.sql` y la aplica `supabase db reset` so
 
 ## ⚠️ Estado: escritas, NO aplicadas todavia
 
-**Nadie las ha corrido contra un Postgres.** Se escribieron mientras Docker Desktop seguia sin arrancar en la maquina de desarrollo, asi que estan verificadas solo de forma estatica: parentesis balanceados, cuerpos `$$` pares, cero residuos de Markdown, y un orden de creacion derivado de las llaves foraneas —no escrito a mano— sin ciclos ni referencias a tablas inexistentes.
+**Nadie las ha corrido contra un Postgres.** Se escribieron mientras Docker Desktop seguia sin arrancar en la maquina de desarrollo. Lo que si se comprobo:
 
-Eso da confianza, no certeza. **La primera vez que corran va a fallar algo**, y eso es normal: se arregla, se vuelve a correr y se quita este aviso.
+| Comprobacion | Resultado |
+|---|---|
+| Orden de creacion | Derivado de las llaves foraneas, **no escrito a mano**. Sin ciclos y sin una sola referencia a tabla inexistente |
+| Sintaxis con `sqlglot` (dialecto postgres) | 130 + 120 + 6 sentencias parseadas, cero errores |
+| Balanceo | Parentesis pares, cuerpos `$$` pares, cero residuos de Markdown |
+
+**Ojo con lo que ese `sqlglot` NO cubre.** No entiende `CREATE POLICY`, `ALTER TABLE … ROW LEVEL SECURITY`, `CREATE DOMAIN`, `CREATE EXTENSION` ni los cuerpos `plpgsql`: los trata como texto opaco y los deja pasar. Es decir, **la sintaxis validada de verdad es la de las tablas, los indices y las vistas** — justo donde esta el grueso del riesgo, pero no en todo el archivo. Y ninguna comprobacion estatica ve tipos, permisos ni si un `CHECK` es satisfacible.
+
+Eso da confianza, no certeza. **La primera vez que corran es probable que falle algo**, y eso es normal: se arregla, se vuelve a correr y se quita este aviso.
 
 ```bash
 corepack pnpm run base:levantar    # supabase start
