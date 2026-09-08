@@ -101,8 +101,10 @@ No hace falta volver a discutirlas. Están todas justificadas en [`03_ARQUITECTU
 **Lo único pendiente: instalar WSL.** Docker Desktop arranca sus procesos y muere con «unable to start» porque **el servicio `LxssManager` no existe**: la característica de Windows nunca se habilitó, y en Windows 11 Home no hay alternativa —no existe el backend de Hyper-V—. La virtualización del firmware **ya está activa** (`HypervisorPresent: True`), así que no hay que tocar la BIOS.
 
 ```powershell
-wsl --install      # PowerShell COMO ADMINISTRADOR, luego reiniciar Windows
+wsl --install --no-distribution    # PowerShell COMO ADMINISTRADOR, luego reiniciar
 ```
+
+**`--no-distribution` no es un detalle opcional.** Un contenedor no es una máquina virtual: es un proceso que usa funciones del kernel de Linux —*namespaces*, *cgroups*— que Windows no tiene. WSL 2 aporta ese kernel; eso es lo que Docker necesita. **Ubuntu no es ese kernel**: es una distribución de usuario que se instala encima, y Docker Desktop no la usa —registra la suya propia, `docker-desktop`—. `wsl --install` a secas descarga Ubuntu solo porque es el valor por defecto del comando. Aquí no aporta nada y sí ocupa disco.
 
 Después del reinicio se abre Docker Desktop una vez y se comprueba con `docker info`. Hasta entonces, `supabase start` no levanta y la medición de rendimiento sigue bloqueada.
 
