@@ -96,9 +96,12 @@ No hace falta volver a discutirlas. Están todas justificadas en [`03_ARQUITECTU
 | **Supabase CLI 2.117.0** | ✅ `devDependency` del repo | `package.json` · `pnpm-lock.yaml` |
 | Python **3.12.13** | ✅ gestionado con `uv` | `.python-version` |
 | GitHub CLI **2.100.0** | ✅ global (winget) | — |
-| Docker **29.7.2** | ✅ instalado · ⛔ **el demonio no ha arrancado nunca** | — |
+| Docker **29.7.2** | ✅ instalado y **corriendo** sobre WSL 2 | — |
+| WSL **2** | ✅ instalado sin distribución de usuario | distro `docker-desktop`, la propia de Docker |
 
-**Lo único pendiente: instalar WSL.** Docker Desktop arranca sus procesos y muere con «unable to start» porque **el servicio `LxssManager` no existe**: la característica de Windows nunca se habilitó, y en Windows 11 Home no hay alternativa —no existe el backend de Hyper-V—. La virtualización del firmware **ya está activa** (`HypervisorPresent: True`), así que no hay que tocar la BIOS.
+**Resuelto.** Docker Desktop arrancaba sus procesos y moría con «unable to start» porque **WSL no estaba instalado**, y en Windows 11 Home no hay alternativa: no existe el backend de Hyper-V. La virtualización del firmware ya estaba activa (`HypervisorPresent: True`), así que no hubo que tocar la BIOS.
+
+> **Nota de diagnóstico, para no repetir el error:** se detectó la ausencia de WSL viendo que el servicio `LxssManager` no existía, y **ese no es el indicador correcto** — WSL 2 no usa ese servicio, así que sigue sin existir ahora que todo funciona. Acertó por casualidad. La comprobación buena es `wsl --status`: si responde con distribución y versión, WSL está; si dice «no está instalado», no está.
 
 ```powershell
 wsl --install --no-distribution    # PowerShell COMO ADMINISTRADOR, luego reiniciar
