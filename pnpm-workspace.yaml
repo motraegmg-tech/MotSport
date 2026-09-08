@@ -1,0 +1,12 @@
+# Espacios de trabajo del monorepo.
+#
+# Se listan de forma explicita y no con 'apps/*' porque apps/motor NO es
+# un paquete de Node: es el motor Python (FastAPI + LightGBM) y se
+# gestiona con uv y pyproject.toml. Nombrarlos uno por uno deja claro
+# cual es cual sin tener que abrir cada carpeta.
+packages:
+  - 'apps/web'
+  - 'apps/movil'
+  - 'packages/dominio'
+  - 'packages/proveedores'
+  - 'packages/ui'

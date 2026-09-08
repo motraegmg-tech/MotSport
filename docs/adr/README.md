@@ -26,4 +26,4 @@ Que gana y que pierde el proyecto con esto. Lo que se pierde tambien se escribe.
 
 ## Indice
 
-Todavia no hay ninguno.
+- [ADR-01 · Las herramientas de desarrollo se versionan en el repositorio, no en la maquina](ADR-01-herramientas-locales-versionadas.md) — Supabase CLI, pnpm, Node y Python quedan declarados en el repo. Nace de dos instalaciones fallidas y un falso positivo de `python.exe`.

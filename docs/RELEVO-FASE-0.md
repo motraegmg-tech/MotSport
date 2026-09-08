@@ -12,7 +12,7 @@
 
 **Hoy es una herramienta de USO INTERNO de MOTRAE.** No se vende, no se distribuye. La venta es la Fase 3 y tiene su propia lista de ocho requisitos.
 
-**No hay una sola línea de código de producto.** Eso es correcto y deliberado: la Fase 0 es documentación, esquema y mockups. `apps/`, `packages/` y `supabase/` tienen solo un README que dice qué va ahí.
+**No hay una sola línea de código de producto.** Eso es correcto y deliberado: la Fase 0 es documentación, esquema y mockups. `apps/`, `packages/` y `supabase/` tienen solo un README que dice qué va ahí. Lo único que ya existe fuera de eso es el andamio del monorepo —`package.json`, `pnpm-workspace.yaml`, `.nvmrc`, `.python-version`—, que se levantó para fijar las versiones de las herramientas y no contiene lógica de producto.
 
 ### Orden de lectura para arrancar
 
@@ -79,30 +79,45 @@ No hace falta volver a discutirlas. Están todas justificadas en [`03_ARQUITECTU
 | 1 | **Qué deportes y qué ligas sigue realmente el equipo** | Define la primera ingesta. Sin esto se construyen conectores que nadie va a abrir |
 | 2 | **Quién es exactamente «el equipo» que va a usar esto a diario** | Toda la estrategia descansa en que el uso escriba el pliego de requisitos, y eso solo funciona si quien lo usa prepara partidos de verdad. Ver [`02_MASTER_PLAN.md`](motsport/02_MASTER_PLAN.md) § 4 |
 | 3 | **Nombre comercial definitivo** | `MotSport` es nombre de trabajo. Cambiarlo hoy cuesta una búsqueda y reemplazo; con código publicado, no |
-| 4 | **Crear el repositorio en GitHub** | Requiere `gh auth login`, que es interactivo. Ver § 5 |
+| 4 | **Crear el repositorio en GitHub** | `gh` **ya está instalado**; falta `gh auth login`, que es interactivo y solo lo puedes correr tú. Ver § 5 |
 
-### 4.2 Requisitos de máquina — antes de escribir código
+### 4.2 Entorno de desarrollo
 
-Verificado de nuevo el 8 de septiembre, con `Get-Command` sobre el PATH real de Windows:
+**Resuelto el 8 de septiembre.** El entorno está armado y las versiones quedaron declaradas en el repositorio — ver [`adr/ADR-01`](adr/ADR-01-herramientas-locales-versionadas.md).
 
-| Herramienta | Estado | Cómo se instala |
+| Herramienta | Estado | Cómo se fija |
 |---|---|---|
-| Node 24.16 | ✅ `C:\Program Files\nodejs\node.exe` | — |
-| Corepack | ✅ instalado | — |
-| **pnpm** | ⛔ **NO activado.** Corepack está, pero `pnpm` no resuelve | `corepack enable pnpm` |
-| **Python 3.12** | ⛔ **NO instalado.** El `python.exe` que responde es el *stub* de `WindowsApps`, no un intérprete. **`apps/motor/` no arranca sin él** | Instalador de python.org, **con «Add to PATH» marcado** |
-| **GitHub CLI (`gh`)** | ⛔ **NO instalado.** Bloquea subir el repositorio (§ 5) | `winget install GitHub.cli` |
-| **Docker Desktop** | ⛔ **NO instalado.** Bloquea la tarea 2 de Fase 1: sin Postgres local no se mide el rendimiento del esquema | `winget install Docker.DockerDesktop` |
-| **Supabase CLI** | ⛔ **NO instalado.** Bloquea la primera migración | `winget install Supabase.CLI` (requiere Docker) |
+| Node **24.16.0** | ✅ | `.nvmrc` · `engines` del `package.json` |
+| pnpm **9.15.9** | ✅ vía `corepack pnpm` | campo `packageManager` |
+| **Supabase CLI 2.117.0** | ✅ `devDependency` del repo | `package.json` · `pnpm-lock.yaml` |
+| Python **3.12.13** | ✅ gestionado con `uv` | `.python-version` |
+| GitHub CLI **2.100.0** | ✅ global (winget) | — |
+| Docker **29.7.2** | ✅ instalado · ⛔ **el demonio no ha arrancado nunca** | — |
 
-**Nota para quien retome desde el Bash de Git en Windows:** ese shell no hereda todo el PATH de Windows y reporta como ausentes herramientas que sí están. Verificar con PowerShell (`Get-Command <nombre>`) antes de concluir que algo falta.
+**Lo único pendiente: abrir Docker Desktop por primera vez.** La primera ejecución pide aceptar términos y puede exigir habilitar WSL 2 y reiniciar Windows. Hasta que el demonio corra, `supabase start` no levanta y la tarea 2 de Fase 1 sigue bloqueada.
+
+Cómo se invocan las herramientas (no están en el `PATH`, y es deliberado):
+
+```bash
+corepack pnpm install                       # dependencias
+corepack pnpm exec supabase --version       # el CLI, o los scripts base:* del package.json
+corepack pnpm run base:levantar             # supabase start
+uv run --python 3.12 python -V              # Python
+```
+
+### Dos trampas de Windows que costaron tiempo
+
+1. **`python.exe` responde aunque no haya Python.** Windows pone *stubs* de Microsoft Store en `WindowsApps` que aparecen en el `PATH` y no ejecutan nada. Que un comando conteste no prueba que exista.
+2. **El Bash de Git no hereda todo el `PATH` de Windows.** Reportó como ausentes `gh` y Docker cuando ya estaban instalados. **Verificar siempre con `Get-Command <nombre>` en PowerShell**, y ante la duda buscar el binario en disco.
+
+Y una que no era trampa sino error de documentación: **`Supabase.CLI` no existe como paquete de winget.** Por eso ahora vive como dependencia del repositorio.
 
 ### 4.3 Primeras tareas de la Fase 1
 
 En este orden:
 
 1. ~~**Aplicar los cuatro hallazgos de la auditoría.**~~ ✅ **Hecho el 8 de septiembre** — ver § 4.4.
-2. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado**: requiere Docker y Supabase CLI (§ 4.2).
+2. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado solo por arrancar Docker Desktop** — el Supabase CLI y todo lo demás ya está (§ 4.2).
 3. Escribir la primera migración de Supabase. **Ya sale contra el esquema corregido**; debe llevar `WITH CHECK` en toda política de escritura ([`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 7.1).
 4. Escribir el primer conector, con su licencia documentada **antes** en [`08_FUENTES_DE_DATOS.md`](motsport/08_FUENTES_DE_DATOS.md). **Debe escribir `periodo_clave` del catálogo, no texto libre**, y separar `resultado` de `resultado_reglamentario`.
 5. Llenar a mano el catálogo de sedes y nombrar a su responsable.
