@@ -674,7 +674,10 @@ CREATE TABLE public.participantes_partido (
   equipo_id uuid NOT NULL,
   condicion text NOT NULL,
   puntuacion numeric(8,2),
+  puntuacion_reglamentaria numeric(8,2),
   resultado text,
+  resultado_reglamentario text,
+  desenlace text,
   detalle_periodos jsonb NOT NULL DEFAULT '[]'::jsonb,
   fuente text NOT NULL,
   obtenido_ts timestamptz NOT NULL,
@@ -691,6 +694,20 @@ CREATE TABLE public.participantes_partido (
     CHECK (condicion IN ('local', 'visitante', 'neutral')),
   CONSTRAINT participantes_partido_resultado_valido
     CHECK (resultado IS NULL OR resultado IN ('victoria', 'empate', 'derrota')),
+  CONSTRAINT participantes_partido_resultado_reglamentario_valido
+    CHECK (resultado_reglamentario IS NULL
+           OR resultado_reglamentario IN ('victoria', 'empate', 'derrota')),
+  CONSTRAINT participantes_partido_desenlace_valido
+    CHECK (desenlace IS NULL
+           OR desenlace IN ('reglamentario', 'prorroga', 'penales',
+                            'muerte_subita', 'walkover')),
+  -- Un empate reglamentario resuelto en penales no es un empate del encuentro:
+  -- si el desenlace fue mas alla del tiempo regular, alguien avanzo.
+  CONSTRAINT participantes_partido_desenlace_coherente
+    CHECK (desenlace IS NULL
+           OR desenlace = 'reglamentario'
+           OR resultado IS NULL
+           OR resultado <> 'empate'),
   CONSTRAINT participantes_partido_periodos_arreglo
     CHECK (jsonb_typeof(detalle_periodos) = 'array'),
   CONSTRAINT participantes_partido_procedencia_objeto
@@ -699,7 +716,23 @@ CREATE TABLE public.participantes_partido (
 
 COMMENT ON TABLE public.participantes_partido IS
   'Modela localía y marcador sin columnas propias de un deporte.';
+
+COMMENT ON COLUMN public.participantes_partido.resultado IS
+  'Desenlace del encuentro: quien gano o avanzo, penales incluidos. Es lo que se muestra.';
+
+COMMENT ON COLUMN public.participantes_partido.resultado_reglamentario IS
+  'Resultado al terminar el tiempo regular. Es el que alimenta rating y forma reciente.';
+
+COMMENT ON COLUMN public.participantes_partido.puntuacion_reglamentaria IS
+  'Marcador al terminar el tiempo regular, sin penales. NULL si la fuente no lo separa.';
+
+COMMENT ON COLUMN public.participantes_partido.desenlace IS
+  'Como se decidio: reglamentario, prorroga, penales, muerte subita o walkover.';
 ```
+
+**Por qué dos resultados y no uno.** Un partido que termina 1-1 y se decide 5-4 en penales tiene dos lecturas legítimas, y cada una sirve a un consumidor distinto. `resultado` responde *quién avanzó* —es lo que ve el analista en la ficha del partido—; `resultado_reglamentario` responde *quién fue mejor durante el juego*, y es el único que deben leer el rating tipo Elo, la forma reciente y los factores del modelo predictivo. Contar un empate como victoria sesga el rating de todo equipo que juegue eliminatorias, y el sesgo no se ve hasta que el modelo ya está entrenado.
+
+**Regla para los conectores.** Si la fuente no separa el marcador de penales, se escribe `desenlace = 'penales'` y se deja `puntuacion_reglamentaria` en `NULL`: es preferible un hueco declarado a un número inventado. `desenlace = 'walkover'` cubre el partido no jugado y adjudicado en mesa, que no debe alimentar forma ni rating.
 
 ### 3.13 `participaciones_jugador`
 
@@ -906,7 +939,7 @@ CREATE TABLE public.eventos (
   equipo_id uuid,
   jugador_id uuid,
   secuencia integer NOT NULL,
-  periodo text,
+  periodo_clave text,
   reloj_segundos numeric(10,3),
   ocurrido_ts timestamptz,
   carga jsonb NOT NULL,
@@ -920,6 +953,9 @@ CREATE TABLE public.eventos (
     REFERENCES public.partidos (tenant_id, partido_id),
   FOREIGN KEY (tenant_id, deporte_id)
     REFERENCES public.deportes (tenant_id, deporte_id),
+  -- Compuesta con deporte_id: un evento de futbol no puede citar un periodo de NBA.
+  FOREIGN KEY (tenant_id, deporte_id, periodo_clave)
+    REFERENCES public.catalogo_periodos (tenant_id, deporte_id, clave),
   FOREIGN KEY (tenant_id, tipo_evento_id)
     REFERENCES public.tipos_evento (tenant_id, tipo_evento_id),
   FOREIGN KEY (tenant_id, esquema_evento_id)
@@ -1698,6 +1734,46 @@ COMMENT ON TABLE public.esquemas_evento IS
 
 Las claves `type`, `properties`, `required` y `additionalProperties` que aparezcan dentro de `esquema` pertenecen al estándar JSON Schema; no son nombres del dominio MotSport.
 
+### 4.11 `catalogo_periodos`
+
+Existe porque el periodo era el último vocabulario del esquema que seguía siendo texto libre. Sin catálogo, el conector de API-Football escribe `'1T'`, el de balldontlie escribe `'Q1'` y un tercero escribe `'primer_tiempo'`: la consulta que agrupe eventos por periodo devuelve tres grupos donde debería haber uno, y el error no se ve hasta que alguien mira una gráfica rara meses después.
+
+Se cataloga **por deporte**, con la misma forma que el resto: agregar un deporte sigue siendo insertar filas.
+
+```sql
+CREATE TABLE public.catalogo_periodos (
+  tenant_id uuid NOT NULL,
+  deporte_id uuid NOT NULL,
+  clave text NOT NULL,
+  nombre text NOT NULL,
+  orden smallint NOT NULL,
+  -- Distingue el tiempo regular de prorroga y penales: solo lo reglamentario
+  -- alimenta rating y forma reciente, igual que en participantes_partido.
+  reglamentario boolean NOT NULL,
+  activo boolean NOT NULL DEFAULT true,
+  fuente text NOT NULL,
+  obtenido_ts timestamptz NOT NULL,
+  confianza public.nivel_confianza NOT NULL,
+  PRIMARY KEY (tenant_id, deporte_id, clave),
+  UNIQUE (tenant_id, deporte_id, orden),
+  FOREIGN KEY (tenant_id, deporte_id)
+    REFERENCES public.deportes (tenant_id, deporte_id),
+  FOREIGN KEY (tenant_id, fuente)
+    REFERENCES public.fuentes (tenant_id, clave),
+  CONSTRAINT catalogo_periodos_orden_positivo CHECK (orden > 0)
+);
+
+COMMENT ON TABLE public.catalogo_periodos IS
+  'Impide que cada conector invente su propio vocabulario de periodos.';
+
+COMMENT ON COLUMN public.catalogo_periodos.orden IS
+  'Ordena cronologicamente dentro del deporte; permite agrupar sin conocer las claves.';
+```
+
+**Qué cambia en `eventos`.** La columna `periodo text` se sustituye por `periodo_clave text` con llave foránea compuesta al catálogo. La llave incluye `deporte_id`, que `eventos` ya tiene: un evento de fútbol no puede referenciar un periodo de NBA.
+
+Queda `NULL`-able a propósito. Hay fuentes que entregan sucesos sin periodo —un cambio de alineación anunciado antes del partido, por ejemplo—, y forzar un valor obligaría al conector a inventarlo. Un hueco declarado es preferible a un dato falso.
+
 ---
 
 ## 5. Datos por deporte
@@ -1826,7 +1902,70 @@ INSERT INTO public.catalogo_factores (
    TIMESTAMPTZ '2026-09-01 12:00:00+00', 75);
 ```
 
-### 5.4 Ejemplos de eventos
+### 5.4 Periodos por deporte
+
+Los tres deportes se separan aquí sin tocar una sola columna. `reglamentario = false` marca lo que no debe alimentar rating ni forma reciente:
+
+```sql
+INSERT INTO public.catalogo_periodos (
+  tenant_id, deporte_id, clave, nombre, orden, reglamentario,
+  fuente, obtenido_ts, confianza
+) VALUES
+  -- Futbol
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001',
+   'primer_tiempo',  'Primer tiempo',        1, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001',
+   'segundo_tiempo', 'Segundo tiempo',       2, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001',
+   'prorroga_1',     'Prórroga · primer tiempo',  3, false,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001',
+   'prorroga_2',     'Prórroga · segundo tiempo', 4, false,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000001',
+   'penales',        'Tanda de penales',     5, false,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+
+  -- NBA
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002',
+   'cuarto_1', 'Primer cuarto',  1, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002',
+   'cuarto_2', 'Segundo cuarto', 2, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002',
+   'cuarto_3', 'Tercer cuarto',  3, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002',
+   'cuarto_4', 'Cuarto cuarto',  4, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000002',
+   'prorroga_1', 'Prórroga 1',   5, false,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+
+  -- NFL
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003',
+   'cuarto_1', 'Primer cuarto',  1, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003',
+   'cuarto_2', 'Segundo cuarto', 2, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003',
+   'cuarto_3', 'Tercer cuarto',  3, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003',
+   'cuarto_4', 'Cuarto cuarto',  4, true,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75),
+  ('00000000-0000-0000-0000-000000000001', '10000000-0000-0000-0000-000000000003',
+   'prorroga_1', 'Tiempo extra', 5, false,
+   'motrae_manual', TIMESTAMPTZ '2026-09-08 00:00:00+00', 75);
+```
+
+La NBA admite más de una prórroga y el fútbol de eliminatoria no siempre llega a penales: **cuando aparezca un periodo que no está, se inserta una fila, no se despliega código.** Esa es la razón de que exista la tabla.
+
+### 5.5 Ejemplos de eventos
 
 Las propiedades son diferentes, pero las tres filas entrarían en `eventos` y serían validadas contra esquemas distintos:
 
@@ -1834,7 +1973,7 @@ Las propiedades son diferentes, pero las tres filas entrarían en `eventos` y se
 -- Fútbol: tiro.
 INSERT INTO public.eventos (
   tenant_id, partido_id, deporte_id, tipo_evento_id, esquema_evento_id,
-  equipo_id, jugador_id, secuencia, periodo, reloj_segundos, carga,
+  equipo_id, jugador_id, secuencia, periodo_clave, reloj_segundos, carga,
   fuente, obtenido_ts, confianza
 ) VALUES (
   '00000000-0000-0000-0000-000000000001',
@@ -1852,7 +1991,7 @@ INSERT INTO public.eventos (
 -- NBA: posesión.
 INSERT INTO public.eventos (
   tenant_id, partido_id, deporte_id, tipo_evento_id, esquema_evento_id,
-  equipo_id, jugador_id, secuencia, periodo, reloj_segundos, carga,
+  equipo_id, jugador_id, secuencia, periodo_clave, reloj_segundos, carga,
   fuente, obtenido_ts, confianza
 ) VALUES (
   '00000000-0000-0000-0000-000000000001',
@@ -1870,7 +2009,7 @@ INSERT INTO public.eventos (
 -- NFL: jugada.
 INSERT INTO public.eventos (
   tenant_id, partido_id, deporte_id, tipo_evento_id, esquema_evento_id,
-  equipo_id, jugador_id, secuencia, periodo, reloj_segundos, carga,
+  equipo_id, jugador_id, secuencia, periodo_clave, reloj_segundos, carga,
   fuente, obtenido_ts, confianza
 ) VALUES (
   '00000000-0000-0000-0000-000000000001',
@@ -2095,6 +2234,11 @@ ALTER TABLE public.catalogo_superficies FORCE ROW LEVEL SECURITY;
 CREATE POLICY lectura_aislada_catalogo_superficies ON public.catalogo_superficies
   FOR SELECT TO authenticated USING (tenant_id = public.tenant_actual());
 
+ALTER TABLE public.catalogo_periodos ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.catalogo_periodos FORCE ROW LEVEL SECURITY;
+CREATE POLICY lectura_aislada_catalogo_periodos ON public.catalogo_periodos
+  FOR SELECT TO authenticated USING (tenant_id = public.tenant_actual());
+
 ALTER TABLE public.competencias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.competencias FORCE ROW LEVEL SECURITY;
 CREATE POLICY lectura_aislada_competencias ON public.competencias
@@ -2252,6 +2396,43 @@ CREATE POLICY lectura_aislada_eventos ON public.eventos
 ```
 
 No se concede acceso directo a las vistas materializadas de `analitica`; las funciones tipadas de la aplicación siempre reciben y comprueban el tenant efectivo.
+
+### 7.1 La regla de `WITH CHECK` — obligatoria desde la primera escritura
+
+Las **40 políticas de arriba son de lectura y llevan solo `USING`**. Eso es correcto mientras no exista ninguna política de escritura para `authenticated`. Deja de serlo el día que se agregue la primera.
+
+> **Toda política de `INSERT` o `UPDATE` lleva `WITH CHECK (tenant_id = public.tenant_actual())`, sin excepción.**
+
+**Por qué.** `USING` decide **qué filas puedo tocar**; `WITH CHECK` decide **cómo pueden quedar después**. Una política de `UPDATE` con solo `USING` deja pasar la fila porque hoy es de mi tenant, pero no valida el resultado: un `UPDATE ... SET tenant_id = <otro tenant>` pasa el filtro y **manda el dato al tenant ajeno**. Es el error de RLS más común y el que no perdona en un producto multi-cliente.
+
+Un `INSERT` sin `WITH CHECK` es todavía peor: `USING` ni siquiera se evalúa en un `INSERT`, así que la política no restringe absolutamente nada y se puede insertar directamente en el tenant de otro.
+
+Forma correcta cuando llegue el momento:
+
+```sql
+-- Plantilla obligatoria. Las dos clausulas, siempre.
+CREATE POLICY escritura_aislada_<tabla> ON public.<tabla>
+  FOR UPDATE TO authenticated
+  USING      (tenant_id = public.tenant_actual())   -- que filas puedo tocar
+  WITH CHECK (tenant_id = public.tenant_actual());  -- como pueden quedar
+
+CREATE POLICY alta_aislada_<tabla> ON public.<tabla>
+  FOR INSERT TO authenticated
+  WITH CHECK (tenant_id = public.tenant_actual());  -- USING no aplica a INSERT
+```
+
+Consulta de verificación, para correr en cada migración que agregue políticas:
+
+```sql
+-- Debe devolver cero filas. Una fila aqui es una fuga de tenant en potencia.
+SELECT schemaname, tablename, policyname, cmd
+FROM pg_policies
+WHERE schemaname = 'public'
+  AND cmd IN ('INSERT', 'UPDATE', 'ALL')
+  AND with_check IS NULL;
+```
+
+La misma regla está escrita en [`14_SEGURIDAD.md`](14_SEGURIDAD.md); si alguna vez difieren, manda la de seguridad.
 
 ---
 
@@ -2804,11 +2985,22 @@ Estas preguntas cambian filas y operación, no la estructura del esquema.
 
 Este esquema lo escribió un modelo y lo revisó otro distinto, de forma independiente. Lo que se comprobó y lo que se encontró:
 
+> **Estado al 8 de septiembre de 2026 · los cuatro hallazgos están aplicados.** El texto de cada uno se conserva íntegro porque explica **por qué** el esquema quedó como quedó; lo que cambió es que el arreglo ya no es una propuesta. Dónde vive cada uno:
+>
+> | # | Sev. | Aplicado en |
+> |---|---|---|
+> | 1 | GRAVE | § 4.11 `catalogo_periodos` · § 3.16 `eventos.periodo_clave` · § 5.4 siembra · § 7 política |
+> | 2 | MENOR | § 3.12 `participantes_partido`: `resultado_reglamentario`, `puntuacion_reglamentaria`, `desenlace` |
+> | 3 | BLOQUEANTE al escribir | § 7.1, con plantilla y consulta de verificación · [`14_SEGURIDAD.md`](14_SEGURIDAD.md) § 1 |
+> | 4 | MENOR | [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) § 2, punto 2: orden de siembra de las trece tablas |
+>
+> El esquema pasó de **39 a 40 tablas**. Sigue pendiente lo único que no se puede juzgar leyendo SQL: el **rendimiento real**, que se mide con datos y es la primera tarea de la Fase 1.
+
 ### Lo que se verificó y está bien
 
 | Frente | Resultado |
 |---|---|
-| **RLS** | Las **39 tablas** tienen `ENABLE` **y** `FORCE ROW LEVEL SECURITY`. Ninguna quedó fuera, catálogos incluidos |
+| **RLS** | Las **39 tablas** auditadas tienen `ENABLE` **y** `FORCE ROW LEVEL SECURITY`. Ninguna quedó fuera, catálogos incluidos. `catalogo_periodos`, que nació de esta auditoría, lleva las suyas: **40 de 40** |
 | **Aislamiento entre tenants** | Las **104 llaves foráneas son compuestas con `tenant_id`**. Cero llaves simples por id. Esto es lo que impide que una fila de un tenant referencie a la de otro, que es la fuga silenciosa clásica de un multi-tenant mal hecho |
 | **Prórroga y penales** | `detalle_periodos` es un arreglo JSONB sin tope, y `periodos_reglamentarios` no restringe los periodos jugados. Nada bloquea la prórroga |
 | **Cuartos de NBA y series de NFL** | Entran por `deportes.configuracion` (`duracion_periodo_segundos`, `intentos_por_serie`, `reloj` ascendente o descendente). Son filas, no columnas |
@@ -2816,13 +3008,13 @@ Este esquema lo escribió un modelo y lo revisó otro distinto, de forma indepen
 | **Traspaso a mitad de temporada** | `plantillas` tiene `vigente_desde` / `vigente_hasta`: se cierra una fila y se abre otra. El histórico no se corrompe |
 | **Zonas horarias** | `inicio_programado` es `timestamptz`. Un partido internacional guarda el instante absoluto, no una hora local ambigua |
 
-### Hallazgo 1 · GRAVE — `eventos.periodo` es texto libre, contra el principio del propio esquema
+### Hallazgo 1 · GRAVE · ✅ APLICADO — `eventos.periodo` era texto libre, contra el principio del propio esquema
 
 **Qué está mal.** `periodo text` no tiene ni `CHECK` ni llave foránea a ningún catálogo. Es el único vocabulario del esquema que quedó sin catalogar, justo cuando la sección 4.3 dice que *«las reglas de periodo, dimensiones y vocabulario entran como filas versionadas»*.
 
 **El caso que lo rompe.** El conector de API-Football escribe `'1T'`, el de balldontlie escribe `'Q1'`, y un tercero escribe `'primer_tiempo'`. Nada lo impide. La consulta que agrupe eventos por periodo devuelve tres grupos donde debería haber uno, y el error no aparece hasta que alguien mira una gráfica rara meses después.
 
-**Arreglo propuesto.** Catálogo por deporte, con la misma forma que el resto:
+**Arreglo aplicado en § 4.11.** Catálogo por deporte, con la misma forma que el resto. Este es el SQL que se propuso; la versión que quedó en § 4.11 le agregó `activo`, procedencia, `UNIQUE (tenant_id, deporte_id, orden)` y su política de RLS:
 
 ```sql
 CREATE TABLE public.catalogo_periodos (
@@ -2840,7 +3032,7 @@ CREATE TABLE public.catalogo_periodos (
 
 Y en `eventos`, sustituir `periodo text` por una referencia a ese catálogo. **Agregar un deporte sigue siendo insertar filas**, que es justo lo que se quería preservar.
 
-### Hallazgo 2 · MENOR — no hay forma de distinguir una victoria en penales de una victoria normal
+### Hallazgo 2 · MENOR · ✅ APLICADO — no había forma de distinguir una victoria en penales de una victoria normal
 
 **Qué está mal.** `participantes_partido.resultado` solo admite `victoria`, `empate` o `derrota`, y `puntuacion` es un solo número.
 
@@ -2848,7 +3040,7 @@ Y en `eventos`, sustituir `periodo text` por una referencia a ese catálogo. **A
 
 **Por qué importa aquí y no en otro producto.** MotSport calcula forma y rating a partir de estos resultados, y los usa como factores del modelo predictivo. Un empate contado como victoria sesga el rating de todo equipo que juegue eliminatorias.
 
-**Arreglo propuesto.** Separar el resultado reglamentario del desenlace:
+**Arreglo aplicado en § 3.12.** Separar el resultado reglamentario del desenlace. La versión que quedó agregó además `puntuacion_reglamentaria` y los `CHECK` de coherencia:
 
 ```sql
 ALTER TABLE public.participantes_partido
@@ -2870,23 +3062,23 @@ Las 39 políticas se revisaron una por una. Resultado:
 | ¿La función de contexto está endurecida? | **Sí.** `STABLE`, `SECURITY INVOKER` y `SET search_path = ''`. Lo tercero es lo que impide el secuestro por `search_path` |
 | ¿Escrituras? | `authenticated` **no tiene ninguna política** de `INSERT`, `UPDATE` o `DELETE`. Con `FORCE ROW LEVEL SECURITY` activa, eso significa que no puede escribir nada. Es deliberado: escribe el rol de servicio de la ingesta |
 
-#### Hallazgo 3 · MENOR (hoy) / BLOQUEANTE (el día que haya escrituras) — falta la advertencia sobre `WITH CHECK`
+#### Hallazgo 3 · BLOQUEANTE el día que haya escrituras · ✅ APLICADO — faltaba la advertencia sobre `WITH CHECK`
 
-**Qué está mal.** Hay 39 `USING` y **cero `WITH CHECK`**. Hoy es correcto, porque no hay políticas de escritura. Pero no está escrito en ninguna parte que el día que se agregue la primera, tenga que llevar `WITH CHECK`.
+**Qué está mal.** Hay 39 `USING` —hoy 40, con `catalogo_periodos`— y **cero `WITH CHECK`**. Hoy es correcto, porque no hay políticas de escritura. Pero no está escrito en ninguna parte que el día que se agregue la primera, tenga que llevar `WITH CHECK`.
 
 **El caso que lo rompe.** Una política de `UPDATE` con solo `USING` deja pasar la fila si pertenece a mi tenant, **pero no valida cómo queda después**: un `UPDATE ... SET tenant_id = <otro tenant>` pasaría el filtro y movería el dato al tenant ajeno. Es el error más común de RLS, y precisamente el que no perdona en un producto multi-cliente.
 
-**Arreglo.** Dejarlo escrito como regla, aquí y en [`14_SEGURIDAD.md`](14_SEGURIDAD.md):
+**Arreglo aplicado en § 7.1 y en [`14_SEGURIDAD.md`](14_SEGURIDAD.md) § 1**, con plantilla de política y consulta de verificación para correr en cada migración:
 
 > **Toda política de `INSERT` o `UPDATE` lleva `WITH CHECK (tenant_id = public.tenant_actual())`, sin excepción.** Un `USING` sin `WITH CHECK` en un `UPDATE` permite mover una fila a otro tenant.
 
-#### Hallazgo 4 · MENOR — los catálogos son por tenant, y nadie dijo cómo se siembran
+#### Hallazgo 4 · MENOR · ✅ APLICADO — los catálogos son por tenant, y nadie decía cómo se siembran
 
 **Qué está mal.** `deportes`, `fuentes`, `niveles_confianza`, `catalogo_metricas` y `catalogo_factores` llevan `tenant_id` y su propia política de aislamiento. Es coherente con el diseño, pero implica que **el catálogo completo se duplica en cada tenant nuevo**, y no hay proceso definido para eso.
 
 **El caso que lo rompe.** En Fase 3 se da de alta el primer club. Su base queda sin deportes, sin métricas y sin factores: la aplicación abre vacía y nadie sabe de quién era la tarea de llenarla.
 
-**Arreglo.** Definir en Fase 3 un procedimiento de siembra que copie los catálogos del tenant plantilla al tenant nuevo, y anotarlo en la lista de [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) § 2, junto al alta de organizaciones.
+**Arreglo aplicado en [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) § 2, punto 2**: el orden de siembra de las trece tablas de catálogo, con las cuatro reglas del procedimiento —identificadores nuevos, procedencia `siembra`, alta atómica y umbrales copiados, no compartidos—. La implementación es de Fase 3; lo que ya no falta es el procedimiento.
 
 ### Qué NO se auditó
 
@@ -2894,7 +3086,9 @@ Falta una revisión de **rendimiento real** —si los índices propuestos sirven
 
 ### Veredicto
 
-**Se puede construir sobre este esquema.** Los dos hallazgos se arreglan con un catálogo nuevo y dos columnas, y **ninguno de los dos toca la estructura del núcleo**. Lo caro de retrofitear —RLS, llaves compuestas con tenant, procedencia por fila, métricas por catálogo— está bien hecho desde el principio, que es exactamente lo que se le pidió.
+**Se puede construir sobre este esquema.** Los dos hallazgos de estructura se arreglaron con un catálogo nuevo y tres columnas, y **ninguno de los dos tocó el núcleo**. Lo caro de retrofitear —RLS, llaves compuestas con tenant, procedencia por fila, métricas por catálogo— estaba bien hecho desde el principio, que es exactamente lo que se le pidió.
+
+**Cerrado el 8 de septiembre de 2026 con los cuatro hallazgos aplicados.** El esquema queda en **40 tablas** y **listo para la primera migración**, con una sola condición previa: medir el rendimiento con datos, que es lo único que esta auditoría no podía juzgar.
 
 ---
 

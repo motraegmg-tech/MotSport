@@ -298,7 +298,7 @@ MotSport/
 - Decisiones de producto: cliente, distribución, alcance de Fase 1, política de datos
 - Repositorio, `README.md`, `CLAUDE.md` y suite de documentación
 - Mockups navegables: fundaciones y **las diez pantallas**, verificadas en navegador en tema claro y oscuro — [`docs/motsport/mockups/index.html`](docs/motsport/mockups/index.html)
-- Esquema de datos completo: 39 tablas con RLS, escala de confianza y resolución de conflictos
+- Esquema de datos completo: 40 tablas con RLS, escala de confianza y resolución de conflictos
 
 **Pendiente de MOTRAE**
 - Esquema de datos detallado y primeras migraciones

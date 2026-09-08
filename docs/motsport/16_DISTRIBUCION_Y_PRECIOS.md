@@ -43,6 +43,29 @@ La costura ya está puesta. Lo que falta es la maquinaria encima:
 
 - **Sembrar los catálogos del tenant nuevo.** Deportes, métricas, factores y fuentes son **por tenant**: un cliente recién dado de alta abre con la base vacía si nadie los copia del tenant plantilla. Lo detectó la auditoría del esquema — ver [`07_MODELO_DE_DATOS.md`](07_MODELO_DE_DATOS.md) § 10, hallazgo 4.
 
+  El alta de un tenant **no termina** hasta que se copiaron estas trece tablas, **en este orden** (cada una depende de las anteriores por llave foránea):
+
+  | # | Tabla | Depende de |
+  |---|---|---|
+  | 1 | `fuentes` | — (todo lo demás la referencia por procedencia) |
+  | 2 | `niveles_confianza` | — |
+  | 3 | `deportes` | `fuentes` |
+  | 4 | `catalogo_techos` · `catalogo_superficies` | `fuentes` |
+  | 5 | `catalogo_periodos` | `deportes` |
+  | 6 | `posiciones` | `deportes` |
+  | 7 | `clases_dato` · `preferencias_fuente` | `fuentes` |
+  | 8 | `catalogo_metricas` | `deportes` |
+  | 9 | `catalogo_factores` | `deportes` |
+  | 10 | `catalogo_parametros` · `valores_parametros` | `deportes` |
+  | 11 | `tipos_evento` · `esquemas_evento` | `deportes` |
+
+  Reglas del procedimiento:
+
+  - **Se copian identificadores nuevos, no los del tenant plantilla.** Un UUID compartido entre tenants es una llave foránea esperando cruzarse.
+  - **La procedencia de las filas sembradas usa una fuente propia** —hay que dar de alta `motrae_siembra` en `fuentes`—, no la del tenant origen: quien audite debe poder distinguir un catálogo copiado de uno ingerido.
+  - **El alta es atómica.** Si la siembra falla a la mitad, se revierte el tenant completo. Un tenant a medio sembrar es peor que uno inexistente, porque parece funcionar.
+  - **Los umbrales (`valores_parametros`) se copian, no se comparten.** Es lo que permite que un cliente ajuste sus mínimos de muestra sin mover los de otro.
+
 - Alta y administración de organizaciones
 - Invitaciones y gestión de usuarios por organización
 - Roles: administrador del club, cuerpo técnico, analista, solo lectura

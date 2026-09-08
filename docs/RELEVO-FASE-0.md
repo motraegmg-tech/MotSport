@@ -33,9 +33,11 @@ La suite completa está en [`motsport/`](motsport/), indexada en [`00_INDICE.md`
 
 ### Esquema de datos · completo y auditado
 
-[`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md), 2,544 líneas: **39 tablas** en español, con SQL, índices, políticas RLS, escala de confianza y algoritmo de resolución de conflictos.
+[`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md): **40 tablas** en español, con SQL, índices, políticas RLS, escala de confianza y algoritmo de resolución de conflictos.
 
 Lo escribió **Codex** y lo auditó **Claude** de forma independiente (se intentó con Gemini, ver § 6). La auditoría está al final del propio documento, § 10.
+
+**Los cuatro hallazgos de la auditoría ya están aplicados** (8 de septiembre). El esquema pasó de 39 a 40 tablas y **está listo para la primera migración**; lo único que falta antes de escribirla es medir el rendimiento con datos, que es lo que la auditoría no podía juzgar leyendo SQL. Detalle en § 4.4.
 
 ### Mockups · las 10 pantallas
 
@@ -81,34 +83,43 @@ No hace falta volver a discutirlas. Están todas justificadas en [`03_ARQUITECTU
 
 ### 4.2 Requisitos de máquina — antes de escribir código
 
-| Herramienta | Estado el 8 sep 2026 |
-|---|---|
-| Node 24.x · pnpm 9 vía Corepack | ✅ instalado |
-| **Python 3.12** | ⛔ **NO instalado.** Los `python.exe` de `WindowsApps` son *stubs* de Microsoft Store. Instalar desde python.org. **`apps/motor/` no arranca sin él** |
-| **GitHub CLI (`gh`)** | ⛔ **NO instalado.** `winget install GitHub.cli` |
-| Docker · Supabase CLI | Por verificar |
+Verificado de nuevo el 8 de septiembre, con `Get-Command` sobre el PATH real de Windows:
+
+| Herramienta | Estado | Cómo se instala |
+|---|---|---|
+| Node 24.16 | ✅ `C:\Program Files\nodejs\node.exe` | — |
+| Corepack | ✅ instalado | — |
+| **pnpm** | ⛔ **NO activado.** Corepack está, pero `pnpm` no resuelve | `corepack enable pnpm` |
+| **Python 3.12** | ⛔ **NO instalado.** El `python.exe` que responde es el *stub* de `WindowsApps`, no un intérprete. **`apps/motor/` no arranca sin él** | Instalador de python.org, **con «Add to PATH» marcado** |
+| **GitHub CLI (`gh`)** | ⛔ **NO instalado.** Bloquea subir el repositorio (§ 5) | `winget install GitHub.cli` |
+| **Docker Desktop** | ⛔ **NO instalado.** Bloquea la tarea 2 de Fase 1: sin Postgres local no se mide el rendimiento del esquema | `winget install Docker.DockerDesktop` |
+| **Supabase CLI** | ⛔ **NO instalado.** Bloquea la primera migración | `winget install Supabase.CLI` (requiere Docker) |
+
+**Nota para quien retome desde el Bash de Git en Windows:** ese shell no hereda todo el PATH de Windows y reporta como ausentes herramientas que sí están. Verificar con PowerShell (`Get-Command <nombre>`) antes de concluir que algo falta.
 
 ### 4.3 Primeras tareas de la Fase 1
 
 En este orden:
 
-1. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.**
-2. **Aplicar los cuatro hallazgos de la auditoría** ([`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 10) — ver § 4.4.
-3. Escribir la primera migración de Supabase.
-4. Escribir el primer conector, con su licencia documentada **antes** en [`08_FUENTES_DE_DATOS.md`](motsport/08_FUENTES_DE_DATOS.md).
+1. ~~**Aplicar los cuatro hallazgos de la auditoría.**~~ ✅ **Hecho el 8 de septiembre** — ver § 4.4.
+2. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado**: requiere Docker y Supabase CLI (§ 4.2).
+3. Escribir la primera migración de Supabase. **Ya sale contra el esquema corregido**; debe llevar `WITH CHECK` en toda política de escritura ([`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 7.1).
+4. Escribir el primer conector, con su licencia documentada **antes** en [`08_FUENTES_DE_DATOS.md`](motsport/08_FUENTES_DE_DATOS.md). **Debe escribir `periodo_clave` del catálogo, no texto libre**, y separar `resultado` de `resultado_reglamentario`.
 5. Llenar a mano el catálogo de sedes y nombrar a su responsable.
 6. Levantar `apps/web/` y el asistente v1.
 
-### 4.4 Los cuatro hallazgos de la auditoría, pendientes de aplicar
+### 4.4 Los cuatro hallazgos de la auditoría · ✅ aplicados el 8 de septiembre
 
-Ninguno toca la estructura del núcleo. Detalle y SQL en [`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 10.
+Ninguno tocó la estructura del núcleo. El esquema pasó de **39 a 40 tablas**. El texto completo de cada hallazgo se conserva en [`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 10, porque explica por qué el esquema quedó como quedó.
 
-| # | Sev. | Qué |
-|---|---|---|
-| 1 | GRAVE | `eventos.periodo` es texto libre sin catálogo. Un conector escribe `'1T'`, otro `'Q1'`, y la consulta que agrupe por periodo devuelve tres grupos donde debería haber uno |
-| 2 | MENOR | No se distingue una victoria en penales de una normal. Sesga el rating y la forma reciente, que alimentan el modelo predictivo |
-| 3 | MENOR hoy, **BLOQUEANTE** al haber escrituras | 39 `USING` y cero `WITH CHECK`. La primera política de escritura debe llevarlo o un `UPDATE` puede mover una fila a otro tenant |
-| 4 | MENOR | Los catálogos son por tenant y no hay procedimiento de siembra. En Fase 3 el primer cliente abriría con la base vacía |
+| # | Sev. | Qué era | Dónde quedó |
+|---|---|---|---|
+| 1 | GRAVE | `eventos.periodo` era texto libre sin catálogo. Un conector escribe `'1T'`, otro `'Q1'`, y la consulta que agrupe por periodo devuelve tres grupos donde debería haber uno | Nueva tabla `catalogo_periodos` (§ 4.11), `eventos.periodo_clave` con FK compuesta por deporte (§ 3.16), siembra de los tres deportes (§ 5.4) y su política de RLS (§ 7) |
+| 2 | MENOR | No se distinguía una victoria en penales de una normal. Sesga el rating y la forma reciente, que alimentan el modelo predictivo | `resultado_reglamentario`, `puntuacion_reglamentaria` y `desenlace` en `participantes_partido` (§ 3.12). **El rating lee el reglamentario; la ficha del partido lee el desenlace** |
+| 3 | MENOR hoy, **BLOQUEANTE** al haber escrituras | 39 `USING` y cero `WITH CHECK`. La primera política de escritura debe llevarlo o un `UPDATE` puede mover una fila a otro tenant | Regla, plantilla de política y consulta de verificación en § 7.1, más [`14_SEGURIDAD.md`](motsport/14_SEGURIDAD.md) § 1 |
+| 4 | MENOR | Los catálogos son por tenant y no había procedimiento de siembra. En Fase 3 el primer cliente abriría con la base vacía | Orden de siembra de las trece tablas y las cuatro reglas del procedimiento en [`16_DISTRIBUCION_Y_PRECIOS.md`](motsport/16_DISTRIBUCION_Y_PRECIOS.md) § 2, punto 2. Se implementa en Fase 3 |
+
+**Lo que queda abierto de la auditoría es el rendimiento**, y solo se cierra midiendo con datos.
 
 ---
 
