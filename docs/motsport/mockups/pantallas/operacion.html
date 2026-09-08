@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Operación · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .kpi { text-align:left; }
+  .kpi .cifra { display:block; margin:var(--e1) 0 2px; }
+  .kpi .sub { color:var(--texto-tenue); font-size:11px; }
+  .medidor { height:6px; background:var(--superficie-2); border-radius:999px; overflow:hidden; margin-top:var(--e2); }
+  .medidor div { height:100%; border-radius:999px; background:var(--verde); }
+  .medidor div.alto { background:var(--alerta); }
+  .medidor div.critico { background:var(--malo); }
+  .fuente-fila {
+    display:grid; grid-template-columns:1fr 110px 120px 130px 90px;
+    gap:var(--e3); align-items:center; padding:var(--e3) 0;
+    border-bottom:1px solid var(--borde-suave); font-size:13px;
+  }
+  .fuente-fila:last-child { border-bottom:none; }
+  .error-fila {
+    display:grid; grid-template-columns:90px 1fr 110px;
+    gap:var(--e3); align-items:start; padding:var(--e3) 0;
+    border-bottom:1px solid var(--borde-suave); font-size:13px;
+  }
+  .error-fila:last-child { border-bottom:none; }
+  .cobertura { display:flex; gap:2px; height:22px; }
+  .cobertura span { flex:1; background:var(--verde); border-radius:2px; opacity:.85; }
+  .cobertura span.falta { background:var(--superficie-2); }
+  @media (max-width:1000px){ .fuente-fila, .error-fila { grid-template-columns:1fr; gap:var(--e2); } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html">Comparador</a>
+    <a href="scouting.html">Scouting</a>
+    <a href="informes.html">Informes</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="operacion.html" class="activo">Operación</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha"><button class="boton fantasma" onclick="cambiarTema()">Tema</button></div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 10 · Panel de operación.</strong> Tres cosas se miden desde el primer día o no existen: <strong>salud de la ingesta, costo de IA y calidad del dato</strong>. En Fase 1 esta pantalla es solo para el equipo; en Fase 3 crece hasta ser la Consola MOTRAE, con tenants y planes. Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4); flex-wrap:wrap; gap:var(--e3)">
+    <div>
+      <h1>Operación</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">8 de septiembre · 01:40 · todo en verde salvo una fuente</p>
+    </div>
+    <button class="boton fantasma">Forzar ingesta</button>
+  </div>
+
+  <!-- KPIs -->
+  <div class="rejilla c4">
+    <div class="tarjeta kpi">
+      <div class="etiqueta">Costo de IA · hoy</div>
+      <span class="cifra l">$1.84</span>
+      <div class="medidor"><div style="width:37%"></div></div>
+      <span class="sub">de $5.00 · tope diario</span>
+    </div>
+    <div class="tarjeta kpi">
+      <div class="etiqueta">Costo de IA · mes</div>
+      <span class="cifra l">$31.20</span>
+      <div class="medidor"><div style="width:39%"></div></div>
+      <span class="sub">de $80.00 · tope mensual</span>
+    </div>
+    <div class="tarjeta kpi">
+      <div class="etiqueta">Aciertos de caché</div>
+      <span class="cifra l" style="color:var(--verde)">88 %</span>
+      <div class="medidor"><div style="width:88%"></div></div>
+      <span class="sub">de los tokens de entrada</span>
+    </div>
+    <div class="tarjeta kpi">
+      <div class="etiqueta">Consultas de API · hoy</div>
+      <span class="cifra l" style="color:var(--alerta)">94</span>
+      <div class="medidor"><div class="alto" style="width:94%"></div></div>
+      <span class="sub">de 100 · API-Football</span>
+    </div>
+  </div>
+
+  <div class="rejilla c-lateral" style="margin-top:var(--e5)">
+    <div>
+
+      <!-- FUENTES -->
+      <div class="encabezado-seccion" style="margin-top:0"><h2>Salud de la ingesta</h2></div>
+      <div class="tarjeta">
+        <div class="fuente-fila" style="border-bottom:1px solid var(--borde)">
+          <span class="etiqueta">Fuente</span><span class="etiqueta">Última</span>
+          <span class="etiqueta">Filas nuevas</span><span class="etiqueta">Presupuesto</span><span class="etiqueta">Estado</span>
+        </div>
+        <div class="fuente-fila">
+          <span>API-Football</span>
+          <span class="procedencia alta"><span class="punto"></span>hace 2 h</span>
+          <span style="font-family:var(--fuente-mono)">1,284</span>
+          <span><div class="medidor" style="margin:0"><div class="alto" style="width:94%"></div></div></span>
+          <span><span class="senal alerta">Al límite</span></span>
+        </div>
+        <div class="fuente-fila">
+          <span>balldontlie (NBA)</span>
+          <span class="procedencia alta"><span class="punto"></span>hace 3 h</span>
+          <span style="font-family:var(--fuente-mono)">612</span>
+          <span><div class="medidor" style="margin:0"><div style="width:22%"></div></div></span>
+          <span><span class="senal buena">Bien</span></span>
+        </div>
+        <div class="fuente-fila">
+          <span>Open-Meteo</span>
+          <span class="procedencia alta"><span class="punto"></span>hace 40 min</span>
+          <span style="font-family:var(--fuente-mono)">168</span>
+          <span><div class="medidor" style="margin:0"><div style="width:8%"></div></div></span>
+          <span><span class="senal buena">Bien</span></span>
+        </div>
+        <div class="fuente-fila">
+          <span>football-data.org</span>
+          <span class="procedencia media"><span class="punto"></span>hace 14 h</span>
+          <span style="font-family:var(--fuente-mono)">0</span>
+          <span><div class="medidor" style="margin:0"><div class="critico" style="width:100%"></div></div></span>
+          <span><span class="senal mala">Agotada</span></span>
+        </div>
+        <div class="fuente-fila">
+          <span>StatsBomb Open Data</span>
+          <span class="procedencia alta"><span class="punto"></span>hace 2 d</span>
+          <span style="font-family:var(--fuente-mono)">—</span>
+          <span style="color:var(--texto-tenue); font-size:11px">sin límite</span>
+          <span><span class="senal buena">Bien</span></span>
+        </div>
+      </div>
+
+      <!-- COBERTURA -->
+      <div class="encabezado-seccion"><h2>Calidad del dato</h2><span class="nota">cobertura de jornadas por competencia</span></div>
+      <div class="tarjeta">
+        <table>
+          <thead><tr><th>Competencia</th><th style="width:38%">Cobertura</th><th class="num">Jornadas</th><th>Conflictos</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Liga MX · Apertura 2026</td>
+              <td><div class="cobertura"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></td>
+              <td class="num">9 / 9</td><td><span class="senal buena">0</span></td>
+            </tr>
+            <tr>
+              <td>NBA · 2026-27</td>
+              <td><div class="cobertura"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span class="falta"></span><span class="falta"></span></div></td>
+              <td class="num">7 / 9</td><td><span class="senal alerta">3</span></td>
+            </tr>
+            <tr>
+              <td>Premier League · 2026-27</td>
+              <td><div class="cobertura"><span></span><span></span><span class="falta"></span><span class="falta"></span><span class="falta"></span><span class="falta"></span><span class="falta"></span><span class="falta"></span><span class="falta"></span></div></td>
+              <td class="num">2 / 5</td><td><span class="senal mala">7</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+          Premier League tiene 3 de 5 jornadas sin datos y 7 conflictos sin resolver.
+          <strong style="color:var(--texto)">Sus percentiles no se muestran como definitivos en ninguna pantalla</strong>
+          hasta que la cobertura suba: un análisis sobre datos incompletos presentado como
+          completo es peor que no tener análisis.
+        </p>
+      </div>
+
+      <!-- ERRORES -->
+      <div class="encabezado-seccion"><h2>Últimos errores</h2></div>
+      <div class="tarjeta">
+        <div class="error-fila">
+          <span class="senal mala" style="padding:2px 8px">429</span>
+          <div>
+            <div style="font-weight:600">football-data.org rechazó la corrida de las 12:00</div>
+            <div style="color:var(--texto-medio); font-size:12px; margin-top:2px">
+              Presupuesto diario agotado. Reintento programado a medianoche. Sin pérdida de datos.
+            </div>
+          </div>
+          <span style="text-align:right; color:var(--texto-tenue); font-size:11px">hace 14 h</span>
+        </div>
+        <div class="error-fila">
+          <span class="senal alerta" style="padding:2px 8px">Conflicto</span>
+          <div>
+            <div style="font-weight:600">3 discrepancias de minutos jugados en NBA</div>
+            <div style="color:var(--texto-medio); font-size:12px; margin-top:2px">
+              balldontlie contra la fuente oficial. Resueltas por confianza; ambas versiones conservadas.
+            </div>
+          </div>
+          <span style="text-align:right; color:var(--texto-tenue); font-size:11px">hace 3 h</span>
+        </div>
+        <div class="error-fila">
+          <span class="senal neutra" style="padding:2px 8px">Aviso</span>
+          <div>
+            <div style="font-weight:600">2 sedes sin altitud registrada</div>
+            <div style="color:var(--texto-medio); font-size:12px; margin-top:2px">
+              El catálogo de sedes se llena a mano. Los factores de altitud de esos dos partidos quedan vacíos y así se declaran.
+            </div>
+          </div>
+          <span style="text-align:right; color:var(--texto-tenue); font-size:11px">ayer</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LATERAL -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Consumo de IA</h3>
+        <table>
+          <tbody>
+            <tr><td>Consultas hoy</td><td class="num">14</td></tr>
+            <tr><td>Tokens de entrada</td><td class="num">412 K</td></tr>
+            <tr><td>Leídos de caché</td><td class="num" style="color:var(--verde)">363 K</td></tr>
+            <tr><td>Tokens de salida</td><td class="num">18 K</td></tr>
+            <tr><td>Costo por consulta</td><td class="num">$0.13</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e3) 0 0">
+          El 88 % de los tokens de entrada se leyeron de caché. Si ese número cae a
+          cero de forma sostenida hay un invalidador silencioso —una fecha en el prompt
+          de sistema, un JSON sin ordenar— y hay que encontrarlo antes de que el costo
+          se multiplique.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Respaldos</h3>
+        <table>
+          <tbody>
+            <tr><td>Último</td><td class="num"><span class="senal buena">hoy 03:00</span></td></tr>
+            <tr><td>Retención</td><td class="num">30 días</td></tr>
+            <tr><td>Última restauración de prueba</td><td class="num"><span class="senal alerta">hace 41 d</span></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+          La prueba de restauración es mensual y va con 11 días de retraso.
+          Un respaldo que nunca se restauró no es un respaldo.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Fase 3</h3>
+        <p style="color:var(--texto-tenue); font-size:12px; margin:0">
+          Cuando MotSport se venda, esta pantalla crece hasta ser la
+          <strong style="color:var(--texto-medio)">Consola MOTRAE</strong>: tenants activos,
+          plan de cada uno, consumo de API por cliente y costo de IA por cliente —
+          indispensable para saber si un plan es rentable.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

@@ -296,11 +296,12 @@ MotSport/
 - Investigación de mercado, proveedores de datos y licencias
 - Decisiones de producto: cliente, distribución, alcance de Fase 1, política de datos
 - Repositorio, `README.md`, `CLAUDE.md` y suite de documentación
-- Mockups navegables: fundaciones y las cuatro pantallas críticas — [`docs/motsport/mockups/index.html`](docs/motsport/mockups/index.html)
+- Mockups navegables: fundaciones y **las diez pantallas**, verificadas en navegador en tema claro y oscuro — [`docs/motsport/mockups/index.html`](docs/motsport/mockups/index.html)
+- Esquema de datos completo: 39 tablas con RLS, escala de confianza y resolución de conflictos
 
 **Pendiente de MOTRAE**
 - Esquema de datos detallado y primeras migraciones
-- Mockups de las seis pantallas restantes
+- Nombrar responsable y periodicidad del catálogo manual de sedes
 - Conector de la primera fuente
 
 **Pendiente de decisión de Gonzalo** — las tres se resuelven antes de arrancar la Fase 1

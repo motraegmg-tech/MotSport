@@ -16,7 +16,7 @@ Antes de entrar aquí, lee [`../../README.md`](../../README.md). Este índice es
 | 03 | [`03_ARQUITECTURA.md`](03_ARQUITECTURA.md) | Vista general, decisiones de arquitectura con su justificación, fronteras entre componentes | ✅ escrito |
 | 04 | [`04_modulos/`](04_modulos/) | Los 10 módulos con su ficha: qué hace, qué NO hace, con qué habla, qué datos toca, y el mapa de dependencias | ✅ escrito |
 | 05 | [`05_UI_UX.md`](05_UI_UX.md) | Principios, las cuatro reglas que salieron de construir los mockups, navegación, estados, accesibilidad | ✅ escrito |
-| 06 | [`06_MOCKUPS.md`](06_MOCKUPS.md) | Guía de los mockups navegables en [`mockups/`](mockups/) — fundaciones y las 8 pantallas del alcance de Fase 1 ya están hechas | ✅ escrito |
+| 06 | [`06_MOCKUPS.md`](06_MOCKUPS.md) | Guía de los mockups navegables en [`mockups/`](mockups/) — fundaciones y las 10 pantallas, verificadas en navegador | ✅ escrito |
 | 07 | [`07_MODELO_DE_DATOS.md`](07_MODELO_DE_DATOS.md) | ★ Esquema completo: 39 tablas, políticas RLS, escala de confianza, resolución de conflictos, índices y vistas | ✅ escrito |
 | 08 | [`08_FUENTES_DE_DATOS.md`](08_FUENTES_DE_DATOS.md) | ★ Proveedor por proveedor: cobertura, costo, límites, **licencia** y plan de migración | ✅ escrito |
 | 09 | [`09_CATALOGO_DE_FACTORES.md`](09_CATALOGO_DE_FACTORES.md) | ★ Todo lo que afecta un partido, por familia y por deporte, con definición y fuente | ✅ escrito |

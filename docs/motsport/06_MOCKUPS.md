@@ -1,6 +1,6 @@
 # 06 · Mockups
 
-> Las fundaciones y las cuatro pantallas críticas están hechas. Faltan las seis pantallas restantes, que son variaciones sobre los mismos componentes.
+> Las fundaciones y las diez pantallas están hechas. Verificadas en navegador, en tema oscuro y claro, el 8 de septiembre de 2026.
 
 **Empieza por [`mockups/index.html`](mockups/index.html)** — desde ahí se navega todo.
 
@@ -19,10 +19,11 @@
 | [`mockups/pantallas/comparador.html`](mockups/pantallas/comparador.html) | Pantalla 5 · Comparador | ✅ |
 | [`mockups/pantallas/scouting.html`](mockups/pantallas/scouting.html) | Pantalla 6 · Scouting | ✅ |
 | [`mockups/pantallas/consola-ia.html`](mockups/pantallas/consola-ia.html) | Pantalla 7 · Consola IA | ✅ |
+| [`mockups/pantallas/informes.html`](mockups/pantallas/informes.html) | Pantalla 8 · Informes (entrega de Fase 2) | ✅ |
 | [`mockups/pantallas/alertas.html`](mockups/pantallas/alertas.html) | Pantalla 9 · Alertas | ✅ |
-| Pantallas 8 y 10 | Informes (Fase 2) y Panel de operación | 🟡 pendiente |
+| [`mockups/pantallas/operacion.html`](mockups/pantallas/operacion.html) | Pantalla 10 · Panel de operación | ✅ |
 
-**Las ocho pantallas del alcance de Fase 1 están hechas.** Faltan dos: Informes, que es entrega de Fase 2, y el Panel de operación, que en Fase 1 es una vista mínima sin diseño propio.
+**Las diez pantallas están hechas.** Con esto termina la Fase 0 de diseño.
 
 ## Seis decisiones que estos mockups ya fijan
 
@@ -44,7 +45,7 @@
 
 - **HTML y CSS puros**, sin framework. Se abren con doble clic, sin instalar nada.
 - **Con datos falsos pero realistas.** Un mockup lleno de texto de relleno no permite juzgar densidad ni longitudes reales, que es justo lo que hay que juzgar en un producto de datos.
-- **Las cuatro críticas primero.** Si Radar, Centro de Partido, Ficha de Jugador y Consola IA funcionan, el producto funciona.
+- **Se construyeron primero las cuatro críticas** —Radar, Centro de Partido, Ficha de Jugador y Consola IA—, porque si esas cuatro funcionan, el producto funciona. Las otras seis salieron después y más rápido, apoyadas en los mismos componentes.
 - Deben verse correctos en tema claro y oscuro, y en pantalla de teléfono.
 
 ---

@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Informes · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .hoja {
+    background:#FFFFFF; color:#14181A;
+    border-radius:var(--r2); padding:34px 38px;
+    font-family:var(--fuente-cuerpo); font-size:12px; line-height:1.55;
+    box-shadow:var(--sombra);
+  }
+  .hoja h1, .hoja h2, .hoja h3 { font-family:var(--fuente-titulo); color:#14181A; }
+  .hoja h1 { font-size:21px; margin:0; }
+  .hoja h2 { font-size:13px; margin:22px 0 8px; padding-bottom:5px; border-bottom:1px solid #D8DEDA; }
+  .hoja .marca-informe {
+    display:flex; justify-content:space-between; align-items:flex-start;
+    padding-bottom:14px; border-bottom:3px solid #57AD30; margin-bottom:18px;
+  }
+  .hoja .sello { font-family:var(--fuente-titulo); font-weight:700; font-size:13px; color:#57AD30; }
+  .hoja table { font-size:11px; }
+  .hoja th { color:#6B7A80; border-bottom:1px solid #D8DEDA; padding:5px 7px; }
+  .hoja td { padding:5px 7px; border-bottom:1px solid #E7EBE8; color:#14181A; }
+  .hoja tr:hover td { background:transparent; }
+  .hoja .destacado { background:#F0F5EC; border-left:3px solid #57AD30; padding:10px 13px; margin:10px 0; }
+  .hoja .pie-informe { margin-top:24px; padding-top:10px; border-top:1px solid #D8DEDA; color:#8A9599; font-size:9px; }
+  .barrita { display:inline-block; width:52px; height:5px; background:#E7EBE8; border-radius:999px; vertical-align:middle; margin-left:5px; }
+  .barrita i { display:block; height:100%; background:#57AD30; border-radius:999px; }
+  .opcion { display:flex; align-items:center; gap:var(--e3); padding:var(--e3) 0; border-bottom:1px solid var(--borde-suave); }
+  .opcion:last-child { border-bottom:none; }
+  .casilla { width:16px; height:16px; border-radius:4px; border:1px solid var(--verde); background:var(--verde); flex:0 0 auto; }
+  .casilla.off { background:transparent; border-color:var(--borde); }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html">Comparador</a>
+    <a href="scouting.html">Scouting</a>
+    <a href="informes.html" class="activo">Informes</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="operacion.html">Operación</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha"><button class="boton fantasma" onclick="cambiarTema()">Tema</button></div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 8 · Informes · entrega de Fase 2.</strong> El informe no calcula nada propio: <strong>compone lo que ya produjeron los módulos de contexto, análisis y predicción</strong>. Se imprime en claro aunque la aplicación viva en oscuro, porque acaba en papel o en un proyector. Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4); flex-wrap:wrap; gap:var(--e3)">
+    <div>
+      <h1>Informes</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">Previa de partido · Tigres UANL — Cruz Azul · J9</p>
+    </div>
+    <div style="display:flex; gap:var(--e2)">
+      <button class="boton fantasma">Programar semanal</button>
+      <button class="boton primario">Descargar PDF</button>
+    </div>
+  </div>
+
+  <div class="rejilla" style="grid-template-columns:1fr 300px">
+
+    <!-- VISTA PREVIA -->
+    <div class="hoja">
+      <div class="marca-informe">
+        <div>
+          <h1>Previa de partido</h1>
+          <div style="color:#6B7A80; margin-top:3px">Tigres UANL — Cruz Azul · Liga MX · Jornada 9</div>
+          <div style="color:#6B7A80">Sábado 12 de septiembre de 2026 · 19:00 · Estadio Universitario</div>
+        </div>
+        <div style="text-align:right">
+          <div class="sello">MotSport</div>
+          <div style="color:#8A9599; font-size:9px; margin-top:2px">Generado 08/09/2026 01:45</div>
+        </div>
+      </div>
+
+      <h2>Resumen</h2>
+      <p style="margin:0">
+        Son equipos parejos en rendimiento reciente. La diferencia la marcan tres cosas: el visitante llega con
+        <strong>dos días menos de descanso</strong>, juega a <strong>2,240 metros menos de altitud de la habitual</strong>
+        a su favor, y el <strong>calor y la humedad previstos</strong> —28 °C con 71 %— suelen castigar el rendimiento
+        en los últimos quince minutos, sobre todo a un equipo que depende de la presión alta sostenida.
+      </p>
+
+      <div class="destacado">
+        <strong>Lo que hay que vigilar:</strong> Cruz Azul tiene el PPDA más alto de los dos (13.4, percentil 28 de la liga)
+        y llega con dos días menos de descanso al partido más caluroso de la jornada. Si su presión cae, cae temprano.
+      </div>
+
+      <h2>Condiciones previstas</h2>
+      <table>
+        <tbody>
+          <tr><td>Temperatura</td><td><strong>28 °C</strong></td><td>Humedad</td><td><strong>71 %</strong> — por encima del óptimo</td></tr>
+          <tr><td>Viento</td><td><strong>11 km/h</strong></td><td>Lluvia</td><td><strong>0 mm</strong></td></tr>
+          <tr><td>Altitud</td><td><strong>537 m</strong></td><td>Césped</td><td><strong>Natural</strong></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Cómo llega cada equipo</h2>
+      <table>
+        <thead><tr><th>Métrica (últimos 10)</th><th>Tigres UANL</th><th>Cruz Azul</th></tr></thead>
+        <tbody>
+          <tr><td>xG a favor / 90</td><td><strong>1.87</strong> <span class="barrita"><i style="width:88%"></i></span></td><td>1.42 <span class="barrita"><i style="width:61%"></i></span></td></tr>
+          <tr><td>xG concedido / 90</td><td><strong>1.04</strong> <span class="barrita"><i style="width:79%"></i></span></td><td>1.36 <span class="barrita"><i style="width:47%"></i></span></td></tr>
+          <tr><td>PPDA (presión alta)</td><td><strong>9.8</strong> <span class="barrita"><i style="width:82%"></i></span></td><td>13.4 <span class="barrita"><i style="width:28%"></i></span></td></tr>
+          <tr><td>Posesión %</td><td>54.2 <span class="barrita"><i style="width:66%"></i></span></td><td><strong>57.1</strong> <span class="barrita"><i style="width:74%"></i></span></td></tr>
+          <tr><td>Días de descanso</td><td><strong>5</strong></td><td>2</td></tr>
+        </tbody>
+      </table>
+      <div style="color:#8A9599; font-size:9px; margin-top:4px">Las barras son el percentil dentro de Liga MX, Apertura 2026, mínimo 5 partidos.</div>
+
+      <h2>Disponibilidad</h2>
+      <table>
+        <thead><tr><th>Equipo</th><th>Baja</th><th>Peso en minutos</th></tr></thead>
+        <tbody>
+          <tr><td>Tigres UANL</td><td colspan="2">Sin bajas relevantes</td></tr>
+          <tr><td>Cruz Azul</td><td>Lateral derecho — lesión</td><td><strong>88 %</strong></td></tr>
+          <tr><td></td><td>Mediocentro — selección</td><td>61 %</td></tr>
+          <tr><td></td><td>Central — duda</td><td>por confirmar</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Historial directo</h2>
+      <table>
+        <tbody>
+          <tr><td>Últimos 10</td><td>4 victorias · 3 empates · 3 derrotas</td></tr>
+          <tr><td>En casa del local</td><td>3 · 1 · 1</td></tr>
+          <tr><td>Promedio de goles</td><td>2.6</td></tr>
+        </tbody>
+      </table>
+
+      <div class="pie-informe">
+        Fuentes: api-football (hace 2 h) · statsbomb (hace 2 h) · open-meteo (hace 40 min). Confianza alta salvo donde se indique.<br>
+        MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026
+      </div>
+    </div>
+
+    <!-- CONFIGURACIÓN -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Qué incluir</h3>
+        <div class="opcion"><span class="casilla"></span><span>Resumen en prosa</span></div>
+        <div class="opcion"><span class="casilla"></span><span>Condiciones previstas</span></div>
+        <div class="opcion"><span class="casilla"></span><span>Comparativa de rendimiento</span></div>
+        <div class="opcion"><span class="casilla"></span><span>Disponibilidad</span></div>
+        <div class="opcion"><span class="casilla"></span><span>Historial directo</span></div>
+        <div class="opcion"><span class="casilla off"></span><span style="color:var(--texto-tenue)">Pronóstico y probabilidades</span></div>
+        <div class="opcion"><span class="casilla off"></span><span style="color:var(--texto-tenue)">Fichas individuales de jugadores</span></div>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Plantillas</h3>
+        <table>
+          <tbody>
+            <tr><td>Previa de partido</td><td class="num"><span class="senal buena">En uso</span></td></tr>
+            <tr><td>Informe de scouting</td><td class="num" style="color:var(--texto-tenue)">Disponible</td></tr>
+            <tr><td>Resumen post-partido</td><td class="num" style="color:var(--texto-tenue)">Disponible</td></tr>
+            <tr><td>Reporte semanal del equipo</td><td class="num" style="color:var(--texto-tenue)">Disponible</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Dos reglas del informe</h3>
+        <p style="color:var(--texto-medio); font-size:12px; margin:0 0 var(--e3)">
+          <strong style="color:var(--texto)">Cita sus fuentes al pie, siempre.</strong> Un informe que sale de MotSport
+          y acaba en manos de un cuerpo técnico tiene que poder defenderse solo: de dónde salió cada número y de cuándo.
+        </p>
+        <p style="color:var(--texto-medio); font-size:12px; margin:0">
+          <strong style="color:var(--texto)">Se imprime en claro.</strong> La aplicación vive en oscuro porque se trabaja
+          en salas de video; el informe acaba en papel o en un proyector, y ahí el oscuro se lee mal y gasta tóner.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Programar</h3>
+        <p style="color:var(--texto-tenue); font-size:12px; margin:0">
+          La previa del próximo rival puede generarse sola cada lunes y llegar por correo.
+          La base técnica ya existe; falta la plantilla por equipo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+document.querySelectorAll('.casilla').forEach(c =>
+  c.addEventListener('click', () => c.classList.toggle('off')));
+</script>
+</body>
+</html>
