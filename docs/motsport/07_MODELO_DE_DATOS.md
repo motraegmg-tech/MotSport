@@ -2800,4 +2800,73 @@ Estas preguntas cambian filas y operación, no la estructura del esquema.
 
 ---
 
+## 10. Auditoría · 8 de septiembre de 2026
+
+Este esquema lo escribió un modelo y lo revisó otro distinto, de forma independiente. Lo que se comprobó y lo que se encontró:
+
+### Lo que se verificó y está bien
+
+| Frente | Resultado |
+|---|---|
+| **RLS** | Las **39 tablas** tienen `ENABLE` **y** `FORCE ROW LEVEL SECURITY`. Ninguna quedó fuera, catálogos incluidos |
+| **Aislamiento entre tenants** | Las **104 llaves foráneas son compuestas con `tenant_id`**. Cero llaves simples por id. Esto es lo que impide que una fila de un tenant referencie a la de otro, que es la fuga silenciosa clásica de un multi-tenant mal hecho |
+| **Prórroga y penales** | `detalle_periodos` es un arreglo JSONB sin tope, y `periodos_reglamentarios` no restringe los periodos jugados. Nada bloquea la prórroga |
+| **Cuartos de NBA y series de NFL** | Entran por `deportes.configuracion` (`duracion_periodo_segundos`, `intentos_por_serie`, `reloj` ascendente o descendente). Son filas, no columnas |
+| **Partido suspendido y reanudado** | `versiones_partido.estado` admite `aplazado`, `suspendido` y `cancelado`, y conserva el historial en vez de sobreescribirlo |
+| **Traspaso a mitad de temporada** | `plantillas` tiene `vigente_desde` / `vigente_hasta`: se cierra una fila y se abre otra. El histórico no se corrompe |
+| **Zonas horarias** | `inicio_programado` es `timestamptz`. Un partido internacional guarda el instante absoluto, no una hora local ambigua |
+
+### Hallazgo 1 · GRAVE — `eventos.periodo` es texto libre, contra el principio del propio esquema
+
+**Qué está mal.** `periodo text` no tiene ni `CHECK` ni llave foránea a ningún catálogo. Es el único vocabulario del esquema que quedó sin catalogar, justo cuando la sección 4.3 dice que *«las reglas de periodo, dimensiones y vocabulario entran como filas versionadas»*.
+
+**El caso que lo rompe.** El conector de API-Football escribe `'1T'`, el de balldontlie escribe `'Q1'`, y un tercero escribe `'primer_tiempo'`. Nada lo impide. La consulta que agrupe eventos por periodo devuelve tres grupos donde debería haber uno, y el error no aparece hasta que alguien mira una gráfica rara meses después.
+
+**Arreglo propuesto.** Catálogo por deporte, con la misma forma que el resto:
+
+```sql
+CREATE TABLE public.catalogo_periodos (
+  tenant_id uuid NOT NULL,
+  deporte_id uuid NOT NULL,
+  clave text NOT NULL,                -- '1T', 'PRO1', 'PENALES', 'Q1', 'OT1'
+  nombre text NOT NULL,
+  orden smallint NOT NULL,            -- para ordenar cronologicamente
+  reglamentario boolean NOT NULL,     -- distingue prorroga y penales del tiempo regular
+  PRIMARY KEY (tenant_id, deporte_id, clave),
+  FOREIGN KEY (tenant_id, deporte_id)
+    REFERENCES public.deportes (tenant_id, deporte_id)
+);
+```
+
+Y en `eventos`, sustituir `periodo text` por una referencia a ese catálogo. **Agregar un deporte sigue siendo insertar filas**, que es justo lo que se quería preservar.
+
+### Hallazgo 2 · MENOR — no hay forma de distinguir una victoria en penales de una victoria normal
+
+**Qué está mal.** `participantes_partido.resultado` solo admite `victoria`, `empate` o `derrota`, y `puntuacion` es un solo número.
+
+**El caso que lo rompe.** Un partido termina 1-1 y se decide 5-4 en penales. ¿El ganador se registra como `victoria` o como `empate`? Las dos respuestas son defendibles y las dos ensucian algo: si es `victoria`, el rating tipo Elo y la «forma reciente» tratan un empate como si el equipo hubiera ganado el partido; si es `empate`, se pierde quién avanzó de ronda.
+
+**Por qué importa aquí y no en otro producto.** MotSport calcula forma y rating a partir de estos resultados, y los usa como factores del modelo predictivo. Un empate contado como victoria sesga el rating de todo equipo que juegue eliminatorias.
+
+**Arreglo propuesto.** Separar el resultado reglamentario del desenlace:
+
+```sql
+ALTER TABLE public.participantes_partido
+  ADD COLUMN resultado_reglamentario text,   -- victoria | empate | derrota al final del tiempo regular
+  ADD COLUMN desenlace text;                 -- NULL | prorroga | penales | walkover
+
+-- 'resultado' pasa a significar quien avanzo o gano el encuentro;
+-- 'resultado_reglamentario' es el que alimenta rating y forma reciente.
+```
+
+### Qué NO se auditó
+
+Falta una revisión de **rendimiento real** —si los índices propuestos sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental o exigen refresco completo—. **Eso no se puede juzgar leyendo SQL: hay que medirlo con datos.** Queda como primera tarea de la Fase 1, antes de escribir la aplicación encima.
+
+### Veredicto
+
+**Se puede construir sobre este esquema.** Los dos hallazgos se arreglan con un catálogo nuevo y dos columnas, y **ninguno de los dos toca la estructura del núcleo**. Lo caro de retrofitear —RLS, llaves compuestas con tenant, procedencia por fila, métricas por catálogo— está bien hecho desde el principio, que es exactamente lo que se le pidió.
+
+---
+
 *MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026*
