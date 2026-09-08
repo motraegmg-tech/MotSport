@@ -41,6 +41,8 @@ Detalle completo en [`15_LEGAL.md`](15_LEGAL.md).
 
 La costura ya está puesta. Lo que falta es la maquinaria encima:
 
+- **Sembrar los catálogos del tenant nuevo.** Deportes, métricas, factores y fuentes son **por tenant**: un cliente recién dado de alta abre con la base vacía si nadie los copia del tenant plantilla. Lo detectó la auditoría del esquema — ver [`07_MODELO_DE_DATOS.md`](07_MODELO_DE_DATOS.md) § 10, hallazgo 4.
+
 - Alta y administración de organizaciones
 - Invitaciones y gestión de usuarios por organización
 - Roles: administrador del club, cuerpo técnico, analista, solo lectura

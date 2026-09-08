@@ -14,6 +14,7 @@ Reglas:
 
 - **RLS activa y forzada en cada tabla**, incluidos los catálogos.
 - **Ninguna consulta se escribe sin filtro de tenant**, aunque hoy sea redundante.
+- **Toda política de `INSERT` o `UPDATE` lleva `WITH CHECK (tenant_id = public.tenant_actual())`, sin excepción.** Hoy no existe ninguna política de escritura para `authenticated` —escribe el rol de servicio—, pero el día que se agregue la primera, un `USING` sin `WITH CHECK` permitiría un `UPDATE ... SET tenant_id = <otro tenant>` y movería el dato al tenant ajeno. Es el error más común de RLS y el que no perdona en multi-cliente.
 - El rol de servicio que usa el motor de ingesta evita RLS por diseño: **esa credencial nunca llega al cliente**.
 - Las escrituras desde la aplicación pasan por funciones acotadas, no por escritura general.
 - **Pruebas de aislamiento entre tenants: obligatorias antes de la Fase 3.** Antes de tener un segundo cliente hay que haber demostrado que el primero no lo puede ver.

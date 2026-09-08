@@ -2859,6 +2859,35 @@ ALTER TABLE public.participantes_partido
 -- 'resultado_reglamentario' es el que alimenta rating y forma reciente.
 ```
 
+### Revisión específica de las políticas RLS
+
+Las 39 políticas se revisaron una por una. Resultado:
+
+| Comprobación | Resultado |
+|---|---|
+| ¿Alguna política deja leer filas de otro tenant? | **No.** Las 39 son `FOR SELECT TO authenticated USING (tenant_id = public.tenant_actual())` |
+| ¿Qué pasa si el JWT no trae el claim de tenant? | **Falla cerrado, que es lo correcto.** `tenant_actual()` devuelve `NULL`, `tenant_id = NULL` evalúa a `NULL`, y la RLS trata `NULL` como falso: no se ve ninguna fila. No hay fuga |
+| ¿La función de contexto está endurecida? | **Sí.** `STABLE`, `SECURITY INVOKER` y `SET search_path = ''`. Lo tercero es lo que impide el secuestro por `search_path` |
+| ¿Escrituras? | `authenticated` **no tiene ninguna política** de `INSERT`, `UPDATE` o `DELETE`. Con `FORCE ROW LEVEL SECURITY` activa, eso significa que no puede escribir nada. Es deliberado: escribe el rol de servicio de la ingesta |
+
+#### Hallazgo 3 · MENOR (hoy) / BLOQUEANTE (el día que haya escrituras) — falta la advertencia sobre `WITH CHECK`
+
+**Qué está mal.** Hay 39 `USING` y **cero `WITH CHECK`**. Hoy es correcto, porque no hay políticas de escritura. Pero no está escrito en ninguna parte que el día que se agregue la primera, tenga que llevar `WITH CHECK`.
+
+**El caso que lo rompe.** Una política de `UPDATE` con solo `USING` deja pasar la fila si pertenece a mi tenant, **pero no valida cómo queda después**: un `UPDATE ... SET tenant_id = <otro tenant>` pasaría el filtro y movería el dato al tenant ajeno. Es el error más común de RLS, y precisamente el que no perdona en un producto multi-cliente.
+
+**Arreglo.** Dejarlo escrito como regla, aquí y en [`14_SEGURIDAD.md`](14_SEGURIDAD.md):
+
+> **Toda política de `INSERT` o `UPDATE` lleva `WITH CHECK (tenant_id = public.tenant_actual())`, sin excepción.** Un `USING` sin `WITH CHECK` en un `UPDATE` permite mover una fila a otro tenant.
+
+#### Hallazgo 4 · MENOR — los catálogos son por tenant, y nadie dijo cómo se siembran
+
+**Qué está mal.** `deportes`, `fuentes`, `niveles_confianza`, `catalogo_metricas` y `catalogo_factores` llevan `tenant_id` y su propia política de aislamiento. Es coherente con el diseño, pero implica que **el catálogo completo se duplica en cada tenant nuevo**, y no hay proceso definido para eso.
+
+**El caso que lo rompe.** En Fase 3 se da de alta el primer club. Su base queda sin deportes, sin métricas y sin factores: la aplicación abre vacía y nadie sabe de quién era la tarea de llenarla.
+
+**Arreglo.** Definir en Fase 3 un procedimiento de siembra que copie los catálogos del tenant plantilla al tenant nuevo, y anotarlo en la lista de [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) § 2, junto al alta de organizaciones.
+
 ### Qué NO se auditó
 
 Falta una revisión de **rendimiento real** —si los índices propuestos sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental o exigen refresco completo—. **Eso no se puede juzgar leyendo SQL: hay que medirlo con datos.** Queda como primera tarea de la Fase 1, antes de escribir la aplicación encima.
