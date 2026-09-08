@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alertas · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .regla {
+    display:grid; grid-template-columns:1fr 150px 90px 30px;
+    gap:var(--e3); align-items:center;
+    padding:var(--e4); border-bottom:1px solid var(--borde-suave);
+  }
+  .regla:last-child { border-bottom:none; }
+  .regla .frase { font-size:14px; }
+  .regla .frase b { color:var(--verde); font-weight:600; }
+  .regla .meta { color:var(--texto-tenue); font-size:11px; margin-top:3px; }
+  .interruptor {
+    width:36px; height:20px; border-radius:999px; background:var(--verde);
+    position:relative; cursor:pointer; flex:0 0 auto;
+  }
+  .interruptor::after {
+    content:''; position:absolute; top:2px; right:2px;
+    width:16px; height:16px; border-radius:50%; background:#0F1416;
+  }
+  .interruptor.off { background:var(--superficie-2); border:1px solid var(--borde); }
+  .interruptor.off::after { right:auto; left:2px; background:var(--texto-tenue); }
+  .aviso {
+    display:grid; grid-template-columns:8px 1fr 110px;
+    gap:var(--e3); align-items:start;
+    padding:var(--e4); border-bottom:1px solid var(--borde-suave);
+  }
+  .aviso:last-child { border-bottom:none; }
+  .aviso .punto-aviso { width:8px; height:8px; border-radius:50%; margin-top:6px; }
+  .aviso.no-leido { background:rgba(87,173,48,.04); }
+  .constructor {
+    background:var(--superficie-2); border:1px dashed var(--borde);
+    border-radius:var(--r2); padding:var(--e4);
+    font-size:14px; line-height:2.2;
+  }
+  .hueco {
+    display:inline-block; padding:3px var(--e3); border-radius:var(--r1);
+    background:var(--superficie); border:1px solid var(--verde);
+    color:var(--verde); font-weight:600; cursor:pointer;
+  }
+  @media (max-width:900px){ .regla{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html">Comparador</a>
+    <a href="scouting.html">Scouting</a>
+    <a href="alertas.html" class="activo">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha"><button class="boton fantasma" onclick="cambiarTema()">Tema</button></div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 9 · Alertas.</strong> Reglas escritas por el usuario sobre el catálogo de factores. Fíjate en que la regla se construye <strong>como una frase en español</strong>, no como un formulario de campos: el usuario no debería tener que saber que «viento_velocidad» existe. Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4); flex-wrap:wrap; gap:var(--e3)">
+    <div>
+      <h1>Alertas</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">6 reglas activas · 3 avisos sin leer</p>
+    </div>
+    <button class="boton primario">+ Nueva regla</button>
+  </div>
+
+  <div class="rejilla c-lateral">
+    <div>
+
+      <div class="encabezado-seccion" style="margin-top:0"><h2>Avisos recientes</h2></div>
+      <div class="tarjeta" style="padding:0">
+
+        <div class="aviso no-leido">
+          <span class="punto-aviso" style="background:var(--malo)"></span>
+          <div>
+            <div style="font-weight:600">El viento en Everton — Brighton subió a 34 km/h</div>
+            <div style="color:var(--texto-medio); font-size:13px; margin-top:3px">
+              Pasó de 22 a 34 km/h en la última actualización. Tu umbral está en 25.
+              Los dos equipos dependen del juego aéreo en balón parado.
+            </div>
+            <span class="procedencia media" style="margin-top:var(--e2); display:inline-flex"><span class="punto"></span>open-meteo · hace 40 min</span>
+          </div>
+          <div style="text-align:right; color:var(--texto-tenue); font-size:11px">hace 40 min</div>
+        </div>
+
+        <div class="aviso no-leido">
+          <span class="punto-aviso" style="background:var(--alerta)"></span>
+          <div>
+            <div style="font-weight:600">R. Salcedo entró al percentil 96 de carga</div>
+            <div style="color:var(--texto-medio); font-size:13px; margin-top:3px">
+              270 minutos en tres semanas, y hay viaje a 2,432 m en cuatro días.
+              Tu regla avisa a partir del percentil 90.
+            </div>
+            <span class="procedencia alta" style="margin-top:var(--e2); display:inline-flex"><span class="punto"></span>api-football · hace 2 h</span>
+          </div>
+          <div style="text-align:right; color:var(--texto-tenue); font-size:11px">hace 2 h</div>
+        </div>
+
+        <div class="aviso no-leido">
+          <span class="punto-aviso" style="background:var(--alerta)"></span>
+          <div>
+            <div style="font-weight:600">Cruz Azul confirmó la baja del lateral derecho</div>
+            <div style="color:var(--texto-medio); font-size:13px; margin-top:3px">
+              Juega el 88 % de los minutos del equipo. Partido en 6 horas.
+            </div>
+            <span class="procedencia alta" style="margin-top:var(--e2); display:inline-flex"><span class="punto"></span>api-football · hace 3 h</span>
+          </div>
+          <div style="text-align:right; color:var(--texto-tenue); font-size:11px">hace 3 h</div>
+        </div>
+
+        <div class="aviso">
+          <span class="punto-aviso" style="background:var(--texto-tenue)"></span>
+          <div>
+            <div style="font-weight:600">M. Rodríguez subió 6 percentiles en xA</div>
+            <div style="color:var(--texto-medio); font-size:13px; margin-top:3px">
+              De 82 a 88 en los últimos 30 días. Está en tu lista de seguimiento.
+            </div>
+          </div>
+          <div style="text-align:right; color:var(--texto-tenue); font-size:11px">ayer</div>
+        </div>
+
+        <div class="aviso">
+          <span class="punto-aviso" style="background:var(--texto-tenue)"></span>
+          <div>
+            <div style="font-weight:600">La ingesta de Premier League lleva 14 h sin actualizar</div>
+            <div style="color:var(--texto-medio); font-size:13px; margin-top:3px">
+              Presupuesto de consultas agotado hasta medianoche. Los datos que ves son de ayer.
+            </div>
+          </div>
+          <div style="text-align:right; color:var(--texto-tenue); font-size:11px">ayer</div>
+        </div>
+
+      </div>
+
+      <div class="encabezado-seccion"><h2>Mis reglas</h2></div>
+      <div class="tarjeta" style="padding:0">
+
+        <div class="regla">
+          <div><div class="frase">Avísame si el <b>viento</b> en un partido de <b>mis equipos</b> supera <b>25 km/h</b></div>
+               <div class="meta">Se disparó 3 veces este mes</div></div>
+          <span class="senal mala">Alta prioridad</span>
+          <span style="color:var(--texto-tenue); font-size:12px">Push + correo</span>
+          <div class="interruptor"></div>
+        </div>
+
+        <div class="regla">
+          <div><div class="frase">Avísame si un <b>titular</b> entra al <b>percentil 90 de carga</b></div>
+               <div class="meta">Se disparó 1 vez este mes</div></div>
+          <span class="senal alerta">Media</span>
+          <span style="color:var(--texto-tenue); font-size:12px">Push</span>
+          <div class="interruptor"></div>
+        </div>
+
+        <div class="regla">
+          <div><div class="frase">Avísame si <b>cambia la alineación probable</b> de un rival a menos de <b>24 h</b> del partido</div>
+               <div class="meta">Se disparó 5 veces este mes</div></div>
+          <span class="senal mala">Alta prioridad</span>
+          <span style="color:var(--texto-tenue); font-size:12px">Push + correo</span>
+          <div class="interruptor"></div>
+        </div>
+
+        <div class="regla">
+          <div><div class="frase">Avísame si un jugador de mi <b>lista de seguimiento</b> se mueve más de <b>5 percentiles</b></div>
+               <div class="meta">Se disparó 2 veces este mes</div></div>
+          <span class="senal neutra">Baja</span>
+          <span style="color:var(--texto-tenue); font-size:12px">Resumen diario</span>
+          <div class="interruptor"></div>
+        </div>
+
+        <div class="regla">
+          <div><div class="frase">Avísame si una <b>fuente lleva más de 12 h</b> sin actualizar</div>
+               <div class="meta">Se disparó 1 vez este mes</div></div>
+          <span class="senal neutra">Baja</span>
+          <span style="color:var(--texto-tenue); font-size:12px">Resumen diario</span>
+          <div class="interruptor"></div>
+        </div>
+
+        <div class="regla" style="opacity:.5">
+          <div><div class="frase">Avísame si la <b>temperatura</b> en un partido supera <b>32 °C</b></div>
+               <div class="meta">Desactivada · duplicaba la regla de índice de calor</div></div>
+          <span class="senal neutra">—</span>
+          <span style="color:var(--texto-tenue); font-size:12px">—</span>
+          <div class="interruptor off"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LATERAL -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Nueva regla</h3>
+        <div class="constructor">
+          Avísame si
+          <span class="hueco">el viento</span>
+          en
+          <span class="hueco">un partido de mis equipos</span>
+          <span class="hueco">supera</span>
+          <span class="hueco">25 km/h</span>
+        </div>
+        <p style="color:var(--texto-tenue); font-size:11px; margin:var(--e3) 0 0">
+          Cada hueco se elige del catálogo de factores. Si un factor no tiene fuente
+          en tu configuración, no aparece como opción — no se puede alertar sobre
+          un dato que no existe.
+        </p>
+        <button class="boton primario" style="width:100%; justify-content:center; margin-top:var(--e3)">Crear regla</button>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Cómo llegan</h3>
+        <table>
+          <tbody>
+            <tr><td>Alta prioridad</td><td class="num" style="color:var(--texto-medio)">Push inmediato + correo</td></tr>
+            <tr><td>Media</td><td class="num" style="color:var(--texto-medio)">Push inmediato</td></tr>
+            <tr><td>Baja</td><td class="num" style="color:var(--texto-medio)">Resumen diario, 8:00</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+          <strong>Regla de diseño:</strong> una alerta que se dispara todos los días deja de
+          leerse a la semana. Si una regla supera 10 disparos al mes, MotSport propone
+          subirle el umbral en vez de seguir mandándola.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Este mes</h3>
+        <table>
+          <tbody>
+            <tr><td>Avisos enviados</td><td class="num">12</td></tr>
+            <tr><td>Abiertos</td><td class="num">11</td></tr>
+            <tr><td>Reglas silenciadas</td><td class="num">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+document.querySelectorAll('.interruptor').forEach(i =>
+  i.addEventListener('click', () => i.classList.toggle('off')));
+</script>
+</body>
+</html>

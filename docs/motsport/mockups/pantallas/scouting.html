@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scouting · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .panel-filtros { position:sticky; top:64px; }
+  .filtro { padding:var(--e3) 0; border-bottom:1px solid var(--borde-suave); }
+  .filtro:last-child { border-bottom:none; }
+  .filtro .etiqueta { display:block; margin-bottom:var(--e2); }
+  .rango { display:flex; align-items:center; gap:var(--e2); }
+  .rango .pista {
+    flex:1; height:6px; background:var(--superficie-2); border-radius:999px; position:relative;
+  }
+  .rango .seleccion { position:absolute; height:100%; background:var(--verde); border-radius:999px; }
+  .rango .num-rango { font-family:var(--fuente-mono); font-size:11px; color:var(--texto-medio); width:26px; }
+  select, input[type=text] {
+    width:100%; background:var(--superficie-2); border:1px solid var(--borde);
+    border-radius:var(--r1); padding:7px var(--e3); color:var(--texto);
+    font-family:var(--fuente-cuerpo); font-size:13px; outline:none;
+  }
+  .guardada {
+    display:flex; justify-content:space-between; align-items:center;
+    padding:var(--e2) 0; font-size:13px; border-bottom:1px solid var(--borde-suave);
+  }
+  .guardada:last-child { border-bottom:none; }
+  .guardada a { color:var(--texto); }
+  .mini { display:inline-block; width:34px; height:5px; background:var(--superficie-2); border-radius:999px; vertical-align:middle; }
+  .mini i { display:block; height:100%; background:var(--verde); border-radius:999px; }
+  @media (max-width:1100px){ .panel-filtros{ position:static; } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html">Comparador</a>
+    <a href="scouting.html" class="activo">Scouting</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha"><button class="boton fantasma" onclick="cambiarTema()">Tema</button></div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 6 · Scouting.</strong> Buscar jugadores por <strong>percentil</strong>, no por valor absoluto: «8.4 pases progresivos» no significa nada sin saber contra quién. Los filtros y la escala de referencia están siempre a la vista porque cambiar cualquiera de ellos cambia todos los resultados. Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4); flex-wrap:wrap; gap:var(--e3)">
+    <div>
+      <h1>Scouting</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">
+        <strong style="color:var(--verde)">4 jugadores</strong> de 61 evaluados cumplen los cinco filtros
+      </p>
+    </div>
+    <div style="display:flex; gap:var(--e2)">
+      <button class="boton fantasma">Guardar búsqueda</button>
+      <button class="boton">Comparar los 4</button>
+    </div>
+  </div>
+
+  <div class="rejilla" style="grid-template-columns:300px 1fr">
+
+    <!-- FILTROS -->
+    <div>
+      <div class="tarjeta panel-filtros">
+        <h3>Escala de referencia</h3>
+        <div class="filtro">
+          <span class="etiqueta">Competencia</span>
+          <select><option>Liga MX · Apertura 2026</option><option>NBA · 2026-27</option></select>
+        </div>
+        <div class="filtro">
+          <span class="etiqueta">Posición</span>
+          <select><option>Mediocentro</option><option>Todas</option></select>
+        </div>
+        <div class="filtro">
+          <span class="etiqueta">Edad máxima</span>
+          <div class="rango"><span class="num-rango">16</span><div class="pista"><div class="seleccion" style="left:0; width:45%"></div></div><span class="num-rango">23</span></div>
+        </div>
+        <div class="filtro">
+          <span class="etiqueta">Minutos mínimos</span>
+          <div class="rango"><span class="num-rango">0</span><div class="pista"><div class="seleccion" style="left:0; width:36%"></div></div><span class="num-rango">900</span></div>
+        </div>
+
+        <h3 style="margin-top:var(--e5)">Filtros por percentil</h3>
+        <div class="filtro">
+          <span class="etiqueta">Pases progresivos / 90</span>
+          <div class="rango"><span class="num-rango">80</span><div class="pista"><div class="seleccion" style="left:80%; width:20%"></div></div><span class="num-rango">100</span></div>
+        </div>
+        <div class="filtro">
+          <span class="etiqueta">xA / 90</span>
+          <div class="rango"><span class="num-rango">60</span><div class="pista"><div class="seleccion" style="left:60%; width:40%"></div></div><span class="num-rango">100</span></div>
+        </div>
+        <div class="filtro">
+          <span class="etiqueta">Duelos ganados %</span>
+          <div class="rango"><span class="num-rango">0</span><div class="pista"><div class="seleccion" style="left:0; width:100%; background:var(--texto-tenue)"></div></div><span class="num-rango">100</span></div>
+          <p style="color:var(--texto-tenue); font-size:11px; margin:var(--e2) 0 0">Sin filtro</p>
+        </div>
+        <button class="boton fantasma" style="width:100%; justify-content:center; margin-top:var(--e3)">+ Agregar métrica</button>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div>
+      <div class="tarjeta" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Jugador</th><th>Equipo</th><th class="num">Edad</th><th class="num">Min</th>
+              <th class="num">Pases prog.</th><th class="num">xA</th><th class="num">Duelos</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="ficha-jugador.html" style="font-weight:600">M. Rodríguez</a></td>
+              <td style="color:var(--texto-medio)">Tigres UANL</td>
+              <td class="num">23</td><td class="num">1,842</td>
+              <td class="num">91 <span class="mini"><i style="width:91%"></i></span></td>
+              <td class="num">88 <span class="mini"><i style="width:88%"></i></span></td>
+              <td class="num" style="color:var(--texto-tenue)">44</td>
+              <td><span class="senal buena">Disponible</span></td>
+            </tr>
+            <tr>
+              <td><a href="ficha-jugador.html" style="font-weight:600">A. Domínguez</a></td>
+              <td style="color:var(--texto-medio)">Toluca</td>
+              <td class="num">22</td><td class="num">1,203</td>
+              <td class="num">88 <span class="mini"><i style="width:88%"></i></span></td>
+              <td class="num">79 <span class="mini"><i style="width:79%"></i></span></td>
+              <td class="num" style="color:var(--texto-tenue)">38</td>
+              <td><span class="senal buena">Disponible</span></td>
+            </tr>
+            <tr>
+              <td><a href="ficha-jugador.html" style="font-weight:600">S. Ocampo</a></td>
+              <td style="color:var(--texto-medio)">Santos</td>
+              <td class="num">21</td><td class="num">998</td>
+              <td class="num">84 <span class="mini"><i style="width:84%"></i></span></td>
+              <td class="num">71 <span class="mini"><i style="width:71%"></i></span></td>
+              <td class="num" style="color:var(--texto-tenue)">52</td>
+              <td><span class="senal alerta">Lesión leve</span></td>
+            </tr>
+            <tr>
+              <td><a href="ficha-jugador.html" style="font-weight:600">D. Quiroz</a></td>
+              <td style="color:var(--texto-medio)">Necaxa</td>
+              <td class="num">23</td><td class="num">1,455</td>
+              <td class="num">80 <span class="mini"><i style="width:80%"></i></span></td>
+              <td class="num">66 <span class="mini"><i style="width:66%"></i></span></td>
+              <td class="num" style="color:var(--texto-tenue)">61</td>
+              <td><span class="senal buena">Disponible</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tarjeta acento" style="margin-top:var(--e4)">
+        <h3>Lo que estos cuatro tienen en común, y por qué importa</h3>
+        <p style="color:var(--texto-medio); font-size:13px; margin:0">
+          Los cuatro están por debajo del percentil 62 en duelos ganados, y tres de ellos por debajo de 55.
+          <strong style="color:var(--texto)">Ese no es un accidente de la muestra: es lo que produce el filtro.</strong>
+          Buscar élite en progresión y creación en Liga MX sub-23 devuelve, casi por definición, perfiles
+          que no defienden. Si el equipo presiona alto, conviene agregar un piso en recuperaciones en
+          campo rival y ver qué queda — probablemente muy poco, y eso también es información útil.
+        </p>
+      </div>
+
+      <div class="rejilla c2" style="margin-top:var(--e4)">
+        <div class="tarjeta">
+          <h3>Búsquedas guardadas</h3>
+          <div class="guardada"><a href="#">Creadores sub-23 Liga MX</a><span style="color:var(--texto-tenue); font-size:11px">4 · hoy</span></div>
+          <div class="guardada"><a href="#">Centrales que sacan el balón</a><span style="color:var(--texto-tenue); font-size:11px">11 · 2 días</span></div>
+          <div class="guardada"><a href="#">Laterales de ida y vuelta</a><span style="color:var(--texto-tenue); font-size:11px">7 · 1 sem</span></div>
+          <div class="guardada"><a href="#">Bases NBA con bajo TOV%</a><span style="color:var(--texto-tenue); font-size:11px">9 · 2 sem</span></div>
+        </div>
+        <div class="tarjeta">
+          <h3>Lista de seguimiento</h3>
+          <div class="guardada"><a href="ficha-jugador.html">M. Rodríguez</a><span class="senal buena" style="padding:2px 8px">↑ 6 pct</span></div>
+          <div class="guardada"><a href="#">J. Herrera</a><span class="senal buena" style="padding:2px 8px">↑ 2 pct</span></div>
+          <div class="guardada"><a href="#">L. Ferreira</a><span class="senal neutra" style="padding:2px 8px">sin cambio</span></div>
+          <div class="guardada"><a href="#">S. Ocampo</a><span class="senal mala" style="padding:2px 8px">lesión</span></div>
+          <p style="color:var(--texto-tenue); font-size:11px; margin:var(--e3) 0 0">
+            El cambio es contra el percentil de hace 30 días.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

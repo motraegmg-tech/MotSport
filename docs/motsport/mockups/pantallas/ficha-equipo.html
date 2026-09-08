@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha de Equipo · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .cabecera-equipo {
+    display:flex; align-items:center; gap:var(--e5); flex-wrap:wrap;
+    padding:var(--e5); background:var(--superficie);
+    border:1px solid var(--borde); border-radius:var(--r3); margin-bottom:var(--e5);
+  }
+  .escudo {
+    width:64px; height:64px; border-radius:var(--r2);
+    background:var(--superficie-2); border:2px solid var(--verde);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--fuente-titulo); font-size:20px; font-weight:700; color:var(--verde);
+  }
+  .metricas-cab { margin-left:auto; display:flex; gap:var(--e6); }
+  .metricas-cab > div { text-align:right; }
+  .calendario { display:grid; grid-template-columns:1fr; }
+  .jornada {
+    display:grid; grid-template-columns:56px 1fr 130px 90px;
+    gap:var(--e3); align-items:center; padding:var(--e3) 0;
+    border-bottom:1px solid var(--borde-suave); font-size:13px;
+  }
+  .jornada:last-child { border-bottom:none; }
+  .res { width:22px; height:22px; border-radius:var(--r1); display:inline-flex;
+         align-items:center; justify-content:center; font-weight:700; font-size:11px; }
+  .res.g { background:rgba(87,173,48,.18); color:#86D45F; }
+  .res.e { background:var(--superficie-2); color:var(--texto-medio); }
+  .res.p { background:rgba(224,57,43,.18); color:#F07A70; }
+  .carga { display:flex; align-items:flex-end; gap:2px; height:34px; }
+  .carga span { flex:1; background:var(--verde); border-radius:2px 2px 0 0; min-height:3px; }
+  .carga span.alta { background:var(--alerta); }
+  .carga span.critica { background:var(--malo); }
+  @media (max-width:900px){ .metricas-cab{ margin-left:0; width:100%; justify-content:space-between; } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html" class="activo">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html">Comparador</a>
+    <a href="scouting.html">Scouting</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha">
+    <button class="boton fantasma" onclick="cambiarTema()">Tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 3 · Ficha de Equipo.</strong> Responde una pregunta: <em>¿cómo juega este equipo y cómo llega?</em> Perfil táctico, tendencias, calendario con carga acumulada y sus fortalezas y debilidades por percentil. Datos ficticios.
+  </div>
+
+  <div class="cabecera-equipo">
+    <div class="escudo">TIG</div>
+    <div>
+      <div style="font-family:var(--fuente-titulo); font-size:26px; font-weight:700">Tigres UANL</div>
+      <div style="color:var(--texto-medio); font-size:13px; margin-top:2px">Liga MX · Apertura 2026 · Estadio Universitario</div>
+      <div style="display:flex; gap:var(--e2); margin-top:var(--e2)">
+        <span class="senal buena">3.º · 17 pts</span>
+        <span class="senal buena">Racha de 4 sin perder</span>
+        <span class="senal neutra">Bloque medio · vertical</span>
+      </div>
+    </div>
+    <div class="metricas-cab">
+      <div><div class="etiqueta">xG / 90</div><div class="cifra l">1.87</div></div>
+      <div><div class="etiqueta">xGC / 90</div><div class="cifra l">1.04</div></div>
+      <div><div class="etiqueta">Rating</div><div class="cifra l" style="color:var(--verde)">1,742</div></div>
+    </div>
+  </div>
+
+  <div class="rejilla c-lateral">
+    <div>
+
+      <div class="encabezado-seccion" style="margin-top:0">
+        <h2>Perfil por percentil</h2>
+        <span class="nota">contra los 18 equipos de Liga MX · temporada actual</span>
+      </div>
+      <div class="tarjeta">
+        <table>
+          <thead><tr><th>Métrica</th><th class="num">Valor</th><th style="width:48%">Percentil en la liga</th></tr></thead>
+          <tbody>
+            <tr><td>xG a favor / 90</td><td class="num">1.87</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:88%"></div></div><span class="valor">88</span></div></td></tr>
+            <tr><td>xG concedido / 90</td><td class="num">1.04</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:79%"></div></div><span class="valor">79</span></div></td></tr>
+            <tr><td>PPDA (presión alta)</td><td class="num">9.8</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:82%"></div></div><span class="valor">82</span></div></td></tr>
+            <tr><td>Pases progresivos / 90</td><td class="num">41.2</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:71%"></div></div><span class="valor">71</span></div></td></tr>
+            <tr><td>Posesión %</td><td class="num">54.2</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno medio" style="width:66%"></div></div><span class="valor">66</span></div></td></tr>
+            <tr><td>Entradas al último tercio / 90</td><td class="num">28.4</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno medio" style="width:58%"></div></div><span class="valor">58</span></div></td></tr>
+            <tr><td>Balón parado a favor (xG)</td><td class="num">0.19</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno bajo" style="width:23%"></div></div><span class="valor">23</span></div></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e4) 0 0; padding-top:var(--e3); border-top:1px solid var(--borde-suave)">
+          <strong style="color:var(--texto)">Lectura rápida.</strong> Equipo sólido en las dos áreas y con presión alta efectiva,
+          pero con posesión apenas por encima de la media: no domina el balón, lo aprovecha.
+          <strong style="color:var(--alerta)">El percentil 23 en balón parado a favor es su punto flojo</strong> —
+          concede muy poco, pero desperdicia una vía de gol que a su nivel debería estar rindiendo.
+        </p>
+        <span class="procedencia alta" style="margin-top:var(--e3); display:inline-flex"><span class="punto"></span>statsbomb + api-football · hace 2 h</span>
+      </div>
+
+      <div class="encabezado-seccion"><h2>Calendario y forma</h2><span class="nota">últimos 8 y próximos 3</span></div>
+      <div class="tarjeta">
+        <div class="calendario">
+          <div class="jornada"><span class="res g">G</span><span>vs Necaxa (L)</span><span style="color:var(--texto-tenue)">3-1 · xG 2.4-0.9</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J8</span></div>
+          <div class="jornada"><span class="res e">E</span><span>en Santos (V)</span><span style="color:var(--texto-tenue)">1-1 · xG 1.6-1.4</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J7</span></div>
+          <div class="jornada"><span class="res g">G</span><span>vs Puebla (L)</span><span style="color:var(--texto-tenue)">2-0 · xG 2.1-0.6</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J6</span></div>
+          <div class="jornada"><span class="res g">G</span><span>en Juárez (V)</span><span style="color:var(--texto-tenue)">2-1 · xG 1.9-1.1</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J5</span></div>
+          <div class="jornada"><span class="res p">P</span><span>vs América (L)</span><span style="color:var(--texto-tenue)">0-2 · xG 1.2-1.8</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J4</span></div>
+          <div class="jornada" style="border-top:2px solid var(--verde); margin-top:var(--e2); padding-top:var(--e3)">
+            <span class="senal alerta" style="padding:2px 8px">Hoy</span><span>vs Cruz Azul (L)</span>
+            <span style="color:var(--texto-tenue)">28 °C · 71% humedad</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J9</span></div>
+          <div class="jornada"><span style="color:var(--texto-tenue); font-size:11px">Próx</span><span>en Pachuca (V)</span><span style="color:var(--texto-tenue)">Altitud 2,432 m</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J10</span></div>
+          <div class="jornada"><span style="color:var(--texto-tenue); font-size:11px">Próx</span><span>vs Tijuana (L)</span><span style="color:var(--texto-tenue)">3 días de descanso</span><span class="num" style="text-align:right; color:var(--texto-tenue)">J11</span></div>
+        </div>
+      </div>
+
+      <div class="encabezado-seccion"><h2>Carga acumulada de la plantilla</h2><span class="nota">minutos por jugador · últimas 3 semanas</span></div>
+      <div class="tarjeta">
+        <table>
+          <thead><tr><th>Jugador</th><th class="num">Min 3 sem</th><th class="num">Percentil de carga</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>R. Salcedo (DFC)</td><td class="num">270'</td><td class="num">96</td><td><span class="senal mala">Riesgo</span></td></tr>
+            <tr><td>M. Rodríguez (MC)</td><td class="num">248'</td><td class="num">84</td><td><span class="senal alerta">Rotar</span></td></tr>
+            <tr><td>A. Quiñones (DL)</td><td class="num">231'</td><td class="num">78</td><td><span class="senal alerta">Vigilar</span></td></tr>
+            <tr><td>J. Aquino (MI)</td><td class="num">164'</td><td class="num">41</td><td><span class="senal buena">Normal</span></td></tr>
+            <tr><td>N. Ibáñez (DL)</td><td class="num">88'</td><td class="num">17</td><td><span class="senal buena">Fresco</span></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e3) 0 0">
+          Dos titulares por encima del percentil 80 de carga, con un viaje a 2,432 metros en cuatro días.
+          Es la clase de cruce que MotSport existe para hacer visible antes del entrenamiento del lunes, no después.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- LATERAL -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Cómo juega</h3>
+        <table>
+          <tbody>
+            <tr><td>Ritmo</td><td class="num">Medio-alto</td></tr>
+            <tr><td>Bloque</td><td class="num">Medio</td></tr>
+            <tr><td>Presión</td><td class="num"><span class="senal buena">Alta y efectiva</span></td></tr>
+            <tr><td>Salida</td><td class="num">Mixta</td></tr>
+            <tr><td>Ataque</td><td class="num">Por bandas</td></tr>
+            <tr><td>Formación más usada</td><td class="num">4-2-3-1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Tendencia · últimas 5</h3>
+        <div class="carga" style="height:56px">
+          <span style="height:52%"></span><span style="height:71%"></span><span style="height:44%"></span>
+          <span style="height:83%"></span><span style="height:91%"></span>
+        </div>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e3) 0 0">
+          xG a favor por jornada. Curva ascendente desde la derrota con América.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Contexto de esta semana</h3>
+        <ul style="margin:0; padding-left:var(--e4); color:var(--texto-medio); font-size:13px; line-height:1.9">
+          <li>5 días de descanso, 3 más que el rival</li>
+          <li>28 °C y 71 % de humedad previstos</li>
+          <li>Sin bajas relevantes</li>
+          <li>Viaje a 2,432 m en 4 días</li>
+        </ul>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <button class="boton" style="width:100%; justify-content:center">Comparar con otro equipo</button>
+        <button class="boton fantasma" style="width:100%; justify-content:center; margin-top:var(--e2)">Informe de scouting (PDF)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

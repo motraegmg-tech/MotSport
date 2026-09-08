@@ -14,15 +14,24 @@
 | [`mockups/fundaciones/componentes.html`](mockups/fundaciones/componentes.html) | Señales, sellos de procedencia, percentiles, tarjetas de partido, dato en conflicto, estados | ✅ |
 | [`mockups/pantallas/radar.html`](mockups/pantallas/radar.html) | Pantalla 1 · Radar | ✅ |
 | [`mockups/pantallas/centro-partido.html`](mockups/pantallas/centro-partido.html) | Pantalla 2 · Centro de Partido (estado «previa») | ✅ |
+| [`mockups/pantallas/ficha-equipo.html`](mockups/pantallas/ficha-equipo.html) | Pantalla 3 · Ficha de Equipo | ✅ |
 | [`mockups/pantallas/ficha-jugador.html`](mockups/pantallas/ficha-jugador.html) | Pantalla 4 · Ficha de Jugador | ✅ |
+| [`mockups/pantallas/comparador.html`](mockups/pantallas/comparador.html) | Pantalla 5 · Comparador | ✅ |
+| [`mockups/pantallas/scouting.html`](mockups/pantallas/scouting.html) | Pantalla 6 · Scouting | ✅ |
 | [`mockups/pantallas/consola-ia.html`](mockups/pantallas/consola-ia.html) | Pantalla 7 · Consola IA | ✅ |
-| Pantallas 3, 5, 6, 8, 9 y 10 | Equipo, Comparador, Scouting, Informes, Alertas, Operación | 🟡 pendiente |
+| [`mockups/pantallas/alertas.html`](mockups/pantallas/alertas.html) | Pantalla 9 · Alertas | ✅ |
+| Pantallas 8 y 10 | Informes (Fase 2) y Panel de operación | 🟡 pendiente |
 
-## Tres decisiones que estos mockups ya fijan
+**Las ocho pantallas del alcance de Fase 1 están hechas.** Faltan dos: Informes, que es entrega de Fase 2, y el Panel de operación, que en Fase 1 es una vista mínima sin diseño propio.
+
+## Seis decisiones que estos mockups ya fijan
 
 1. **La señal es la unidad de valor del Radar.** «Viento 34 km/h», «3 días menos de descanso», «duda el central titular»: un hecho del contexto en cuatro palabras. No es opinión ni pronóstico — es un dato que amerita mirarse.
 2. **Todo dato lleva su sello de procedencia visible**, con un punto de color según la confianza. No escondido detrás del cursor: a la vista, junto a la cifra.
 3. **En la Consola IA, las herramientas que llamó el asistente quedan visibles** arriba de cada respuesta, y cada cifra cita su fuente y su fecha. El tercer intercambio del mockup es a propósito uno donde **el asistente dice que no tiene el dato** — ese es el comportamiento que hay que construir, no el que hay que evitar.
+4. **Ningún percentil se muestra sin su escala de referencia.** En el Comparador y en Scouting, los cinco parámetros que definen la comparación —competencia, temporada, posición, mínimo de minutos y tamaño de muestra— están permanentemente a la vista, porque cambiar cualquiera cambia todos los números de la pantalla.
+5. **Las reglas de alerta se escriben como frases en español**, no como formularios de campos. El usuario no debería tener que saber que existe un factor llamado `viento_velocidad`.
+6. **La interfaz interpreta, no solo muestra.** Cada pantalla cierra con una lectura en prosa —qué significa este perfil, qué tienen en común estos cuatro jugadores, qué hay que mirar de este equipo—. Un tablero que solo pinta números deja el trabajo a medias.
 
 ## Qué fase muestran los mockups
 

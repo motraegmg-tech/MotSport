@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparador · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .ranura {
+    display:flex; align-items:center; gap:var(--e3);
+    padding:var(--e3) var(--e4); background:var(--superficie);
+    border:1px solid var(--borde); border-radius:var(--r2);
+  }
+  .ranura .marca { width:10px; height:10px; border-radius:50%; flex:0 0 auto; }
+  .ranura .quitar { margin-left:auto; color:var(--texto-tenue); cursor:pointer; font-size:16px; line-height:1; }
+  .ranura.vacia { border-style:dashed; color:var(--texto-tenue); justify-content:center; cursor:pointer; }
+  .barras-comp { display:flex; flex-direction:column; gap:5px; }
+  .barra-comp { display:flex; align-items:center; gap:var(--e2); }
+  .barra-comp .pista { flex:1; height:14px; background:var(--superficie-2); border-radius:3px; overflow:hidden; }
+  .barra-comp .relleno { height:100%; border-radius:3px; }
+  .barra-comp .val { font-family:var(--fuente-mono); font-size:11px; width:42px; text-align:right; color:var(--texto-medio); }
+  .fila-metrica { padding:var(--e4) 0; border-bottom:1px solid var(--borde-suave); }
+  .fila-metrica:last-child { border-bottom:none; }
+  .fila-metrica .titulo { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:var(--e2); }
+  .fila-metrica .nombre-metrica { font-weight:600; font-size:13px; }
+  .fila-metrica .gana { font-size:11px; color:var(--texto-tenue); }
+  /* colores por ranura */
+  .s1 { background:#57AD30; } .s2 { background:#5B8DB8; } .s3 { background:#F2853A; } .s4 { background:#8A6BB1; }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Partido</a>
+    <a href="ficha-equipo.html">Equipo</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="comparador.html" class="activo">Comparador</a>
+    <a href="scouting.html">Scouting</a>
+    <a href="alertas.html">Alertas</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha"><button class="boton fantasma" onclick="cambiarTema()">Tema</button></div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 5 · Comparador.</strong> Hasta cuatro jugadores o equipos lado a lado, en la <strong>misma escala y la misma temporada</strong>. Esa restricción es el producto: comparar un delantero de Liga MX con uno de Premier sin normalizar por liga es exactamente el error que esta pantalla existe para impedir. Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4); flex-wrap:wrap; gap:var(--e3)">
+    <div>
+      <h1>Comparador</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">Mediocentros · Liga MX · Apertura 2026 · mínimo 900 minutos</p>
+    </div>
+    <div style="display:flex; gap:var(--e2)">
+      <button class="boton fantasma">Cambiar escala</button>
+      <button class="boton">Exportar</button>
+    </div>
+  </div>
+
+  <div class="rejilla c4" style="margin-bottom:var(--e5)">
+    <div class="ranura"><span class="marca s1"></span><div><div style="font-weight:600; font-size:13px">M. Rodríguez</div><div style="color:var(--texto-tenue); font-size:11px">Tigres · 23 años</div></div><span class="quitar">×</span></div>
+    <div class="ranura"><span class="marca s2"></span><div><div style="font-weight:600; font-size:13px">J. Herrera</div><div style="color:var(--texto-tenue); font-size:11px">Pumas · 24 años</div></div><span class="quitar">×</span></div>
+    <div class="ranura"><span class="marca s3"></span><div><div style="font-weight:600; font-size:13px">A. Domínguez</div><div style="color:var(--texto-tenue); font-size:11px">Toluca · 22 años</div></div><span class="quitar">×</span></div>
+    <div class="ranura vacia">+ Agregar cuarto</div>
+  </div>
+
+  <div class="rejilla c-lateral">
+    <div class="tarjeta">
+      <h3 style="margin-bottom:var(--e4)">Percentiles en su liga y posición</h3>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">Pases progresivos / 90</span><span class="gana">gana M. Rodríguez</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:91%"></div></div><span class="val">91</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:86%"></div></div><span class="val">86</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:88%"></div></div><span class="val">88</span></div>
+        </div>
+      </div>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">xA / 90</span><span class="gana">gana M. Rodríguez</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:88%"></div></div><span class="val">88</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:64%"></div></div><span class="val">64</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:79%"></div></div><span class="val">79</span></div>
+        </div>
+      </div>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">Entradas al último tercio / 90</span><span class="gana">gana A. Domínguez</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:83%"></div></div><span class="val">83</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:72%"></div></div><span class="val">72</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:90%"></div></div><span class="val">90</span></div>
+        </div>
+      </div>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">Duelos ganados %</span><span class="gana">gana J. Herrera, y por mucho</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:44%"></div></div><span class="val">44</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:81%"></div></div><span class="val">81</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:38%"></div></div><span class="val">38</span></div>
+        </div>
+      </div>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">Recuperaciones en campo rival / 90</span><span class="gana">gana J. Herrera, y por mucho</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:19%"></div></div><span class="val">19</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:77%"></div></div><span class="val">77</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:24%"></div></div><span class="val">24</span></div>
+        </div>
+      </div>
+
+      <div class="fila-metrica">
+        <div class="titulo"><span class="nombre-metrica">Pases completados %</span><span class="gana">parejo</span></div>
+        <div class="barras-comp">
+          <div class="barra-comp"><div class="pista"><div class="relleno s1" style="width:76%"></div></div><span class="val">76</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s2" style="width:73%"></div></div><span class="val">73</span></div>
+          <div class="barra-comp"><div class="pista"><div class="relleno s3" style="width:80%"></div></div><span class="val">80</span></div>
+        </div>
+      </div>
+
+      <span class="procedencia alta" style="margin-top:var(--e4); display:inline-flex"><span class="punto"></span>statsbomb + api-football · hace 2 h · misma temporada, misma liga, misma posición</span>
+    </div>
+
+    <div>
+      <div class="tarjeta acento">
+        <h3>Lo que dice la comparación</h3>
+        <p style="color:var(--texto-medio); font-size:13px; margin:0 0 var(--e3)">
+          <strong style="color:var(--texto)">No son el mismo jugador con distinta camiseta.</strong>
+          Rodríguez y Domínguez son creadores puros: élite en progresión y creación,
+          por debajo de la media en todo lo defensivo.
+        </p>
+        <p style="color:var(--texto-medio); font-size:13px; margin:0">
+          Herrera es el único de los tres que sostiene el perfil creativo
+          <em>sin</em> ceder trabajo defensivo — percentil 81 en duelos y 77 en recuperaciones
+          en campo rival. Si el equipo presiona alto, es el único de los tres que encaja sin ajustes.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Contexto que no está en los percentiles</h3>
+        <table>
+          <tbody>
+            <tr><td>Minutos jugados</td><td class="num">1,842 / 1,610 / 1,203</td></tr>
+            <tr><td>Edad</td><td class="num">23 / 24 / 22</td></tr>
+            <tr><td>Disponibilidad</td><td class="num"><span class="senal buena">3 de 3</span></td></tr>
+            <tr><td>Carga 3 semanas</td><td class="num">248' / 190' / 156'</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+          Domínguez tiene 639 minutos menos que Rodríguez. Sus percentiles son
+          más volátiles y pueden moverse bastante en lo que queda de temporada.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Escala aplicada</h3>
+        <table>
+          <tbody>
+            <tr><td>Liga</td><td class="num">Liga MX</td></tr>
+            <tr><td>Temporada</td><td class="num">Apertura 2026</td></tr>
+            <tr><td>Posición</td><td class="num">Mediocentro</td></tr>
+            <tr><td>Mínimo</td><td class="num">900 min</td></tr>
+            <tr><td>Muestra</td><td class="num">61 jugadores</td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-tenue); font-size:11px; margin:var(--e3) 0 0">
+          Cambiar cualquiera de estos cinco cambia todos los percentiles de la pantalla.
+          Por eso están siempre a la vista y no escondidos en un menú.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>
