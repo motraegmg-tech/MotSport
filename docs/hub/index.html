@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MotSport · Hub de avance</title>
+<link rel="stylesheet" href="../motsport/mockups/estilos.css">
+<style>
+/* ─────────────────────────────────────────────────────────────
+   Hub de avance · MotSport
+   Hereda los tokens de los mockups: mismo verde, misma tipografia.
+   Todo lo de aqui lleva prefijo hub- para no chocar con esa hoja.
+   HTML y CSS puros, igual que los mockups: doble clic y listo.
+   ───────────────────────────────────────────────────────────── */
+
+body { margin: 0; }
+
+.hub-envoltura { max-width: 1180px; margin: 0 auto; padding: var(--e6) var(--e5) var(--e8); }
+
+/* Encabezado */
+.hub-cabecera {
+  border-bottom: 1px solid var(--borde);
+  padding-bottom: var(--e5);
+  margin-bottom: var(--e6);
+}
+.hub-marca {
+  display: flex; align-items: baseline; gap: var(--e3); flex-wrap: wrap;
+}
+.hub-marca h1 {
+  font-family: var(--fuente-titulo);
+  font-size: 30px; font-weight: 700; letter-spacing: -.5px;
+  margin: 0; color: var(--texto);
+}
+.hub-marca h1 span { color: var(--verde); }
+.hub-lema { color: var(--texto-tenue); font-size: 13px; }
+.hub-bajada { color: var(--texto-medio); margin: var(--e3) 0 0; max-width: 74ch; }
+
+.hub-avisos { display: flex; gap: var(--e2); flex-wrap: wrap; margin-top: var(--e4); }
+.hub-sello {
+  font-size: 11px; font-weight: 600; letter-spacing: .3px;
+  padding: 4px 10px; border-radius: 100px;
+  border: 1px solid var(--borde); color: var(--texto-medio);
+  background: var(--superficie);
+}
+.hub-sello.es-verde { border-color: var(--verde); color: var(--verde); }
+.hub-sello.es-alerta { border-color: var(--alerta); color: var(--alerta); }
+
+/* Metricas */
+.hub-metricas {
+  display: grid; gap: var(--e3);
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  margin-bottom: var(--e7);
+}
+.hub-metrica {
+  background: var(--superficie); border: 1px solid var(--borde-suave);
+  border-radius: var(--r2); padding: var(--e4);
+}
+.hub-metrica b {
+  display: block; font-family: var(--fuente-titulo);
+  font-size: 26px; font-weight: 700; color: var(--verde); line-height: 1.1;
+}
+.hub-metrica small { display: block; color: var(--texto-tenue); font-size: 12px; margin-top: 4px; }
+
+/* Secciones */
+.hub-seccion { margin-bottom: var(--e7); }
+.hub-seccion > h2 {
+  font-family: var(--fuente-titulo); font-size: 19px; font-weight: 600;
+  margin: 0 0 var(--e2); color: var(--texto);
+  display: flex; align-items: center; gap: var(--e2);
+}
+.hub-seccion > h2::before {
+  content: ''; width: 3px; height: 17px; border-radius: 2px; background: var(--verde);
+}
+.hub-nota { color: var(--texto-medio); margin: 0 0 var(--e4); max-width: 84ch; font-size: 13px; }
+
+/* Rejilla de tarjetas */
+.hub-rejilla { display: grid; gap: var(--e3); grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); }
+.hub-tarjeta {
+  background: var(--superficie); border: 1px solid var(--borde-suave);
+  border-radius: var(--r2); padding: var(--e4);
+}
+.hub-tarjeta h3 {
+  font-family: var(--fuente-titulo); font-size: 14px; font-weight: 600;
+  margin: 0 0 var(--e2); color: var(--texto);
+  display: flex; align-items: center; gap: var(--e2);
+}
+.hub-tarjeta p { margin: 0; color: var(--texto-medio); font-size: 13px; }
+.hub-tarjeta p + p { margin-top: var(--e2); }
+
+/* Punto de estado */
+.hub-punto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.hub-punto.listo { background: var(--verde); }
+.hub-punto.curso { background: var(--alerta); }
+.hub-punto.parado { background: var(--malo); }
+.hub-punto.espera { background: var(--texto-tenue); }
+
+/* Tablas */
+.hub-tabla-caja { overflow-x: auto; border: 1px solid var(--borde-suave); border-radius: var(--r2); }
+table.hub-tabla { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--superficie); }
+table.hub-tabla th {
+  text-align: left; font-family: var(--fuente-titulo); font-weight: 600;
+  font-size: 11px; letter-spacing: .4px; text-transform: uppercase;
+  color: var(--texto-tenue); padding: var(--e3) var(--e4);
+  border-bottom: 1px solid var(--borde);
+}
+table.hub-tabla td { padding: var(--e3) var(--e4); border-bottom: 1px solid var(--borde-suave); color: var(--texto-medio); vertical-align: top; }
+table.hub-tabla tr:last-child td { border-bottom: none; }
+table.hub-tabla td strong { color: var(--texto); font-weight: 600; }
+code, .hub-mono { font-family: var(--fuente-mono); font-size: .92em; color: var(--texto); }
+
+/* Bloque de atencion — unico lugar donde se usa el degradado */
+.hub-atencion {
+  border: 1px solid var(--borde); border-radius: var(--r2);
+  background: var(--superficie); overflow: hidden;
+}
+.hub-atencion-borde { height: 3px; background: var(--degradado); }
+.hub-atencion-cuerpo { padding: var(--e5); }
+.hub-atencion h2 { margin-top: 0; }
+
+/* Lista de decisiones */
+ol.hub-lista { margin: 0; padding-left: 0; list-style: none; counter-reset: d; }
+ol.hub-lista li {
+  counter-increment: d; position: relative; padding-left: 34px;
+  margin-bottom: var(--e4); color: var(--texto-medio); font-size: 13px;
+}
+ol.hub-lista li:last-child { margin-bottom: 0; }
+ol.hub-lista li::before {
+  content: counter(d); position: absolute; left: 0; top: -1px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--superficie-2); border: 1px solid var(--borde);
+  color: var(--verde); font-family: var(--fuente-titulo);
+  font-size: 11px; font-weight: 700;
+  display: grid; place-items: center;
+}
+ol.hub-lista b { color: var(--texto); display: block; margin-bottom: 2px; font-size: 14px; }
+
+/* Enlaces */
+.hub-accesos { display: grid; gap: var(--e3); grid-template-columns: repeat(auto-fit, minmax(228px, 1fr)); }
+a.hub-acceso {
+  display: block; text-decoration: none;
+  background: var(--superficie); border: 1px solid var(--borde-suave);
+  border-radius: var(--r2); padding: var(--e4);
+  transition: border-color .15s, transform .15s;
+}
+a.hub-acceso:hover { border-color: var(--verde); transform: translateY(-1px); }
+a.hub-acceso b { display: block; color: var(--texto); font-family: var(--fuente-titulo); font-size: 14px; font-weight: 600; }
+a.hub-acceso small { display: block; color: var(--texto-tenue); font-size: 12px; margin-top: 4px; }
+
+/* Linea de tiempo de commits */
+.hub-commits { border-left: 2px solid var(--borde); padding-left: var(--e4); margin: 0; }
+.hub-commit { position: relative; padding-bottom: var(--e4); }
+.hub-commit:last-child { padding-bottom: 0; }
+.hub-commit::before {
+  content: ''; position: absolute; left: calc(var(--e4) * -1 - 5px); top: 5px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--verde); border: 2px solid var(--fondo);
+}
+.hub-commit code { color: var(--texto-tenue); font-size: 11px; }
+.hub-commit p { margin: 2px 0 0; color: var(--texto-medio); font-size: 13px; }
+
+/* Pie */
+.hub-pie {
+  border-top: 1px solid var(--borde); margin-top: var(--e7);
+  padding-top: var(--e4); color: var(--texto-tenue); font-size: 12px;
+  display: flex; justify-content: space-between; gap: var(--e4); flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .hub-envoltura { padding: var(--e5) var(--e4) var(--e7); }
+  .hub-marca h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+<div class="hub-envoltura">
+
+  <header class="hub-cabecera">
+    <div class="hub-marca">
+      <h1>Mot<span>Sport</span></h1>
+      <span class="hub-lema">Hub de avance · MOTRAE</span>
+    </div>
+    <p class="hub-bajada">
+      La mesa de trabajo del analista deportivo. Este hub es el estado real del proyecto
+      al <strong>8 de septiembre de 2026</strong>: qué está hecho, qué está bloqueado y
+      quién lo desbloquea.
+    </p>
+    <div class="hub-avisos">
+      <span class="hub-sello es-verde">Fase 0 cerrada</span>
+      <span class="hub-sello es-alerta">Fase 1 en curso</span>
+      <span class="hub-sello">Uso interno · confidencial</span>
+      <span class="hub-sello">No se vende ni se distribuye</span>
+    </div>
+  </header>
+
+  <section class="hub-metricas">
+    <div class="hub-metrica"><b>16/17</b><small>documentos escritos</small></div>
+    <div class="hub-metrica"><b>40</b><small>tablas con RLS</small></div>
+    <div class="hub-metrica"><b>10</b><small>mockups navegables</small></div>
+    <div class="hub-metrica"><b>2 453</b><small>líneas de migración</small></div>
+    <div class="hub-metrica"><b>39 066</b><small>palabras de documentación</small></div>
+    <div class="hub-metrica"><b>18</b><small>commits</small></div>
+  </section>
+
+  <!-- ───────────── Lo hecho ───────────── -->
+  <section class="hub-seccion">
+    <h2>Lo que está hecho</h2>
+    <p class="hub-nota">
+      La Fase 0 era documentación, esquema y mockups; está cerrada. La Fase 1 arrancó
+      con el entorno y la primera migración.
+    </p>
+    <div class="hub-rejilla">
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Documentación · 16 de 17</h3>
+        <p>La suite completa, indexada. El único pendiente es <strong>11 · Modelos
+        predictivos</strong>, y lo está a propósito: es entrega de Fase 2 y no se
+        puede especificar sin datos encima.</p>
+      </article>
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Esquema · 40 tablas, auditado</h3>
+        <p>Lo escribió <strong>Codex</strong> y lo auditó <strong>Claude</strong> de
+        forma independiente. Esa separación es la razón de que la auditoría encontrara
+        cuatro defectos.</p>
+        <p>Los cuatro <strong>ya están aplicados</strong>.</p>
+      </article>
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Mockups · las 10 pantallas</h3>
+        <p>HTML y CSS puros: se abren con doble clic, sin instalar nada. Verificados
+        en navegador, en tema oscuro y claro.</p>
+      </article>
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Entorno de desarrollo</h3>
+        <p>Las herramientas dejaron de vivir en la máquina y pasaron al repositorio.
+        Cualquiera que clone obtiene las mismas versiones. Ver <strong>ADR-01</strong>.</p>
+      </article>
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Primera migración · aplicada</h3>
+        <p>El esquema dejó de ser documento: <strong>2 453 líneas</strong> de SQL
+        aplicable en dos migraciones más la semilla.</p>
+        <p><strong>Aplicó a la primera, sin un solo error</strong>, contra Postgres 17.6
+        en local. Se esperaba que fallara algo y no falló.</p>
+      </article>
+
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto espera"></span>Repositorio en GitHub</h3>
+        <p>El remoto ya está configurado, pero <strong>nada se ha subido</strong>:
+        falta <code>gh auth login</code>, que es interactivo.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ───────────── Los hallazgos ───────────── -->
+  <section class="hub-seccion">
+    <h2>Los cuatro hallazgos de la auditoría · aplicados</h2>
+    <p class="hub-nota">
+      Ninguno tocó la estructura del núcleo. El esquema pasó de 39 a 40 tablas.
+    </p>
+    <div class="hub-tabla-caja">
+      <table class="hub-tabla">
+        <thead>
+          <tr><th>#</th><th>Severidad</th><th>Qué era</th><th>Dónde quedó</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1</strong></td>
+            <td>Grave</td>
+            <td><code>eventos.periodo</code> era texto libre. Un conector escribe
+                <code>'1T'</code>, otro <code>'Q1'</code>, y agrupar por periodo
+                devuelve tres grupos donde debería haber uno.</td>
+            <td>Nueva tabla <code>catalogo_periodos</code> por deporte y
+                <code>periodo_clave</code> con llave foránea compuesta.</td>
+          </tr>
+          <tr>
+            <td><strong>2</strong></td>
+            <td>Menor</td>
+            <td>No se distinguía una victoria en penales de una normal. Sesga el rating
+                de todo equipo que juegue eliminatorias.</td>
+            <td><code>resultado_reglamentario</code>, <code>puntuacion_reglamentaria</code>
+                y <code>desenlace</code>. El rating lee el reglamentario.</td>
+          </tr>
+          <tr>
+            <td><strong>3</strong></td>
+            <td>Bloqueante al escribir</td>
+            <td>39 <code>USING</code> y cero <code>WITH CHECK</code>. Un
+                <code>UPDATE</code> podría mover una fila a otro tenant.</td>
+            <td>Regla, plantilla y consulta de verificación en el § 7.1, más el
+                documento de seguridad.</td>
+          </tr>
+          <tr>
+            <td><strong>4</strong></td>
+            <td>Menor</td>
+            <td>Los catálogos son por tenant y no había procedimiento de siembra: el
+                primer cliente abriría con la base vacía.</td>
+            <td>Orden de siembra de las trece tablas y cuatro reglas, en el documento
+                de distribución.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hub-nota" style="margin-top:var(--e3)">
+      <strong>Lo que sigue abierto de la auditoría es el rendimiento</strong>, y es lo
+      único que no se juzga leyendo SQL: se mide con datos encima.
+    </p>
+  </section>
+
+  <!-- ───────────── Verificación contra la base ───────────── -->
+  <section class="hub-seccion">
+    <h2>La base existe · verificado contra Postgres</h2>
+    <p class="hub-nota">
+      Estas cifras no salen de leer el SQL: salen de consultar el catálogo de un
+      Postgres 17.6 con las migraciones aplicadas. Es la diferencia entre creer que
+      el esquema está bien y saberlo.
+    </p>
+    <div class="hub-rejilla">
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Estructura</h3>
+        <p><strong>40</strong> tablas · <strong>40</strong> con RLS activa ·
+        <strong>40</strong> con RLS forzada · <strong>40</strong> políticas.
+        Ninguna tabla quedó fuera, catálogos incluidos.</p>
+        <p>9 funciones · 18 triggers · 10 índices propios · 4 vistas de resolución.</p>
+      </article>
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Aislamiento entre tenants</h3>
+        <p><strong>107 de 108</strong> llaves foráneas son compuestas con
+        <code>tenant_id</code>. La 108 es <code>usuarios → auth.users</code>, que sale
+        del dominio y por eso no lo lleva: es correcta.</p>
+      </article>
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Falla cerrado · probado</h3>
+        <p>La auditoría lo dedujo leyendo; ahora está medido. Sin JWT,
+        <code>authenticated</code> ve <strong>0 deportes, 0 fuentes y 0 inquilinos</strong>,
+        mientras el rol dueño ve los 3 deportes.</p>
+        <p>Cero políticas de escritura sin <code>WITH CHECK</code>.</p>
+      </article>
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto listo"></span>Semilla</h3>
+        <p>1 inquilino · 7 fuentes · 3 deportes · 3 métricas · 3 factores ·
+        <strong>15 periodos</strong> repartidos entre fútbol, NBA y NFL.</p>
+      </article>
+      <article class="hub-tarjeta">
+        <h3><span class="hub-punto curso"></span>Lo que sigue sin medirse</h3>
+        <p><strong>El rendimiento.</strong> Los índices se crearon, pero nadie ha
+        comprobado que sirvan de verdad a la consulta de percentiles con millones de
+        filas. Necesita datos sintéticos a escala.</p>
+        <p>Es lo único que la auditoría dejó abierto.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ───────────── Entorno ───────────── -->
+  <section class="hub-seccion">
+    <h2>Entorno de desarrollo</h2>
+    <p class="hub-nota">
+      Toda herramienta cuya versión afecte el resultado se declara en el repositorio,
+      no en la máquina. Docker y GitHub CLI son la excepción deliberada: son
+      infraestructura de la máquina, no dependencias del build.
+    </p>
+    <div class="hub-tabla-caja">
+      <table class="hub-tabla">
+        <thead><tr><th>Herramienta</th><th>Versión</th><th>Dónde se fija</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Node</strong></td><td>24.16.0</td><td><code>.nvmrc</code> · <code>engines</code></td></tr>
+          <tr><td><strong>pnpm</strong></td><td>9.15.9</td><td><code>packageManager</code>, vía <code>corepack pnpm</code></td></tr>
+          <tr><td><strong>Supabase CLI</strong></td><td>2.117.0</td><td><code>devDependency</code> + <code>pnpm-lock.yaml</code></td></tr>
+          <tr><td><strong>Python</strong></td><td>3.12.13</td><td><code>.python-version</code>, gestionado con <code>uv</code></td></tr>
+          <tr><td><strong>Docker</strong></td><td>29.7.2</td><td>global · corriendo sobre WSL 2</td></tr>
+          <tr><td><strong>GitHub CLI</strong></td><td>2.100.0</td><td>global</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───────────── Bloqueos ───────────── -->
+  <section class="hub-seccion">
+    <div class="hub-atencion">
+      <div class="hub-atencion-borde"></div>
+      <div class="hub-atencion-cuerpo">
+        <h2>Bloqueado · esperando a Gonzalo</h2>
+        <p class="hub-nota">
+          Nada de esto lo puede resolver el equipo técnico. Son decisiones, y cada una
+          detiene trabajo concreto.
+        </p>
+        <ol class="hub-lista">
+          <li>
+            <b>Qué deportes y qué ligas sigue realmente el equipo</b>
+            Define la primera ingesta. Sin esto se construyen conectores que nadie va a abrir.
+          </li>
+          <li>
+            <b>Quién es exactamente «el equipo» que va a usar esto a diario</b>
+            Toda la estrategia descansa en que el uso escriba el pliego de requisitos, y
+            eso solo funciona si quien lo usa prepara partidos de verdad.
+          </li>
+          <li>
+            <b>Nombre comercial definitivo</b>
+            <code>MotSport</code> es nombre de trabajo. Cambiarlo hoy cuesta una búsqueda
+            y reemplazo; con código publicado, no.
+          </li>
+          <li>
+            <b>Subir el repositorio a GitHub</b>
+            <code>gh</code> ya está instalado; falta <code>gh auth login</code>, que es
+            interactivo. Hoy los últimos commits solo existen en esta máquina.
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Lo que sigue ───────────── -->
+  <section class="hub-seccion">
+    <h2>Lo que sigue, en orden</h2>
+    <div class="hub-tabla-caja">
+      <table class="hub-tabla">
+        <thead><tr><th></th><th>Tarea</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Aplicar los cuatro hallazgos de la auditoría</td><td><span class="hub-punto listo" style="display:inline-block;margin-right:6px"></span>Hecho</td></tr>
+          <tr><td>2</td><td>Escribir la primera migración</td><td><span class="hub-punto listo" style="display:inline-block;margin-right:6px"></span>Hecha</td></tr>
+          <tr><td>3</td><td>Aplicarla contra Postgres</td><td><span class="hub-punto listo" style="display:inline-block;margin-right:6px"></span>Hecho, a la primera</td></tr>
+          <tr><td>4</td><td>Medir el rendimiento del esquema con datos a escala</td><td><span class="hub-punto curso" style="display:inline-block;margin-right:6px"></span>Siguiente</td></tr>
+          <tr><td>5</td><td>Primer conector, con su licencia documentada <strong>antes</strong></td><td><span class="hub-punto parado" style="display:inline-block;margin-right:6px"></span>Espera decisión 1</td></tr>
+          <tr><td>6</td><td>Llenar a mano el catálogo de sedes y nombrar responsable</td><td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>Pendiente</td></tr>
+          <tr><td>7</td><td>Levantar <code>apps/web</code> y el asistente v1</td><td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>Pendiente</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ───────────── Commits ───────────── -->
+  <section class="hub-seccion">
+    <h2>Lo último que pasó</h2>
+    <p class="hub-nota">
+      Los seis commits más recientes viven en la rama
+      <code>fix/hallazgos-auditoria-esquema</code>, no en <code>main</code>: sin
+      repositorio en GitHub no hay dónde abrir el PR.
+    </p>
+    <div class="hub-commits">
+      <div class="hub-commit">
+        <code>76b5c35</code>
+        <p>WSL 2 quedó instalado y Docker ya corre. Sin Ubuntu: Docker registra su propia distro.</p>
+      </div>
+      <div class="hub-commit">
+        <code>fd621ed</code>
+        <p>Docker necesita el kernel de WSL, no una distribución.</p>
+      </div>
+      <div class="hub-commit">
+        <code>699851b</code>
+        <p>Decir con precisión qué se verificó de las migraciones y qué no.</p>
+      </div>
+      <div class="hub-commit">
+        <code>787773c</code>
+        <p>El esquema deja de ser un documento y se vuelve migración.</p>
+      </div>
+      <div class="hub-commit">
+        <code>26238f2</code>
+        <p>Las herramientas dejan de vivir en la máquina y pasan al repo.</p>
+      </div>
+      <div class="hub-commit">
+        <code>d902d3f</code>
+        <p>Los cuatro hallazgos de la auditoría dejan de ser propuesta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── Accesos ───────────── -->
+  <section class="hub-seccion">
+    <h2>Ir a</h2>
+    <div class="hub-accesos">
+      <a class="hub-acceso" href="../motsport/mockups/index.html">
+        <b>Los 10 mockups</b><small>Las pantallas, navegables</small></a>
+      <a class="hub-acceso" href="../RELEVO-FASE-0.md">
+        <b>Relevo de Fase 0</b><small>Qué está hecho, qué falta, qué bloquea</small></a>
+      <a class="hub-acceso" href="../motsport/00_INDICE.md">
+        <b>Índice de documentación</b><small>Los 17 documentos</small></a>
+      <a class="hub-acceso" href="../motsport/07_MODELO_DE_DATOS.md">
+        <b>Modelo de datos</b><small>40 tablas y la auditoría</small></a>
+      <a class="hub-acceso" href="../../supabase/migrations/">
+        <b>Migraciones</b><small>El esquema aplicable</small></a>
+      <a class="hub-acceso" href="../adr/ADR-01-herramientas-locales-versionadas.md">
+        <b>ADR-01</b><small>Por qué las herramientas viven en el repo</small></a>
+    </div>
+  </section>
+
+  <footer class="hub-pie">
+    <span>MOTRAE · <em>Innovation already in motion</em></span>
+    <span>Confidencial · Uso interno · Xalapa, Veracruz · México</span>
+  </footer>
+
+</div>
+</body>
+</html>

@@ -2,9 +2,9 @@
 
 > **Para quien abra este repositorio sin haber estado en la conversación que lo creó** — otra máquina, otro IDE, otro agente, o tú mismo dentro de tres meses.
 >
-> Estado al **8 de septiembre de 2026** · 14 commits · 60 archivos · ~35,600 palabras de documentación · 10 mockups navegables · el esquema ya es migración.
+> Estado al **8 de septiembre de 2026** · 18 commits · 61 archivos · ~39,000 palabras de documentación · 10 mockups navegables · **el esquema ya corre en Postgres**.
 >
-> ⚠️ **Los tres commits más recientes viven en la rama `fix/hallazgos-auditoria-esquema`, no en `main`.** Son los hallazgos de la auditoría, el entorno de desarrollo y la primera migración. No se fusionaron porque el repositorio todavía no está en GitHub y no hay dónde abrir el PR. **Si clonas y ves `main`, te falta todo eso**: `git checkout fix/hallazgos-auditoria-esquema`.
+> ⚠️ **Los últimos 7 commits viven en la rama `fix/hallazgos-auditoria-esquema`, no en `main`.** Son los hallazgos de la auditoría, el entorno de desarrollo, la primera migración y el hub de avance. No se fusionaron porque el repositorio todavía no está en GitHub y no hay dónde abrir el PR. **Si clonas y ves `main`, te falta todo eso**: `git checkout fix/hallazgos-auditoria-esquema`.
 
 ---
 
@@ -22,6 +22,8 @@
 2. [`../CLAUDE.md`](../CLAUDE.md) — las reglas duras, en corto
 3. [`motsport/00_INDICE.md`](motsport/00_INDICE.md) — índice de los 17 documentos
 4. Este relevo — qué está hecho, qué falta y qué está bloqueado
+
+> 💡 **¿Prefieres verlo que leerlo?** [`hub/index.html`](hub/index.html) es el mismo estado en una página: doble clic, sin instalar nada.
 
 ---
 
@@ -41,7 +43,7 @@ Lo escribió **Codex** y lo auditó **Claude** de forma independiente (se intent
 
 **Los cuatro hallazgos de la auditoría ya están aplicados** (8 de septiembre) y el esquema pasó de 39 a 40 tablas. Detalle en § 4.4.
 
-**Y ya es migración**, no solo documento: [`supabase/migrations/`](../supabase/migrations/) — escrita pero **sin aplicar todavía**, porque Docker no arranca. Ver § 4.5. Lo único que la auditoría no pudo juzgar sigue abierto: el rendimiento, que se mide con datos encima.
+**Y ya es migración aplicada**, no solo documento: [`supabase/migrations/`](../supabase/migrations/) corrió contra Postgres 17.6 **sin un solo error** y quedó verificada contra el catálogo de la base. Ver § 4.5. Lo único que la auditoría no pudo juzgar sigue abierto: el rendimiento, que se mide con datos encima.
 
 ### Mockups · las 10 pantallas
 
@@ -132,8 +134,8 @@ Y una que no era trampa sino error de documentación: **`Supabase.CLI` no existe
 En este orden:
 
 1. ~~**Aplicar los cuatro hallazgos de la auditoría.**~~ ✅ **Hecho el 8 de septiembre** — ver § 4.4.
-2. ~~**Escribir la primera migración de Supabase.**~~ ✅ **Escrita el 8 de septiembre**, pero **sin aplicar todavía** — ver § 4.5. Se adelantó a la medición precisamente porque sin esquema aplicado no hay nada que medir.
-3. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado por WSL** — ver § 4.2.
+2. ~~**Escribir la primera migración de Supabase.**~~ ✅ **Escrita y aplicada el 8 de septiembre**, verificada contra la base — ver § 4.5.
+3. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⏭️ **Es lo siguiente**, y ya no está bloqueado: necesita generar datos sintéticos a escala.
 4. Escribir el primer conector, con su licencia documentada **antes** en [`08_FUENTES_DE_DATOS.md`](motsport/08_FUENTES_DE_DATOS.md). **Debe escribir `periodo_clave` del catálogo, no texto libre**, y separar `resultado` de `resultado_reglamentario`.
 5. Llenar a mano el catálogo de sedes y nombrar a su responsable.
 6. Levantar `apps/web/` y el asistente v1.
@@ -151,7 +153,7 @@ Ninguno tocó la estructura del núcleo. El esquema pasó de **39 a 40 tablas**.
 
 **Lo que queda abierto de la auditoría es el rendimiento**, y solo se cierra midiendo con datos.
 
-### 4.5 La primera migración · escrita, **sin aplicar**
+### 4.5 La primera migración · ✅ aplicada y verificada
 
 En [`supabase/migrations/`](../supabase/migrations/):
 
@@ -167,7 +169,21 @@ Dos colocaciones que llaman la atención y tienen motivo: las funciones `plpgsql
 
 Fuera del `seed.sql` quedaron los ejemplos de eventos de §5.5: referencian partidos, equipos y jugadores que nadie inserta. Sirven para leer, no para sembrar.
 
-> ⚠️ **Nadie las ha corrido contra un Postgres.** Además del orden derivado de las llaves foráneas, la sintaxis se validó con `sqlglot` en dialecto postgres: 130 + 120 + 6 sentencias, cero errores. Pero `sqlglot` **no entiende** `CREATE POLICY`, `ROW LEVEL SECURITY` ni los cuerpos `plpgsql` —los deja pasar como texto opaco—, así que lo validado de verdad son las tablas, los índices y las vistas. Eso da confianza, no certeza: **es probable que la primera corrida falle en algo**, se arregla y se quita el aviso del README.
+**Aplicaron a la primera, sin un solo error**, contra `supabase/postgres:17.6.1.167` en local. Se escribió aquí que era probable que fallara algo; no falló, y el mérito es del orden derivado de las llaves foráneas.
+
+Lo comprobado **consultando el catálogo de Postgres**, no leyendo el SQL:
+
+| Comprobación | Resultado |
+|---|---|
+| Tablas · RLS activa · RLS forzada · políticas | **40 · 40 · 40 · 40** |
+| Funciones · triggers · índices propios · vistas | 9 · 18 · 10 · 4 |
+| Llaves foráneas compuestas con `tenant_id` | **107 de 108** |
+| Políticas de escritura sin `WITH CHECK` | **0** — la consulta del § 7.1 devuelve vacío |
+| Semilla | 1 inquilino · 7 fuentes · 3 deportes · 3 métricas · 3 factores · 15 periodos |
+
+**La llave 108 es legítima:** `usuarios.usuario_id → auth.users(id)` apunta al esquema de autenticación de Supabase, donde `tenant_id` no existe. La regla de llaves compuestas vale para el dominio; esa sale del dominio. **No hay que «arreglarla».**
+
+**El aislamiento ya no se deduce, se probó.** Con el rol `authenticated` y sin JWT, `tenant_actual()` devuelve `NULL` y la consulta ve **0 deportes, 0 fuentes y 0 inquilinos**, mientras el rol dueño ve los 3 deportes. Falla cerrado, como decía la auditoría — ahora medido.
 
 ---
 

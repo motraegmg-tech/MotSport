@@ -13,24 +13,43 @@ El esquema, versionado.
 
 La semilla de catalogos esta en `../seed.sql` y la aplica `supabase db reset` sola.
 
-## ⚠️ Estado: escritas, NO aplicadas todavia
+## ✅ Estado: aplicadas y verificadas · 8 de septiembre de 2026
 
-**Nadie las ha corrido contra un Postgres.** Se escribieron mientras Docker Desktop seguia sin arrancar en la maquina de desarrollo. Lo que si se comprobo:
+**Aplicaron a la primera, sin un solo error**, contra `supabase/postgres:17.6.1.167` en local. Se esperaba que fallara algo y no fallo; el merito es del orden derivado de las llaves foraneas, no de la suerte.
+
+Lo comprobado **contra la base**, no leyendo el SQL:
 
 | Comprobacion | Resultado |
 |---|---|
-| Orden de creacion | Derivado de las llaves foraneas, **no escrito a mano**. Sin ciclos y sin una sola referencia a tabla inexistente |
-| Sintaxis con `sqlglot` (dialecto postgres) | 130 + 120 + 6 sentencias parseadas, cero errores |
-| Balanceo | Parentesis pares, cuerpos `$$` pares, cero residuos de Markdown |
+| Tablas creadas | **40** |
+| RLS activa · RLS forzada | **40 · 40** — ninguna tabla fuera |
+| Politicas | **40** de lectura |
+| Funciones · triggers · indices propios · vistas | 9 · 18 · 10 · 4 |
+| Llaves foraneas compuestas con `tenant_id` | **107 de 108** |
+| Politicas de escritura sin `WITH CHECK` | **0** (la consulta del § 7.1 devuelve vacio) |
+| Semilla | 1 inquilino · 7 fuentes · 3 deportes · 3 metricas · 3 factores · **15 periodos** |
 
-**Ojo con lo que ese `sqlglot` NO cubre.** No entiende `CREATE POLICY`, `ALTER TABLE … ROW LEVEL SECURITY`, `CREATE DOMAIN`, `CREATE EXTENSION` ni los cuerpos `plpgsql`: los trata como texto opaco y los deja pasar. Es decir, **la sintaxis validada de verdad es la de las tablas, los indices y las vistas** — justo donde esta el grueso del riesgo, pero no en todo el archivo. Y ninguna comprobacion estatica ve tipos, permisos ni si un `CHECK` es satisfacible.
+**La FK 108 es legitima y no hay que "arreglarla":** `usuarios.usuario_id → auth.users(id)` apunta al esquema de autenticacion de Supabase, donde `tenant_id` no existe. La regla de llaves compuestas vale para el dominio; esta sale del dominio.
 
-Eso da confianza, no certeza. **La primera vez que corran es probable que falle algo**, y eso es normal: se arregla, se vuelve a correr y se quita este aviso.
+### El aislamiento se probo, ya no se deduce
+
+La auditoria afirmaba que la RLS *falla cerrado* razonando sobre el SQL. Ahora esta medido:
+
+| Quien consulta | Ve |
+|---|---|
+| `postgres` (dueño) | 3 deportes |
+| `authenticated` **sin JWT** | **0 deportes, 0 fuentes, 0 inquilinos** |
+
+Sin claim de tenant, `tenant_actual()` devuelve `NULL`, la comparacion evalua a `NULL` y la RLS lo trata como falso. **No hay fuga.**
 
 ```bash
 corepack pnpm run base:levantar    # supabase start
 corepack pnpm run base:reiniciar   # supabase db reset: aplica migraciones + seed
 ```
+
+### Lo que sigue sin medirse
+
+**El rendimiento.** Los indices se crearon, pero nadie ha comprobado que sirvan de verdad a la consulta de percentiles con millones de filas, ni si las vistas se pueden refrescar de forma incremental. Eso necesita datos sinteticos a escala, y es lo unico que la auditoria dejo abierto.
 
 ## De donde sale este SQL
 
