@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .fila-partido {
+    display:grid; grid-template-columns: 92px 1fr 200px 90px;
+    gap:var(--e4); align-items:center;
+    padding:var(--e4); border-bottom:1px solid var(--borde-suave);
+    cursor:pointer;
+  }
+  .fila-partido:hover { background:var(--superficie-2); }
+  .fila-partido:last-child { border-bottom:none; }
+  .hora { font-family:var(--fuente-mono); font-size:13px; color:var(--texto-medio); }
+  .hora .dia { display:block; font-size:11px; color:var(--texto-tenue); text-transform:uppercase; letter-spacing:.05em; }
+  .equipos { font-weight:600; font-size:15px; }
+  .competencia { font-size:11px; color:var(--texto-tenue); text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
+  .senales-fila { display:flex; gap:6px; flex-wrap:wrap; }
+  .prob { text-align:right; }
+  .prob .barra-prob { height:4px; background:var(--superficie-2); border-radius:999px; margin-top:4px; overflow:hidden; }
+  .prob .barra-prob div { height:100%; background:var(--verde); }
+  .filtros { display:flex; gap:var(--e2); flex-wrap:wrap; margin-bottom:var(--e4); }
+  .chip { padding:6px var(--e3); border-radius:999px; border:1px solid var(--borde);
+          background:var(--superficie); font-size:12px; color:var(--texto-medio); cursor:pointer; }
+  .chip.activo { background:var(--verde); color:#0F1416; border-color:var(--verde); font-weight:600; }
+  @media (max-width:900px){ .fila-partido{ grid-template-columns:1fr; gap:var(--e2); } .prob{ text-align:left; } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html" class="activo">Radar</a>
+    <a href="centro-partido.html">Centro de Partido</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha">
+    <button class="boton fantasma">Asistente <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button class="boton fantasma" onclick="cambiarTema()">Tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 1 · Radar.</strong> Lo primero que se ve al abrir MotSport. Responde una sola pregunta: <em>¿qué partidos de esta semana merecen mi atención, y por qué?</em> Datos ficticios.
+  </div>
+
+  <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:var(--e4)">
+    <div>
+      <h1>Radar</h1>
+      <p style="color:var(--texto-medio); margin:var(--e1) 0 0">Semana del 8 al 14 de septiembre · 14 partidos seguidos</p>
+    </div>
+    <button class="boton primario">Generar previas de la semana</button>
+  </div>
+
+  <div class="filtros">
+    <span class="chip activo">Todos</span>
+    <span class="chip">Fútbol</span>
+    <span class="chip">NBA</span>
+    <span class="chip">Mis equipos</span>
+    <span class="chip">Solo con señales</span>
+  </div>
+
+  <div class="rejilla c-lateral">
+
+    <div>
+      <!-- HOY -->
+      <div class="encabezado-seccion" style="margin-top:0"><h2>Hoy</h2><span class="nota">sábado 12 de septiembre</span></div>
+      <div class="tarjeta" style="padding:0">
+
+        <div class="fila-partido">
+          <div class="hora"><span class="dia">Sáb</span>19:00</div>
+          <div>
+            <div class="competencia">Liga MX · J9</div>
+            <div class="equipos">Tigres UANL — Cruz Azul</div>
+          </div>
+          <div class="senales-fila">
+            <span class="senal alerta">3 días menos descanso</span>
+            <span class="senal neutra">28 °C · 71%</span>
+          </div>
+          <div class="prob">
+            <div class="cifra m">54%</div>
+            <div class="barra-prob"><div style="width:54%"></div></div>
+          </div>
+        </div>
+
+        <div class="fila-partido">
+          <div class="hora"><span class="dia">Sáb</span>20:30</div>
+          <div>
+            <div class="competencia">NBA · Temporada regular</div>
+            <div class="equipos">Denver Nuggets — Miami Heat</div>
+          </div>
+          <div class="senales-fila">
+            <span class="senal mala">Altitud 1,609 m</span>
+            <span class="senal mala">Visitante en back-to-back</span>
+          </div>
+          <div class="prob">
+            <div class="cifra m">67%</div>
+            <div class="barra-prob"><div style="width:67%"></div></div>
+          </div>
+        </div>
+
+        <div class="fila-partido">
+          <div class="hora"><span class="dia">Sáb</span>21:00</div>
+          <div>
+            <div class="competencia">Liga MX · J9</div>
+            <div class="equipos">Club América — Monterrey</div>
+          </div>
+          <div class="senales-fila">
+            <span class="senal mala">Duda el central titular</span>
+            <span class="senal mala">Altitud 2,240 m</span>
+            <span class="senal neutra">Clásico</span>
+          </div>
+          <div class="prob">
+            <div class="cifra m">49%</div>
+            <div class="barra-prob"><div style="width:49%"></div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MAÑANA -->
+      <div class="encabezado-seccion"><h2>Mañana</h2><span class="nota">domingo 13 de septiembre</span></div>
+      <div class="tarjeta" style="padding:0">
+
+        <div class="fila-partido">
+          <div class="hora"><span class="dia">Dom</span>12:00</div>
+          <div>
+            <div class="competencia">Premier League · J5</div>
+            <div class="equipos">Everton — Brighton</div>
+          </div>
+          <div class="senales-fila">
+            <span class="senal mala">Viento 34 km/h</span>
+            <span class="senal mala">Lluvia 8 mm</span>
+          </div>
+          <div class="prob">
+            <div class="cifra m">41%</div>
+            <div class="barra-prob"><div style="width:41%"></div></div>
+          </div>
+        </div>
+
+        <div class="fila-partido">
+          <div class="hora"><span class="dia">Dom</span>17:00</div>
+          <div>
+            <div class="competencia">Liga MX · J9</div>
+            <div class="equipos">Pumas UNAM — Toluca</div>
+          </div>
+          <div class="senales-fila">
+            <span class="senal buena">Racha de 5 sin perder</span>
+            <span class="senal alerta">2 bajas por selección</span>
+          </div>
+          <div class="prob">
+            <div class="cifra m">58%</div>
+            <div class="barra-prob"><div style="width:58%"></div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LATERAL -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Lo que cambió hoy</h3>
+        <ul style="margin:0; padding-left:var(--e4); color:var(--texto-medio); font-size:13px; line-height:1.9">
+          <li><strong style="color:var(--texto)">Cruz Azul</strong> — se confirmó la baja del lateral derecho</li>
+          <li><strong style="color:var(--texto)">Everton</strong> — el pronóstico de viento subió de 22 a 34 km/h</li>
+          <li><strong style="color:var(--texto)">Miami</strong> — alineación probable publicada</li>
+        </ul>
+        <span class="procedencia media" style="margin-top:var(--e3); display:inline-flex"><span class="punto"></span>actualizado hace 40 min</span>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Mis equipos</h3>
+        <table>
+          <tbody>
+            <tr><td>Tigres UANL</td><td class="num"><span class="senal buena">3.º</span></td></tr>
+            <tr><td>Denver Nuggets</td><td class="num"><span class="senal buena">2.º</span></td></tr>
+            <tr><td>Everton</td><td class="num"><span class="senal alerta">14.º</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Estado de la ingesta</h3>
+        <table>
+          <tbody>
+            <tr><td>Liga MX</td><td class="num"><span class="procedencia alta"><span class="punto"></span>hace 2 h</span></td></tr>
+            <tr><td>NBA</td><td class="num"><span class="procedencia alta"><span class="punto"></span>hace 3 h</span></td></tr>
+            <tr><td>Premier League</td><td class="num"><span class="procedencia media"><span class="punto"></span>hace 14 h</span></td></tr>
+            <tr><td>Clima</td><td class="num"><span class="procedencia alta"><span class="punto"></span>hace 40 min</span></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-tenue); font-size:11px; margin:var(--e3) 0 0">
+          Consultas usadas hoy: 63 de 100
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('.chip').forEach(x => x.classList.remove('activo'));
+  c.classList.add('activo');
+}));
+document.querySelectorAll('.fila-partido').forEach(f => f.addEventListener('click', () => {
+  location.href = 'centro-partido.html';
+}));
+</script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ficha de Jugador · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .cabecera-jugador {
+    display:flex; align-items:center; gap:var(--e5); flex-wrap:wrap;
+    padding:var(--e5); background:var(--superficie);
+    border:1px solid var(--borde); border-radius:var(--r3); margin-bottom:var(--e5);
+  }
+  .avatar {
+    width:72px; height:72px; border-radius:50%;
+    background:var(--superficie-2); border:2px solid var(--verde);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--fuente-titulo); font-size:24px; font-weight:700; color:var(--verde);
+  }
+  .datos-jugador .nombre { font-family:var(--fuente-titulo); font-size:26px; font-weight:700; }
+  .datos-jugador .meta { color:var(--texto-medio); font-size:13px; margin-top:2px; }
+  .metricas-cab { margin-left:auto; display:flex; gap:var(--e6); }
+  .metricas-cab > div { text-align:right; }
+  .evolucion { display:flex; align-items:flex-end; gap:3px; height:64px; }
+  .evolucion span { flex:1; background:var(--verde); border-radius:2px 2px 0 0; min-height:3px; opacity:.85; }
+  .evolucion span.bajo { background:var(--texto-tenue); }
+  .similar { display:flex; justify-content:space-between; align-items:center;
+             padding:var(--e3) 0; border-bottom:1px solid var(--borde-suave); }
+  .similar:last-child { border-bottom:none; }
+  @media (max-width:900px){ .metricas-cab{ margin-left:0; width:100%; justify-content:space-between; } }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Centro de Partido</a>
+    <a href="ficha-jugador.html" class="activo">Jugador</a>
+    <a href="consola-ia.html">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha">
+    <button class="boton fantasma">Asistente <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button class="boton fantasma" onclick="cambiarTema()">Tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 4 · Ficha de Jugador.</strong> Percentiles contra su liga, evolución en el tiempo, disponibilidad y jugadores similares. Todo número absoluto va acompañado de su referencia: un 8.4 no dice nada sin saber que es percentil 91. Datos ficticios.
+  </div>
+
+  <div class="cabecera-jugador">
+    <div class="avatar">MR</div>
+    <div class="datos-jugador">
+      <div class="nombre">M. Rodríguez</div>
+      <div class="meta">Mediocentro · 23 años · Tigres UANL · Liga MX</div>
+      <div style="display:flex; gap:var(--e2); margin-top:var(--e2)">
+        <span class="senal buena">Disponible</span>
+        <span class="senal neutra">1,842 min esta temporada</span>
+      </div>
+    </div>
+    <div class="metricas-cab">
+      <div><div class="etiqueta">Partidos</div><div class="cifra l">22</div></div>
+      <div><div class="etiqueta">xA / 90</div><div class="cifra l">0.24</div></div>
+      <div><div class="etiqueta">Percentil medio</div><div class="cifra l" style="color:var(--verde)">76</div></div>
+    </div>
+  </div>
+
+  <div class="rejilla c-lateral">
+    <div>
+
+      <div class="encabezado-seccion" style="margin-top:0">
+        <h2>Perfil por percentil</h2>
+        <span class="nota">contra mediocentros de Liga MX con más de 900 minutos</span>
+      </div>
+      <div class="tarjeta">
+        <table>
+          <thead><tr><th>Métrica</th><th class="num">Valor</th><th style="width:48%">Percentil</th></tr></thead>
+          <tbody>
+            <tr><td>Pases progresivos / 90</td><td class="num">8.4</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:91%"></div></div><span class="valor">91</span></div></td></tr>
+            <tr><td>xA / 90</td><td class="num">0.24</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:88%"></div></div><span class="valor">88</span></div></td></tr>
+            <tr><td>Entradas al último tercio / 90</td><td class="num">4.1</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:83%"></div></div><span class="valor">83</span></div></td></tr>
+            <tr><td>Pases completados %</td><td class="num">87.4</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno" style="width:76%"></div></div><span class="valor">76</span></div></td></tr>
+            <tr><td>Duelos ganados %</td><td class="num">48.2</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno medio" style="width:44%"></div></div><span class="valor">44</span></div></td></tr>
+            <tr><td>Recuperaciones campo rival / 90</td><td class="num">1.9</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno bajo" style="width:19%"></div></div><span class="valor">19</span></div></td></tr>
+            <tr><td>Faltas cometidas / 90</td><td class="num">2.3</td>
+              <td><div class="percentil"><div class="pista"><div class="relleno medio" style="width:52%"></div></div><span class="valor">52</span></div></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e4) 0 0; padding-top:var(--e3); border-top:1px solid var(--borde-suave)">
+          <strong style="color:var(--texto)">Lectura rápida.</strong> Perfil claramente creativo: élite en progresión y creación,
+          discreto en trabajo defensivo. El percentil 19 en recuperaciones en campo rival es el número
+          que hay que mirar si el equipo juega con presión alta.
+        </p>
+        <span class="procedencia alta" style="margin-top:var(--e3); display:inline-flex"><span class="punto"></span>statsbomb + api-football · hace 2 h</span>
+      </div>
+
+      <div class="encabezado-seccion"><h2>Evolución</h2><span class="nota">xA / 90 por jornada · temporada actual</span></div>
+      <div class="tarjeta">
+        <div class="evolucion">
+          <span style="height:22%"></span><span style="height:34%"></span><span class="bajo" style="height:11%"></span>
+          <span style="height:48%"></span><span style="height:39%"></span><span style="height:61%"></span>
+          <span class="bajo" style="height:8%"></span><span style="height:55%"></span><span style="height:72%"></span>
+          <span style="height:66%"></span><span style="height:81%"></span><span style="height:58%"></span>
+          <span style="height:93%"></span><span style="height:77%"></span><span style="height:84%"></span>
+          <span class="bajo" style="height:17%"></span><span style="height:69%"></span><span style="height:88%"></span>
+          <span style="height:74%"></span><span style="height:91%"></span><span style="height:79%"></span>
+          <span style="height:86%"></span>
+        </div>
+        <div style="display:flex; justify-content:space-between; color:var(--texto-tenue); font-size:11px; margin-top:var(--e2)">
+          <span>J1</span><span>J11</span><span>J22</span>
+        </div>
+        <p style="color:var(--texto-medio); font-size:12px; margin:var(--e3) 0 0">
+          Curva ascendente sostenida desde la jornada 8. Las tres caídas coinciden con partidos
+          de menos de 30 minutos jugados.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- LATERAL -->
+    <div>
+      <div class="tarjeta acento">
+        <h3>Disponibilidad</h3>
+        <table>
+          <tbody>
+            <tr><td>Estado</td><td class="num"><span class="senal buena">Disponible</span></td></tr>
+            <tr><td>Minutos últimas 3 sem</td><td class="num">248'</td></tr>
+            <tr><td>Minutos últimas 6 sem</td><td class="num">497'</td></tr>
+            <tr><td>Partidos en 14 días</td><td class="num">4</td></tr>
+            <tr><td>Amarillas acumuladas</td><td class="num">3 <span style="color:var(--alerta)">(1 para ciclo)</span></td></tr>
+          </tbody>
+        </table>
+        <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+          248 minutos en tres semanas está en el percentil 84 de carga para su posición.
+          Candidato a rotación.
+        </p>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <h3>Jugadores similares</h3>
+        <p style="color:var(--texto-tenue); font-size:11px; margin:0 0 var(--e2)">
+          Por perfil de percentiles, misma posición, ±3 años
+        </p>
+        <div class="similar"><div><div style="font-weight:600">J. Herrera</div><div style="color:var(--texto-tenue); font-size:11px">Pumas UNAM · 24</div></div><span class="senal buena">94 %</span></div>
+        <div class="similar"><div><div style="font-weight:600">A. Domínguez</div><div style="color:var(--texto-tenue); font-size:11px">Toluca · 22</div></div><span class="senal buena">91 %</span></div>
+        <div class="similar"><div><div style="font-weight:600">L. Ferreira</div><div style="color:var(--texto-tenue); font-size:11px">Monterrey · 25</div></div><span class="senal neutra">87 %</span></div>
+        <div class="similar"><div><div style="font-weight:600">S. Ocampo</div><div style="color:var(--texto-tenue); font-size:11px">Santos · 21</div></div><span class="senal neutra">83 %</span></div>
+      </div>
+
+      <div class="tarjeta" style="margin-top:var(--e4)">
+        <button class="boton" style="width:100%; justify-content:center">Comparar con otro jugador</button>
+        <button class="boton fantasma" style="width:100%; justify-content:center; margin-top:var(--e2)">Añadir a lista de seguimiento</button>
+        <button class="boton fantasma" style="width:100%; justify-content:center; margin-top:var(--e2)">Informe de scouting (PDF)</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

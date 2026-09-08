@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockups · MotSport</title>
+<link rel="stylesheet" href="estilos.css">
+<style>
+  .tarjeta-enlace {
+    display:block; padding:var(--e5);
+    background:var(--superficie); border:1px solid var(--borde);
+    border-radius:var(--r2); text-decoration:none; color:inherit;
+    transition:border-color .15s;
+  }
+  .tarjeta-enlace:hover { border-color:var(--verde); text-decoration:none; }
+  .tarjeta-enlace .num-pantalla {
+    font-family:var(--fuente-titulo); font-size:12px; font-weight:700;
+    color:var(--verde); letter-spacing:.05em;
+  }
+  .tarjeta-enlace h3 { margin:var(--e2) 0; font-size:18px; }
+  .tarjeta-enlace p { color:var(--texto-medio); font-size:13px; margin:0; }
+  .pendiente { opacity:.5; }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav><a href="index.html" class="activo">Índice de mockups</a></nav>
+  <div class="derecha">
+    <button class="boton fantasma" onclick="cambiarTema()">Cambiar tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <h1>Mockups de MotSport</h1>
+  <p style="color:var(--texto-medio); max-width:75ch">
+    HTML y CSS puros, sin framework: se abren con doble clic, sin instalar nada.
+    Los datos son ficticios pero realistas a propósito — un mockup con texto de relleno
+    no permite juzgar densidad ni longitudes reales, que es justo lo que hay que juzgar
+    en un producto de datos.
+  </p>
+
+  <div class="aviso-mockup" style="margin-top:var(--e5)">
+    <strong>Estado del producto:</strong> Fase 0 · planeación · uso interno de MOTRAE.
+    Este producto todavía no se vende ni se distribuye.
+  </div>
+
+  <div class="encabezado-seccion"><h2>Fundaciones</h2></div>
+  <div class="rejilla c2">
+    <a class="tarjeta-enlace" href="fundaciones/tokens.html">
+      <div class="num-pantalla">FUNDACIÓN</div>
+      <h3>Tokens de diseño</h3>
+      <p>Color, tipografía, espaciado, semántica de datos y niveles de confianza.</p>
+    </a>
+    <a class="tarjeta-enlace" href="fundaciones/componentes.html">
+      <div class="num-pantalla">FUNDACIÓN</div>
+      <h3>Componentes</h3>
+      <p>Señales, sellos de procedencia, barras de percentil, tarjetas de partido, estados.</p>
+    </a>
+  </div>
+
+  <div class="encabezado-seccion">
+    <h2>Pantallas críticas</h2>
+    <span class="nota">si estas cuatro funcionan, el producto funciona</span>
+  </div>
+  <div class="rejilla c2">
+    <a class="tarjeta-enlace" href="pantallas/radar.html">
+      <div class="num-pantalla">PANTALLA 1</div>
+      <h3>Radar</h3>
+      <p>Los partidos de la semana con sus señales automáticas. Lo primero que se ve al abrir.</p>
+    </a>
+    <a class="tarjeta-enlace" href="pantallas/centro-partido.html">
+      <div class="num-pantalla">PANTALLA 2</div>
+      <h3>Centro de Partido</h3>
+      <p>La vista estrella. Previa completa: condiciones, disponibilidad, forma, pronóstico con su porqué.</p>
+    </a>
+    <a class="tarjeta-enlace" href="pantallas/ficha-jugador.html">
+      <div class="num-pantalla">PANTALLA 4</div>
+      <h3>Ficha de Jugador</h3>
+      <p>Percentiles contra su liga, evolución, carga acumulada y jugadores similares.</p>
+    </a>
+    <a class="tarjeta-enlace" href="pantallas/consola-ia.html">
+      <div class="num-pantalla">PANTALLA 7</div>
+      <h3>Consola IA</h3>
+      <p>Preguntas en español, con las herramientas usadas a la vista y cada cifra citando su fuente.</p>
+    </a>
+  </div>
+
+  <div class="encabezado-seccion">
+    <h2>Pendientes</h2>
+    <span class="nota">segunda pasada</span>
+  </div>
+  <div class="rejilla c3">
+    <div class="tarjeta pendiente"><h3>Ficha de Equipo</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 3</p></div>
+    <div class="tarjeta pendiente"><h3>Comparador</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 5</p></div>
+    <div class="tarjeta pendiente"><h3>Scouting</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 6</p></div>
+    <div class="tarjeta pendiente"><h3>Informes</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 8</p></div>
+    <div class="tarjeta pendiente"><h3>Alertas</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 9</p></div>
+    <div class="tarjeta pendiente"><h3>Panel de operación</h3><p style="color:var(--texto-medio); font-size:13px; margin:0">Pantalla 10</p></div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

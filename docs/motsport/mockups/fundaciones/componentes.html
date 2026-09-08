@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Componentes · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="../index.html">Índice</a>
+    <a href="tokens.html">Tokens</a>
+    <a href="componentes.html" class="activo">Componentes</a>
+  </nav>
+  <div class="derecha">
+    <button class="boton fantasma" onclick="cambiarTema()">Cambiar tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Mockup de fundación.</strong> Los componentes que se repiten en todo el producto. Datos falsos pero realistas: un mockup con texto de relleno no permite juzgar densidad, que es justo lo que hay que juzgar aquí.
+  </div>
+
+  <h1>Componentes</h1>
+
+  <!-- ── Señales ── -->
+  <div class="encabezado-seccion">
+    <h2>Señales</h2>
+    <span class="nota">el elemento más importante del producto: lo que hace que el Radar sirva de un vistazo</span>
+  </div>
+  <div class="tarjeta">
+    <p style="color:var(--texto-medio); margin-top:0">
+      Una señal es un hecho del contexto que puede mover el partido, resumido en cuatro palabras.
+      No es una opinión ni un pronóstico: es un dato que amerita mirarse.
+    </p>
+    <div style="display:flex; gap:var(--e2); flex-wrap:wrap; margin-top:var(--e3)">
+      <span class="senal mala">Viento 34 km/h</span>
+      <span class="senal alerta">3 días menos de descanso</span>
+      <span class="senal alerta">Duda el central titular</span>
+      <span class="senal mala">Altitud 2,240 m</span>
+      <span class="senal buena">Racha de 5 sin perder</span>
+      <span class="senal neutra">Clásico regional</span>
+      <span class="senal alerta">Segundo partido en 3 días</span>
+      <span class="senal mala">Lluvia 8 mm previstos</span>
+    </div>
+  </div>
+
+  <!-- ── Procedencia ── -->
+  <div class="encabezado-seccion">
+    <h2>Sello de procedencia</h2>
+    <span class="nota">todo dato dice de dónde vino, cuándo y con qué confianza</span>
+  </div>
+  <div class="rejilla c3">
+    <div class="tarjeta">
+      <div class="etiqueta">xG a favor</div>
+      <div class="cifra l">1.87</div>
+      <span class="procedencia alta"><span class="punto"></span>statsbomb · hace 2 h</span>
+    </div>
+    <div class="tarjeta">
+      <div class="etiqueta">Viento previsto</div>
+      <div class="cifra l">34 km/h</div>
+      <span class="procedencia media"><span class="punto"></span>open-meteo · hace 6 h</span>
+    </div>
+    <div class="tarjeta">
+      <div class="etiqueta">Estado del césped</div>
+      <div class="cifra m" style="font-size:16px">Pesado por lluvia</div>
+      <span class="procedencia baja"><span class="punto"></span>web · citado</span>
+    </div>
+  </div>
+
+  <!-- ── Percentiles ── -->
+  <div class="encabezado-seccion">
+    <h2>Barras de percentil</h2>
+    <span class="nota">un número absoluto no dice nada sin su liga de referencia</span>
+  </div>
+  <div class="tarjeta">
+    <table>
+      <thead><tr><th>Métrica</th><th class="num">Valor</th><th style="width:45%">Percentil en su liga</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Pases progresivos / 90</td><td class="num">8.4</td>
+          <td><div class="percentil"><div class="pista"><div class="relleno" style="width:91%"></div></div><span class="valor">91</span></div></td>
+        </tr>
+        <tr>
+          <td>xA / 90</td><td class="num">0.24</td>
+          <td><div class="percentil"><div class="pista"><div class="relleno" style="width:78%"></div></div><span class="valor">78</span></div></td>
+        </tr>
+        <tr>
+          <td>Duelos ganados %</td><td class="num">48.2</td>
+          <td><div class="percentil"><div class="pista"><div class="relleno medio" style="width:44%"></div></div><span class="valor">44</span></div></td>
+        </tr>
+        <tr>
+          <td>Recuperaciones campo rival</td><td class="num">1.9</td>
+          <td><div class="percentil"><div class="pista"><div class="relleno bajo" style="width:19%"></div></div><span class="valor">19</span></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Dato en conflicto ── -->
+  <div class="encabezado-seccion">
+    <h2>Dato en conflicto</h2>
+    <span class="nota">dos fuentes que discrepan: se muestran las dos, no se elige en silencio</span>
+  </div>
+  <div class="tarjeta acento">
+    <div class="etiqueta">Minutos jugados · última jornada</div>
+    <div style="display:flex; gap:var(--e6); margin-top:var(--e2); align-items:flex-end">
+      <div>
+        <div class="cifra l">78'</div>
+        <span class="procedencia alta"><span class="punto"></span>api-football</span>
+      </div>
+      <div>
+        <div class="cifra l" style="color:var(--texto-medio)">81'</div>
+        <span class="procedencia media"><span class="punto"></span>balldontlie</span>
+      </div>
+    </div>
+    <p style="color:var(--alerta); font-size:12px; margin:var(--e3) 0 0">
+      Las fuentes discrepan en 3 minutos. Se muestra la de mayor confianza y se declara la diferencia.
+    </p>
+  </div>
+
+  <!-- ── Tarjeta de partido ── -->
+  <div class="encabezado-seccion"><h2>Tarjeta de partido</h2><span class="nota">la unidad del Radar</span></div>
+  <div class="rejilla c2">
+    <div class="tarjeta acento">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start">
+        <div>
+          <div class="etiqueta">Liga MX · Jornada 9</div>
+          <h3 style="margin:var(--e2) 0 0; font-size:16px">Tigres UANL — Cruz Azul</h3>
+          <div style="color:var(--texto-tenue); font-size:12px; margin-top:2px">Sáb 12 sep · 19:00 · Estadio Universitario</div>
+        </div>
+        <div style="text-align:right">
+          <div class="etiqueta">Pronóstico</div>
+          <div class="cifra m">54%</div>
+          <div style="color:var(--texto-tenue); font-size:11px">local</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:var(--e2); flex-wrap:wrap; margin-top:var(--e3)">
+        <span class="senal alerta">3 días menos de descanso</span>
+        <span class="senal neutra">28 °C · 71% humedad</span>
+      </div>
+    </div>
+    <div class="tarjeta">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start">
+        <div>
+          <div class="etiqueta">NBA · Temporada regular</div>
+          <h3 style="margin:var(--e2) 0 0; font-size:16px">Denver Nuggets — Miami Heat</h3>
+          <div style="color:var(--texto-tenue); font-size:12px; margin-top:2px">Sáb 12 sep · 20:30 · Ball Arena</div>
+        </div>
+        <div style="text-align:right">
+          <div class="etiqueta">Pronóstico</div>
+          <div class="cifra m">67%</div>
+          <div style="color:var(--texto-tenue); font-size:11px">local</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:var(--e2); flex-wrap:wrap; margin-top:var(--e3)">
+        <span class="senal mala">Altitud 1,609 m</span>
+        <span class="senal mala">Visitante en back-to-back</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Botones ── -->
+  <div class="encabezado-seccion"><h2>Controles</h2></div>
+  <div class="tarjeta">
+    <div style="display:flex; gap:var(--e3); flex-wrap:wrap; align-items:center">
+      <button class="boton primario">Generar previa</button>
+      <button class="boton">Comparar</button>
+      <button class="boton fantasma">Exportar</button>
+      <span style="color:var(--texto-tenue); font-size:12px; margin-left:var(--e4)">
+        Abrir asistente <kbd>Ctrl</kbd> <kbd>K</kbd> · Buscar <kbd>/</kbd>
+      </span>
+    </div>
+  </div>
+
+  <!-- ── Estados ── -->
+  <div class="encabezado-seccion"><h2>Estados</h2><span class="nota">un producto de datos vive en los estados que no son el feliz</span></div>
+  <div class="rejilla c3">
+    <div class="tarjeta" style="text-align:center; padding:var(--e6) var(--e4)">
+      <div class="cifra m" style="color:var(--texto-tenue)">Sin datos</div>
+      <p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">
+        Esta competencia todavía no está en la ingesta.
+      </p>
+    </div>
+    <div class="tarjeta" style="text-align:center; padding:var(--e6) var(--e4)">
+      <div class="cifra m" style="color:var(--alerta)">Dato parcial</div>
+      <p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">
+        Faltan 3 de 17 jornadas. Los percentiles pueden moverse.
+      </p>
+    </div>
+    <div class="tarjeta" style="text-align:center; padding:var(--e6) var(--e4)">
+      <div class="cifra m" style="color:var(--malo)">Ingesta con error</div>
+      <p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">
+        Última actualización hace 31 h. Presupuesto de consultas agotado.
+      </p>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Consola IA · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .conversacion { max-width:820px; }
+  .pregunta {
+    background:var(--superficie-2); border:1px solid var(--borde);
+    border-radius:var(--r2) var(--r2) var(--r2) 4px;
+    padding:var(--e3) var(--e4); margin:var(--e5) 0 var(--e3);
+    font-weight:500; display:inline-block; max-width:90%;
+  }
+  .respuesta { padding-left:var(--e4); border-left:2px solid var(--verde); }
+  .respuesta p { margin:0 0 var(--e3); }
+  .herramientas {
+    display:flex; gap:var(--e2); flex-wrap:wrap;
+    margin-bottom:var(--e3); padding-bottom:var(--e3);
+    border-bottom:1px dashed var(--borde);
+  }
+  .herramienta {
+    font-family:var(--fuente-mono); font-size:11px;
+    padding:3px 8px; border-radius:var(--r1);
+    background:rgba(87,173,48,.1); color:#86D45F;
+    border:1px solid rgba(87,173,48,.25);
+  }
+  .fuentes {
+    margin-top:var(--e3); padding-top:var(--e3);
+    border-top:1px solid var(--borde-suave);
+    font-size:11px; color:var(--texto-tenue);
+  }
+  .fuentes span { margin-right:var(--e4); }
+  .entrada {
+    position:sticky; bottom:0; background:var(--fondo);
+    padding:var(--e4) 0; margin-top:var(--e6);
+    border-top:1px solid var(--borde);
+  }
+  .caja-entrada {
+    display:flex; gap:var(--e3); align-items:center;
+    background:var(--superficie); border:1px solid var(--borde);
+    border-radius:var(--r2); padding:var(--e3) var(--e4);
+  }
+  .caja-entrada input {
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--texto); font-family:var(--fuente-cuerpo); font-size:14px;
+  }
+  .sugerencias { display:flex; gap:var(--e2); flex-wrap:wrap; margin-top:var(--e3); }
+  .sugerencia {
+    padding:6px var(--e3); border-radius:999px;
+    border:1px solid var(--borde); background:var(--superficie);
+    font-size:12px; color:var(--texto-medio); cursor:pointer;
+  }
+  .sugerencia:hover { border-color:var(--verde); color:var(--texto); }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="radar.html">Radar</a>
+    <a href="centro-partido.html">Centro de Partido</a>
+    <a href="ficha-jugador.html">Jugador</a>
+    <a href="consola-ia.html" class="activo">Consola IA</a>
+    <a href="../index.html">Índice</a>
+  </nav>
+  <div class="derecha">
+    <span style="color:var(--texto-tenue); font-size:12px">Consultas hoy: 14</span>
+    <button class="boton fantasma" onclick="cambiarTema()">Tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Pantalla 7 · Consola IA.</strong> Se abre con <kbd>Ctrl</kbd> <kbd>K</kbd> desde cualquier pantalla.
+    Fíjate en dos cosas: las <strong>herramientas que el asistente llamó</strong> quedan visibles arriba de cada respuesta,
+    y <strong>cada cifra cita su fuente y su fecha</strong>. Ningún número lo produce el modelo. Datos ficticios.
+  </div>
+
+  <div class="conversacion">
+
+    <!-- INTERCAMBIO 1 -->
+    <div class="pregunta">¿Qué clima va a hacer en el partido del sábado y cómo le pega a cada equipo?</div>
+    <div class="respuesta">
+      <div class="herramientas">
+        <span class="herramienta">buscar_partidos</span>
+        <span class="herramienta">clima_de_partido</span>
+        <span class="herramienta">estadisticas_equipo</span>
+      </div>
+      <p>
+        En <strong>Tigres UANL — Cruz Azul</strong> (sáb 12 sep, 19:00, Estadio Universitario) se esperan
+        <strong>28 °C con 71 % de humedad</strong>, viento flojo de 11 km/h y sin lluvia.
+      </p>
+      <p>
+        Eso está por encima del rango óptimo de rendimiento físico —alrededor de 22 °C con menos de 60 % de humedad—.
+        Con esa humedad la evaporación del sudor se dificulta y la carrera de alta intensidad
+        suele caer marcadamente <strong>en los últimos quince minutos</strong>.
+      </p>
+      <p>
+        Le pega asimétricamente: <strong>Cruz Azul</strong> es el equipo que más depende de la presión alta sostenida
+        —PPDA de 13.4, percentil 28 de la liga— y llega además con dos días menos de descanso.
+        <strong>Tigres</strong> juega más en bloque medio, así que el calor le cuesta menos.
+      </p>
+      <div class="fuentes">
+        <span>◦ open-meteo · hace 40 min · confianza alta</span>
+        <span>◦ api-football · hace 2 h · confianza alta</span>
+      </div>
+    </div>
+
+    <!-- INTERCAMBIO 2 -->
+    <div class="pregunta">Búscame mediocampistas sub-23 en el percentil 80 o mejor de pases progresivos</div>
+    <div class="respuesta">
+      <div class="herramientas">
+        <span class="herramienta">estadisticas_jugador</span>
+        <span class="herramienta">comparar</span>
+      </div>
+      <p>Cuatro jugadores en Liga MX cumplen, con más de 900 minutos esta temporada:</p>
+      <table style="margin-bottom:var(--e3)">
+        <thead><tr><th>Jugador</th><th>Equipo</th><th class="num">Edad</th><th class="num">Pases prog./90</th><th class="num">Percentil</th></tr></thead>
+        <tbody>
+          <tr><td>M. Rodríguez</td><td>Tigres UANL</td><td class="num">23</td><td class="num">8.4</td><td class="num"><span class="senal buena">91</span></td></tr>
+          <tr><td>A. Domínguez</td><td>Toluca</td><td class="num">22</td><td class="num">8.1</td><td class="num"><span class="senal buena">88</span></td></tr>
+          <tr><td>S. Ocampo</td><td>Santos</td><td class="num">21</td><td class="num">7.6</td><td class="num"><span class="senal buena">84</span></td></tr>
+          <tr><td>D. Quiroz</td><td>Necaxa</td><td class="num">23</td><td class="num">7.2</td><td class="num"><span class="senal buena">80</span></td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--texto-medio); font-size:13px">
+        Nota: los tres primeros tienen percentiles defensivos por debajo de 45. Si el filtro es para un
+        equipo que presiona alto, conviene revisar también recuperaciones en campo rival.
+      </p>
+      <div class="fuentes">
+        <span>◦ statsbomb + api-football · hace 2 h · confianza alta</span>
+        <span>◦ 4 de 61 jugadores evaluados</span>
+      </div>
+    </div>
+
+    <!-- INTERCAMBIO 3: el caso importante — el asistente dice que no sabe -->
+    <div class="pregunta">¿Cómo está el césped del Estadio Universitario después de la lluvia del jueves?</div>
+    <div class="respuesta">
+      <div class="herramientas">
+        <span class="herramienta">clima_de_partido</span>
+        <span class="herramienta">buscar_en_la_red</span>
+      </div>
+      <p>
+        <strong>No tengo un dato estructurado del estado del césped</strong> — ninguna de las fuentes conectadas
+        lo publica, así que no puedo darte una cifra.
+      </p>
+      <p>
+        Lo que sí tengo: el jueves cayeron <strong>18 mm de lluvia</strong> en Monterrey, y el pronóstico para
+        el sábado es seco con 28 °C, lo que da unas 40 horas de secado.
+        Una nota de prensa local menciona que el campo "se recuperó bien", pero es
+        <span class="senal neutra" style="padding:2px 8px">confianza baja</span> y no la trataría como verificada.
+      </p>
+      <div class="fuentes">
+        <span>◦ open-meteo · hace 40 min · confianza alta</span>
+        <span>◦ web · citado · confianza baja</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="entrada">
+    <div class="caja-entrada">
+      <span style="color:var(--verde); font-weight:700">›</span>
+      <input placeholder="Pregunta lo que quieras sobre un partido, un equipo o un jugador…">
+      <kbd>Enter</kbd>
+    </div>
+    <div class="sugerencias">
+      <span class="sugerencia">Dame la previa completa del domingo</span>
+      <span class="sugerencia">¿Cómo llega el rival?</span>
+      <span class="sugerencia">Compara estos dos delanteros</span>
+      <span class="sugerencia">¿Qué pasa cuando juegan a más de 2,000 m?</span>
+      <span class="sugerencia">¿Por qué el modelo da favorito al visitante?</span>
+    </div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

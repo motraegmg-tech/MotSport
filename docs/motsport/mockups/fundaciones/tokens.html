@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokens · MotSport</title>
+<link rel="stylesheet" href="../estilos.css">
+<style>
+  .muestra { border:1px solid var(--borde); border-radius:var(--r2); overflow:hidden; }
+  .muestra .color { height:72px; }
+  .muestra .pie-muestra { padding:var(--e3); background:var(--superficie); }
+  .muestra .nombre { font-weight:600; font-size:13px; }
+  .muestra .hex { font-family:var(--fuente-mono); font-size:11px; color:var(--texto-tenue); }
+  .esp { display:flex; align-items:center; gap:var(--e3); margin-bottom:var(--e2); }
+  .esp .barra-esp { height:14px; background:var(--verde); border-radius:3px; }
+  .esp .txt { font-family:var(--fuente-mono); font-size:12px; color:var(--texto-medio); }
+</style>
+</head>
+<body>
+
+<div class="barra">
+  <div class="logo">Mot<span>Sport</span></div>
+  <nav>
+    <a href="../index.html">Índice</a>
+    <a href="tokens.html" class="activo">Tokens</a>
+    <a href="componentes.html">Componentes</a>
+  </nav>
+  <div class="derecha">
+    <button class="boton fantasma" onclick="cambiarTema()">Cambiar tema</button>
+  </div>
+</div>
+
+<div class="marco">
+
+  <div class="aviso-mockup">
+    <strong>Mockup de fundación.</strong> Estos son los tokens de diseño de MotSport. Cuando exista el código real, se convierten en variables del sistema de diseño; hasta entonces, esta página es la referencia.
+  </div>
+
+  <h1>Tokens de diseño</h1>
+  <p style="color:var(--texto-medio); max-width:70ch">
+    Base oscura por defecto —se trabaja en salas de video—, verde MOTRAE como acento dominante,
+    y el degradado naranja-rojo reservado para acentos de energía, con moderación.
+  </p>
+
+  <div class="encabezado-seccion"><h2>Marca</h2><span class="nota">acento dominante y degradado</span></div>
+  <div class="rejilla c4">
+    <div class="muestra"><div class="color" style="background:#57AD30"></div><div class="pie-muestra"><div class="nombre">Verde MOTRAE</div><div class="hex">#57AD30 · --verde</div></div></div>
+    <div class="muestra"><div class="color" style="background:#E8F3E1"></div><div class="pie-muestra"><div class="nombre">Verde suave</div><div class="hex">#E8F3E1 · --verde-suave</div></div></div>
+    <div class="muestra"><div class="color" style="background:#F2853A"></div><div class="pie-muestra"><div class="nombre">Naranja</div><div class="hex">#F2853A · --naranja</div></div></div>
+    <div class="muestra"><div class="color" style="background:#E0392B"></div><div class="pie-muestra"><div class="nombre">Rojo</div><div class="hex">#E0392B · --rojo</div></div></div>
+  </div>
+  <div style="margin-top:var(--e4); height:56px; border-radius:var(--r2); background:linear-gradient(135deg,#F2853A,#E0392B); display:flex; align-items:center; padding:0 var(--e4); color:#fff; font-weight:600">
+    Degradado de energía · --degradado · usar con moderación
+  </div>
+
+  <div class="encabezado-seccion"><h2>Base y superficies</h2></div>
+  <div class="rejilla c4">
+    <div class="muestra"><div class="color" style="background:#14181A"></div><div class="pie-muestra"><div class="nombre">Fondo</div><div class="hex">#14181A · --fondo</div></div></div>
+    <div class="muestra"><div class="color" style="background:#1C2225"></div><div class="pie-muestra"><div class="nombre">Superficie</div><div class="hex">#1C2225 · --superficie</div></div></div>
+    <div class="muestra"><div class="color" style="background:#242B2F"></div><div class="pie-muestra"><div class="nombre">Superficie 2</div><div class="hex">#242B2F · --superficie-2</div></div></div>
+    <div class="muestra"><div class="color" style="background:#2D3A42"></div><div class="pie-muestra"><div class="nombre">Borde</div><div class="hex">#2D3A42 · --borde</div></div></div>
+  </div>
+
+  <div class="encabezado-seccion"><h2>Semántica de datos</h2><span class="nota">nunca solo por color: siempre con texto o icono al lado</span></div>
+  <div class="rejilla c4">
+    <div class="muestra"><div class="color" style="background:#57AD30"></div><div class="pie-muestra"><div class="nombre">Bueno</div><div class="hex">--bueno</div></div></div>
+    <div class="muestra"><div class="color" style="background:#F2853A"></div><div class="pie-muestra"><div class="nombre">Alerta</div><div class="hex">--alerta</div></div></div>
+    <div class="muestra"><div class="color" style="background:#E0392B"></div><div class="pie-muestra"><div class="nombre">Malo</div><div class="hex">--malo</div></div></div>
+    <div class="muestra"><div class="color" style="background:#5B8DB8"></div><div class="pie-muestra"><div class="nombre">Neutro</div><div class="hex">--neutro</div></div></div>
+  </div>
+
+  <div class="encabezado-seccion"><h2>Confianza del dato</h2><span class="nota">el color del punto en cada sello de procedencia</span></div>
+  <div class="rejilla c3">
+    <div class="tarjeta"><span class="procedencia alta"><span class="punto"></span> confianza alta</span><p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">Fuente estructurada, verificada, reciente</p></div>
+    <div class="tarjeta"><span class="procedencia media"><span class="punto"></span> confianza media</span><p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">Fuente estructurada, con antigüedad o hueco</p></div>
+    <div class="tarjeta"><span class="procedencia baja"><span class="punto"></span> confianza baja</span><p style="color:var(--texto-medio); font-size:12px; margin:var(--e2) 0 0">Búsqueda web en vivo. Siempre citada, nunca mezclada</p></div>
+  </div>
+
+  <div class="encabezado-seccion"><h2>Tipografía</h2></div>
+  <div class="rejilla c2">
+    <div class="tarjeta">
+      <div class="etiqueta">Space Grotesk · títulos y cifras</div>
+      <div style="font-family:var(--fuente-titulo)">
+        <div style="font-size:34px; font-weight:700; letter-spacing:-.02em">2.34 xG</div>
+        <div style="font-size:20px; font-weight:600; margin-top:var(--e2)">Centro de Partido</div>
+        <div style="font-size:15px; font-weight:600; margin-top:var(--e2)">Condiciones previstas</div>
+      </div>
+    </div>
+    <div class="tarjeta">
+      <div class="etiqueta">Inter · cuerpo e interfaz</div>
+      <p style="margin:var(--e2) 0 0; color:var(--texto)">
+        El visitante llega con dos días menos de descanso y viento cruzado de 31 km/h,
+        que históricamente degrada su juego aéreo.
+      </p>
+      <p style="margin:var(--e2) 0 0; color:var(--texto-medio); font-size:13px">
+        Texto secundario, para contexto y notas al pie del dato.
+      </p>
+    </div>
+  </div>
+
+  <div class="encabezado-seccion"><h2>Espaciado</h2><span class="nota">escala de 4</span></div>
+  <div class="tarjeta">
+    <div class="esp"><span class="txt" style="width:60px">--e1</span><div class="barra-esp" style="width:4px"></div><span class="txt">4px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e2</span><div class="barra-esp" style="width:8px"></div><span class="txt">8px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e3</span><div class="barra-esp" style="width:12px"></div><span class="txt">12px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e4</span><div class="barra-esp" style="width:16px"></div><span class="txt">16px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e5</span><div class="barra-esp" style="width:24px"></div><span class="txt">24px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e6</span><div class="barra-esp" style="width:32px"></div><span class="txt">32px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e7</span><div class="barra-esp" style="width:48px"></div><span class="txt">48px</span></div>
+    <div class="esp"><span class="txt" style="width:60px">--e8</span><div class="barra-esp" style="width:64px"></div><span class="txt">64px</span></div>
+  </div>
+
+  <div class="pie">MOTRAE · Innovation already in motion · Confidencial · Uso interno · Septiembre 2026</div>
+</div>
+
+<script>
+function cambiarTema() {
+  const h = document.documentElement;
+  h.dataset.tema = h.dataset.tema === 'claro' ? 'oscuro' : 'claro';
+}
+</script>
+</body>
+</html>

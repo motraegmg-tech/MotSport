@@ -1,0 +1,243 @@
+/* ─────────────────────────────────────────────────────────────
+   MotSport · Hoja de estilos de los mockups
+   MOTRAE · Septiembre 2026
+
+   Estos mockups son HTML y CSS puros a proposito: se abren con
+   doble clic, sin instalar nada, y cualquiera del equipo los puede
+   revisar sin levantar un servidor. Cuando exista el codigo real,
+   estos tokens se convierten en variables del sistema de diseno.
+   ───────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  /* Marca MOTRAE */
+  --verde:          #57AD30;
+  --verde-suave:    #E8F3E1;
+  --verde-oscuro:   #3D7A21;
+  --naranja:        #F2853A;
+  --rojo:           #E0392B;
+  --degradado:      linear-gradient(135deg, #F2853A, #E0392B);
+
+  /* Base oscura — el tema por defecto */
+  --fondo:          #14181A;
+  --superficie:     #1C2225;
+  --superficie-2:   #242B2F;
+  --borde:          #2D3A42;
+  --borde-suave:    #232B30;
+
+  /* Texto */
+  --texto:          #EDF2F0;
+  --texto-medio:    #A3B0B3;
+  --texto-tenue:    #6B7A80;
+
+  /* Semantica de datos */
+  --bueno:          #57AD30;
+  --alerta:         #F2853A;
+  --malo:           #E0392B;
+  --neutro:         #5B8DB8;
+  --info:           #7FB3D5;
+
+  /* Confianza del dato — se usa en los sellos de procedencia */
+  --conf-alta:      #57AD30;
+  --conf-media:     #F2853A;
+  --conf-baja:      #8A6BB1;
+
+  /* Tipografia */
+  --fuente-titulo:  'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --fuente-cuerpo:  'Inter', 'Segoe UI', system-ui, sans-serif;
+  --fuente-mono:    ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  /* Espaciado */
+  --e1: 4px;  --e2: 8px;  --e3: 12px; --e4: 16px;
+  --e5: 24px; --e6: 32px; --e7: 48px; --e8: 64px;
+
+  /* Radios y sombras */
+  --r1: 6px; --r2: 10px; --r3: 14px;
+  --sombra: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.25);
+}
+
+/* Tema claro — existe y funciona, pero no es el que se abre */
+[data-tema="claro"] {
+  --fondo:        #F7F8F6;
+  --superficie:   #FFFFFF;
+  --superficie-2: #F0F2EF;
+  --borde:        #D8DEDA;
+  --borde-suave:  #E7EBE8;
+  --texto:        #14181A;
+  --texto-medio:  #4A5559;
+  --texto-tenue:  #8A9599;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--fuente-titulo); margin: 0; letter-spacing: -.01em; }
+h1 { font-size: 28px; font-weight: 700; }
+h2 { font-size: 20px; font-weight: 600; }
+h3 { font-size: 15px; font-weight: 600; }
+a  { color: var(--verde); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── Estructura ───────────────────────────────────────────── */
+
+.marco { max-width: 1400px; margin: 0 auto; padding: var(--e5); }
+
+.barra {
+  display: flex; align-items: center; gap: var(--e4);
+  padding: var(--e3) var(--e5);
+  background: var(--superficie);
+  border-bottom: 1px solid var(--borde);
+  position: sticky; top: 0; z-index: 10;
+}
+.barra .logo {
+  font-family: var(--fuente-titulo); font-weight: 700; font-size: 16px;
+  letter-spacing: -.02em;
+}
+.barra .logo span { color: var(--verde); }
+.barra nav { display: flex; gap: var(--e1); margin-left: var(--e4); flex-wrap: wrap; }
+.barra nav a {
+  padding: 6px var(--e3); border-radius: var(--r1);
+  color: var(--texto-medio); font-size: 13px; font-weight: 500;
+}
+.barra nav a:hover { background: var(--superficie-2); color: var(--texto); text-decoration: none; }
+.barra nav a.activo { background: var(--verde); color: #0F1416; }
+.barra .derecha { margin-left: auto; display: flex; align-items: center; gap: var(--e3); }
+
+.rejilla { display: grid; gap: var(--e4); }
+.c2 { grid-template-columns: repeat(2, 1fr); }
+.c3 { grid-template-columns: repeat(3, 1fr); }
+.c4 { grid-template-columns: repeat(4, 1fr); }
+.c-lateral { grid-template-columns: 1fr 340px; }
+@media (max-width: 1100px) { .c3, .c4, .c-lateral { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 720px)  { .c2, .c3, .c4, .c-lateral { grid-template-columns: 1fr; } }
+
+/* ── Tarjetas ─────────────────────────────────────────────── */
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--r2);
+  padding: var(--e4);
+}
+.tarjeta.acento { border-left: 3px solid var(--verde); }
+.tarjeta h3 { margin-bottom: var(--e3); color: var(--texto); }
+
+.encabezado-seccion {
+  display: flex; align-items: baseline; gap: var(--e3);
+  margin: var(--e6) 0 var(--e3);
+}
+.encabezado-seccion h2 { flex: 0 0 auto; }
+.encabezado-seccion .nota { color: var(--texto-tenue); font-size: 12px; }
+
+/* ── Cifras ───────────────────────────────────────────────── */
+
+.cifra { font-family: var(--fuente-titulo); font-weight: 700; letter-spacing: -.02em; }
+.cifra.xl { font-size: 34px; }
+.cifra.l  { font-size: 24px; }
+.cifra.m  { font-size: 18px; }
+.etiqueta {
+  font-size: 11px; text-transform: uppercase; letter-spacing: .07em;
+  color: var(--texto-tenue); font-weight: 600;
+}
+
+/* ── Senales: el elemento mas importante del Radar ────────── */
+
+.senal {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 12px; font-weight: 500;
+  border: 1px solid transparent;
+}
+.senal.alerta { background: rgba(242,133,58,.13); color: #F2A469; border-color: rgba(242,133,58,.3); }
+.senal.mala   { background: rgba(224,57,43,.13);  color: #F07A70; border-color: rgba(224,57,43,.3); }
+.senal.buena  { background: rgba(87,173,48,.13);  color: #86D45F; border-color: rgba(87,173,48,.3); }
+.senal.neutra { background: var(--superficie-2);  color: var(--texto-medio); border-color: var(--borde); }
+
+/* ── Sello de procedencia: el dato dice de donde vino ─────── */
+
+.procedencia {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; color: var(--texto-tenue);
+  font-family: var(--fuente-mono);
+}
+.procedencia .punto { width: 6px; height: 6px; border-radius: 50%; }
+.procedencia.alta  .punto { background: var(--conf-alta); }
+.procedencia.media .punto { background: var(--conf-media); }
+.procedencia.baja  .punto { background: var(--conf-baja); }
+
+/* ── Tablas ───────────────────────────────────────────────── */
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: var(--e2) var(--e3);
+  font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--texto-tenue); font-weight: 600;
+  border-bottom: 1px solid var(--borde);
+}
+td { padding: var(--e3); border-bottom: 1px solid var(--borde-suave); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--superficie-2); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── Barras de percentil ──────────────────────────────────── */
+
+.percentil { display: flex; align-items: center; gap: var(--e2); }
+.percentil .pista {
+  flex: 1; height: 6px; background: var(--superficie-2);
+  border-radius: 999px; overflow: hidden; min-width: 60px;
+}
+.percentil .relleno { height: 100%; border-radius: 999px; background: var(--verde); }
+.percentil .relleno.medio { background: var(--naranja); }
+.percentil .relleno.bajo  { background: var(--rojo); }
+.percentil .valor {
+  font-family: var(--fuente-mono); font-size: 12px;
+  color: var(--texto-medio); min-width: 30px; text-align: right;
+}
+
+/* ── Botones y controles ──────────────────────────────────── */
+
+.boton {
+  display: inline-flex; align-items: center; gap: var(--e2);
+  padding: 8px var(--e4); border-radius: var(--r1);
+  font-family: var(--fuente-cuerpo); font-size: 13px; font-weight: 600;
+  border: 1px solid var(--borde); background: var(--superficie-2);
+  color: var(--texto); cursor: pointer;
+}
+.boton:hover { border-color: var(--verde); }
+.boton.primario { background: var(--verde); color: #0F1416; border-color: var(--verde); }
+.boton.primario:hover { background: var(--verde-oscuro); }
+.boton.fantasma { background: transparent; }
+
+kbd {
+  font-family: var(--fuente-mono); font-size: 11px;
+  padding: 2px 6px; border-radius: 4px;
+  background: var(--superficie-2); border: 1px solid var(--borde);
+  color: var(--texto-medio);
+}
+
+/* ── Aviso de mockup ──────────────────────────────────────── */
+
+.aviso-mockup {
+  background: rgba(242,133,58,.1);
+  border: 1px solid rgba(242,133,58,.3);
+  border-radius: var(--r2);
+  padding: var(--e3) var(--e4);
+  font-size: 12px; color: #F2A469;
+  margin-bottom: var(--e5);
+}
+
+.pie {
+  margin-top: var(--e8); padding-top: var(--e4);
+  border-top: 1px solid var(--borde);
+  color: var(--texto-tenue); font-size: 12px; font-style: italic;
+}

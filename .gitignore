@@ -1,0 +1,84 @@
+# ─────────────────────────────────────────────────────────────
+# MotSport · .gitignore
+#
+# El bloqueo de material sensible es POR EXTENSION, no por ruta.
+# Motivo: una ruta se olvida al crear una carpeta nueva; una
+# extension no. Aqui viajan llaves de APIs deportivas, credenciales
+# de Supabase y llaves de firma. Un solo archivo filtrado obliga a
+# rotar todo. Si necesitas versionar un archivo con estas
+# extensiones, agrega una excepcion explicita y explica por que.
+# ─────────────────────────────────────────────────────────────
+
+# Material criptografico y credenciales — POR EXTENSION
+*.key
+*.pem
+*.crt
+*.cer
+*.pfx
+*.p12
+*.jks
+*.keystore
+*.pass
+*.secret
+id_rsa*
+id_ed25519*
+*.gpg
+*.asc
+
+# Variables de entorno
+.env
+.env.*
+!.env.ejemplo
+
+# Credenciales de servicios
+service-account*.json
+credenciales*.json
+supabase/.temp/
+.supabase/
+
+# Dependencias
+node_modules/
+.pnpm-store/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Construccion
+dist/
+build/
+.svelte-kit/
+.output/
+*.tsbuildinfo
+
+# Datos descargados y modelos entrenados
+# No se versionan: son grandes, se regeneran, y algunos tienen
+# licencia que prohibe redistribuirlos (ver docs/motsport/15_LEGAL.md).
+datos/crudo/
+datos/cache/
+*.parquet
+*.duckdb
+*.sqlite
+*.sqlite-*
+modelos/*.pkl
+modelos/*.joblib
+modelos/*.txt
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Estado local de agentes — se mantiene CLAUDE.md, se ignora el estado
+.antigravity/
+.claude/settings.local.json
+
+# Registros
+*.log
+logs/
