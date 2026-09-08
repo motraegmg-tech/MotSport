@@ -86,6 +86,8 @@ El grupo con el dolor más claro y sin oferta razonable: **academias, fuerzas b�
 
 Es un segmento que MotSport puede atender bien porque su costo marginal por cliente es bajo —el dato ya está ingerido, lo que se suma es consulta de IA—, y es el mejor candidato para las primeras entrevistas de validación de precio en Fase 3.
 
+> **Ojo: esta tesis todavía no está probada.** Descansa en un supuesto que nadie ha verificado —que estos clubes se quedan fuera por precio— y ninguna de las herramientas del sector publica precio de forma confiable. Podría ser que el problema no sea el costo sino el tiempo de aprendizaje, o que ya usen algo que les basta. **Las tres entrevistas de [`16_DISTRIBUCION_Y_PRECIOS.md`](16_DISTRIBUCION_Y_PRECIOS.md) existen para confirmar o tumbar esta tesis antes de construir sobre ella.**
+
 ---
 
 ## 6. Fuentes

@@ -96,7 +96,11 @@ Se reutiliza el esqueleto de `legal/` de MotRest, adaptado:
 | **Club** | Equipo o academia | ~$299–899 USD/mes | Usuarios múltiples, todas las ligas del plan, informes, alertas |
 | **Federación** | Multi-equipo | A medida | Varios equipos, integraciones, soporte dedicado |
 
-**Referencia de mercado:** las herramientas establecidas del sector —Wyscout, StatsBomb, Sportscode— arrancan en el orden de unos pocos dólares por usuario al mes con facturación anual en sus escalones más bajos, y suben mucho en configuración de club. El hueco que MotSport busca no es competir en precio con Hudl: es dar contexto integrado —clima, viaje, descanso, disponibilidad, todo cruzado— que ninguna de ellas entrega junto.
+> ⚠️ **Estos precios no tienen sustento todavía.** Las herramientas establecidas del sector —Wyscout, StatsBomb, Sportscode— no publican precio de forma confiable: se vende por configuración de club y por contrato anual, y las cifras que circulan en comparativas públicas no son verificables. **Sin saber qué paga hoy un club real, cualquier precio nuestro es un número inventado.**
+>
+> Por eso las tres entrevistas no son una formalidad: son el requisito para poder fijar precio. Lo que hay que sacar de ellas es (1) qué herramientas paga hoy y cuánto, (2) cuántas horas por semana se le van en preparar un partido, y (3) qué tendría que hacer MotSport para justificar cambiar. **Hasta tener esas tres respuestas, la tabla de arriba es una hipótesis de trabajo y nada más.**
+
+El hueco que MotSport busca no es competir en precio con Hudl: es dar el contexto integrado —clima, viaje, descanso, disponibilidad, todo cruzado— que ninguna de ellas entrega junto.
 
 ---
 

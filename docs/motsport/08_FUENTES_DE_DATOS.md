@@ -39,7 +39,7 @@ Todas son gratuitas y **legales para uso interno no comercial**. Ninguna de ella
 |---|---|---|---|---|
 | **API-Football** (api-sports.io) | ~1,236 ligas en el tier gratuito | **100 consultas/día** | Tier gratuito. Verificar condiciones de uso comercial antes de Fase 3 | Calendario, resultados, tablas, plantillas, lesiones. **Fuente principal de Fase 1** |
 | **football-data.org** | 12 competiciones (top 5 europeas + Champions) | Generoso para hobby | Gratuito | Respaldo y contraste de calendario/resultados |
-| **StatsBomb Open Data** | Competiciones selectas, evento a evento, con freeze-frames de posición en cada tiro | Sin límite (archivos en GitHub) | ⛔ **Prohíbe uso comercial.** Requiere atribución | **Solo para entrenar y validar modelos y calibrar métricas avanzadas (xG, xT).** Nunca se sirve al usuario en Fase 3 |
+| **StatsBomb Open Data** | Competiciones selectas, evento a evento, con freeze-frames de posición en cada tiro | Sin límite (archivos en GitHub) | ⛔ **Prohíbe uso comercial.** Requiere atribución | Métricas avanzadas de fútbol (xG, xA, xT) y calibración de modelos. **Puede servirse al equipo mientras el uso sea interno; se retira antes del primer cobro** |
 | **Club Elo** | Ratings históricos de clubes | — | Verificar | Rating base para el modelo de fuerza |
 
 > ⚠️ El límite de **100 consultas al día** de API-Football es la restricción real de la Fase 1. Obliga a diseñar la ingesta como **incremental y con caché agresivo desde el primer día** —lo cual, de todos modos, es como debe estar hecha—. No se resuelve pagando: se resuelve no pidiendo lo que ya tenemos.
@@ -68,6 +68,20 @@ Open-Meteo es la elección correcta para Fase 1: no pide llave, tiene histórico
 ### Búsqueda web en vivo
 
 Lo que ningún API cubre —una lesión anunciada hace dos horas, una declaración del entrenador, el estado del césped— entra por la **herramienta de búsqueda web de Claude**, con dominios permitidos por competencia. Esto **no reemplaza** a las fuentes estructuradas: complementa, se marca con `confianza` baja y **siempre se presenta citando el origen**. Ver [`10_INTELIGENCIA_ARTIFICIAL.md`](10_INTELIGENCIA_ARTIFICIAL.md).
+
+### Factores del catálogo que todavía NO tienen fuente
+
+[`09_CATALOGO_DE_FACTORES.md`](09_CATALOGO_DE_FACTORES.md) define el catálogo completo de lo que puede mover un partido. Varias familias **no tienen proveedor asignado** en las Fases 1 y 2, y conviene decirlo antes de que alguien las dé por hechas:
+
+| Factores | Estado | Cómo se resuelve |
+|---|---|---|
+| `altitud_sede`, `techo`, `superficie`, `dimensiones_cancha` | **Sin API** | **Tabla propia de sedes, llenada a mano por MOTRAE.** Son unas decenas de estadios por competencia, cambian casi nunca, y la altitud sale de las coordenadas. Es trabajo de una tarde y vale la pena: la altitud es uno de los factores con más peso real |
+| `km_recorridos`, `husos_cruzados` | **Derivados** | Se calculan de las coordenadas de las dos sedes; no necesitan proveedor |
+| `arbitro` (tarjetas y faltas por partido) | **Parcial** | API-Football publica designación arbitral en algunas competencias. Donde no, el factor queda vacío y se declara |
+| `asistencia_esperada` | **Sin fuente confiable** | Se pospone. Un factor sin dato es un factor que no entra al modelo |
+| `cuota_consenso`, `movimiento_cuota` (familia mercado) | **Fase 3** | El único proveedor de cuotas contemplado es SportMonks, que llega con la comercialización. **Hasta entonces la familia mercado está vacía**, y el modelo no la usa |
+
+**Regla:** un factor sin fuente se queda en el catálogo con su definición escrita, pero **no entra al modelo predictivo ni se muestra como si existiera**. La interfaz dice que no hay dato; no lo estima.
 
 ### Lo que NO vamos a hacer
 

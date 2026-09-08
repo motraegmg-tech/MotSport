@@ -6,10 +6,14 @@
 
 ## 1. La regla que gobierna todo
 
-> ### Ninguna cifra sale del modelo. Sale de la base.
-> El modelo **busca**, **ordena** y **explica**. Nunca produce un número por su cuenta.
+> ### Ninguna cifra sale del modelo. Toda cifra viene de una llamada a herramienta.
+> El modelo **busca**, **ordena** y **explica**. Nunca produce un número desde su memoria.
 
-De esa regla se derivan las tres decisiones de diseño que siguen. Si alguna vez alguien propone algo que la viole, la respuesta es no.
+La formulación corta que se usa a diario es *«ninguna cifra sale del modelo, sale de la base»*, y para casi todo es exacta. La formulación precisa es la de arriba, porque hay una excepción legítima: la **búsqueda web en vivo** (sección 4) también es una llamada a herramienta y también puede traer un dato, pero ese dato **no se guarda en la base**. Se marca con confianza baja, se cita siempre, y nunca se mezcla con lo verificado.
+
+Lo que la regla prohíbe, en las dos formulaciones, es lo mismo: **que el modelo escriba un número que no vino de ninguna herramienta.**
+
+De esta regla se derivan las decisiones de diseño que siguen. Si alguien propone algo que la viole, la respuesta es no.
 
 ---
 
@@ -26,8 +30,10 @@ El modelo no escribe consultas contra la base. Llama funciones acotadas, con esq
 | `clima_de_partido` | Condiciones previstas o registradas para un partido |
 | `disponibilidad_plantilla` | Lesionados, suspendidos y ausencias, ponderados por peso en el once |
 | `historico_enfrentamientos` | Historial directo, con contexto de cada partido |
-| `pronostico` | Salida del modelo predictivo, con sus factores y su confianza |
+| `pronostico` | **Fase 2.** Salida del modelo predictivo, con sus factores y su confianza |
 | `buscar_en_la_red` | Búsqueda web en vivo para lo que ningún API cubre |
+
+> **Qué puede decir el asistente sobre el resultado en Fase 1.** El modelo predictivo completo es entrega de Fase 2, así que en Fase 1 la herramienta `pronostico` **no existe todavía**. Lo que sí hay desde Fase 1 es el **rating base tipo Elo** y los factores contextuales ya calculados, que el asistente puede leer y comparar: *«son parejos en rating, pero el visitante llega con dos días menos de descanso»*. Eso es descripción del contexto, no pronóstico, y así se presenta. Ninguna probabilidad de resultado se muestra antes de que exista backtesting — ver [`11_MODELOS_PREDICTIVOS.md`](11_MODELOS_PREDICTIVOS.md).
 
 **Por qué no SQL libre.** Un modelo con acceso libre a la base es imposible de auditar —no sabes qué consultó hasta que ya lo hizo—, trivial de manipular con una pregunta mal intencionada, y capaz de tumbar la base con una consulta desafortunada. Con herramientas tipadas, la superficie es exactamente la que decidimos, **el filtro de tenant no lo controla el modelo**, y cada llamada queda registrada.
 
@@ -84,15 +90,21 @@ El costo de IA es la única partida de operación que puede sorprender. Se contr
 
 ---
 
-## 7. Qué debe poder responder en Fase 1
+## 7. Qué debe poder responder
+
+### Fase 1
 
 - *¿Qué clima va a hacer en el partido del sábado y cómo le pega a cada equipo?*
 - *¿Cómo llega el rival: quién está lesionado, cuántos días de descanso trae, cómo viene de forma?*
 - *Compárame a estos dos delanteros en los últimos seis meses, por percentil de su liga.*
 - *¿Qué pasa históricamente cuando este equipo juega a más de 2,000 metros de altitud?*
 - *Búscame mediocampistas sub-23 en el percentil 80 o mejor de pases progresivos.*
+- *Dame la previa completa del partido del domingo.* — con contexto y forma, sin probabilidad de resultado
+
+### Fase 2, cuando exista el modelo con backtesting
+
 - *¿Por qué el modelo da favorito al visitante?*
-- *Dame la previa completa del partido del domingo.*
+- *¿Qué tan seguro está el modelo y en qué se equivocó las últimas cinco veces que dijo esto?*
 
 Este conjunto es también la **base del banco de pruebas**: cada pregunta tiene una respuesta esperada verificable contra la base, y se corre antes de cada cambio del prompt o de las herramientas. Un asistente sin banco de pruebas se degrada sin que nadie lo note.
 

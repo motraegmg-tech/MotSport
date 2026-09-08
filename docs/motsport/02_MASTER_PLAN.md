@@ -56,7 +56,23 @@ No es el dato: el dato lo tiene cualquiera que pague. Lo defendible son tres cos
 
 ---
 
-## 4. Estrategia: interno primero
+## 4. Por qué MOTRAE construye esto
+
+Es la pregunta que va a hacer cualquiera que vea el catálogo de la empresa: ¿qué hace una compañía de optimización operativa metida en software deportivo?
+
+La respuesta es que **es el mismo problema con otro vestido**. La tesis central de MOTRAE es que las iniciativas de inteligencia artificial fracasan cuando se resuelve la capa del modelo sin haber resuelto antes las de infraestructura, datos y orquestación. Un club preparando un partido tiene exactamente la patología que DELTA OPS diagnostica en una planta: información fragmentada entre sistemas que no se hablan, y decisiones tomadas con datos incompletos. Ingerir, normalizar, dar procedencia, orquestar y recién entonces poner inteligencia encima es la misma secuencia, aplicada a otro dominio.
+
+Y hay una razón práctica: **MotSport es un producto que MOTRAE controla de punta a punta.** A diferencia de un proyecto de cliente, aquí la empresa decide el alcance, el ritmo y el momento de vender. Eso lo convierte en el mejor banco de pruebas para la arquitectura agéntica de la plataforma SaaS, sin arriesgar el compromiso con ningún cliente.
+
+### La pregunta abierta
+
+**Quién es exactamente «el equipo» que va a usar esto todos los días.** Toda la estrategia de este documento descansa en que el uso diario escriba el pliego de requisitos, y eso solo funciona si quien lo usa entiende de análisis deportivo. Si el usuario real termina siendo alguien de MOTRAE que no prepara partidos de verdad, el pliego que salga va a ser el de un aficionado con buenas herramientas, no el de un analista — y el producto que se construya no le va a servir a un cuerpo técnico.
+
+**Esto se resuelve antes de arrancar la Fase 1**, junto con la decisión de qué deportes y ligas se siguen. Ver [`../../README.md`](../../README.md) § Estado actual.
+
+---
+
+## 5. Estrategia: interno primero
 
 **MotSport arranca como herramienta de uso interno de MOTRAE.** Esa no es una etapa provisional que haya que apurar: es la estrategia de la empresa aplicada a su propio producto. MOTRAE no se presenta con pilotos teóricos —la columna digital que ofrece comercialmente es la misma que ya sostiene su operación—. **Demostrar primero, comercializar después.**
 
@@ -68,7 +84,7 @@ Las consecuencias prácticas son tres:
 
 ---
 
-## 5. Alcance por fase
+## 6. Alcance por fase
 
 | Fase | Uso | Duración | Qué entrega |
 |---|---|---|---|
@@ -94,7 +110,7 @@ Todo lo que se corta por alcance no se pierde: se manda a [`17_VISION_FUTURA.md`
 
 ---
 
-## 6. Costos de operación
+## 7. Costos de operación
 
 ### Fases 0 a 2 (uso interno)
 
@@ -103,9 +119,10 @@ Todo lo que se corta por alcance no se pierde: se manda a [`17_VISION_FUTURA.md`
 | Fuentes de datos | **$0** (tiers gratuitos) |
 | Supabase | $0 a ~$25 USD según el plan que haga falta |
 | Contenedor del motor | ~$10–20 USD |
-| API de Claude | **La partida real.** Depende del uso; se mide desde el primer día |
+| API de Claude | **La partida real.** Techo puesto en **$80 USD/mes** |
+| **Total con el techo puesto** | **~$125 USD/mes** en el peor caso |
 
-El costo de IA es la única partida que puede sorprender, y es por eso que la caché de prompt sobre el bloque estable y la medición por consulta están en el diseño desde el día uno, no como optimización posterior. Ver [`10_INTELIGENCIA_ARTIFICIAL.md`](10_INTELIGENCIA_ARTIFICIAL.md).
+El costo de IA es la única partida que puede sorprender, y por eso **tiene un tope duro configurado, no una intención de moderación**: `TOPE_DIARIO_IA_USD` y `TOPE_MENSUAL_IA_USD` en el entorno. Al llegar al tope, el asistente se apaga y lo dice; nunca degrada en silencio ni sigue gastando. La caché de prompt sobre el bloque estable y la medición por consulta están en el diseño desde el día uno, no como optimización posterior. Ver [`10_INTELIGENCIA_ARTIFICIAL.md`](10_INTELIGENCIA_ARTIFICIAL.md).
 
 ### Fase 3 (comercialización)
 
@@ -113,7 +130,7 @@ Se suma el proveedor de datos con derecho de redistribución (~€29–249/mes a
 
 ---
 
-## 7. Riesgos
+## 8. Riesgos
 
 | # | Riesgo | Probabilidad | Impacto | Mitigación |
 |---|---|---|---|---|
@@ -127,7 +144,7 @@ Se suma el proveedor de datos con derecho de redistribución (~€29–249/mes a
 
 ---
 
-## 8. Gobierno del proyecto
+## 9. Gobierno del proyecto
 
 | Quién | Qué decide |
 |---|---|

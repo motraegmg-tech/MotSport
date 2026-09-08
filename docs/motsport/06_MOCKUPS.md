@@ -24,6 +24,13 @@
 2. **Todo dato lleva su sello de procedencia visible**, con un punto de color según la confianza. No escondido detrás del cursor: a la vista, junto a la cifra.
 3. **En la Consola IA, las herramientas que llamó el asistente quedan visibles** arriba de cada respuesta, y cada cifra cita su fuente y su fecha. El tercer intercambio del mockup es a propósito uno donde **el asistente dice que no tiene el dato** — ese es el comportamiento que hay que construir, no el que hay que evitar.
 
+## Qué fase muestran los mockups
+
+**Muestran el producto completo, no el recorte de Fase 1.** Es deliberado: sirven para juzgar hacia dónde va MotSport, no para especificar la primera entrega. Dos diferencias concretas a tener presentes:
+
+- **Las probabilidades de resultado son de Fase 2.** El Radar y el Centro de Partido muestran un pronóstico porque así se ve el producto terminado; en Fase 1 no se muestra ninguna probabilidad, porque el modelo con backtesting es entrega de Fase 2. Ver [`10_INTELIGENCIA_ARTIFICIAL.md`](10_INTELIGENCIA_ARTIFICIAL.md) § 3 y [`11_MODELOS_PREDICTIVOS.md`](11_MODELOS_PREDICTIVOS.md).
+- **Las fuentes citadas cambian en Fase 3.** El mockup de la Consola IA cita `statsbomb` junto a una respuesta al usuario. Eso es correcto mientras el uso sea interno, y **deja de serlo el día que se cobre**: ver [`15_LEGAL.md`](15_LEGAL.md).
+
 ## Reglas de los mockups
 
 - **HTML y CSS puros**, sin framework. Se abren con doble clic, sin instalar nada.

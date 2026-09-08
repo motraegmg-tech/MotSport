@@ -303,8 +303,9 @@ MotSport/
 - Mockups de las seis pantallas restantes
 - Conector de la primera fuente
 
-**Pendiente de decisión de Gonzalo**
+**Pendiente de decisión de Gonzalo** — las tres se resuelven antes de arrancar la Fase 1
 - **Qué deportes y qué ligas sigue realmente el equipo** — define la primera ingesta y evita construir conectores que nadie va a abrir
+- **Quién es exactamente «el equipo» que va a usar esto a diario** — toda la estrategia descansa en que el uso escriba el pliego de requisitos, y eso solo funciona si quien lo usa prepara partidos de verdad. Ver [`02_MASTER_PLAN.md`](docs/motsport/02_MASTER_PLAN.md) § 4
 - Nombre comercial definitivo (`MotSport` es el nombre de trabajo)
 
 ---

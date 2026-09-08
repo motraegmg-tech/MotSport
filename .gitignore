@@ -65,7 +65,8 @@ datos/cache/
 *.sqlite-*
 modelos/*.pkl
 modelos/*.joblib
-modelos/*.txt
+modelos/*.lgb
+modelos/*.onnx
 
 # Sistema operativo y editores
 .DS_Store
