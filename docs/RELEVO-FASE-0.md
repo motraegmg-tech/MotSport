@@ -94,7 +94,13 @@ No hace falta volver a discutirlas. Están todas justificadas en [`03_ARQUITECTU
 | GitHub CLI **2.100.0** | ✅ global (winget) | — |
 | Docker **29.7.2** | ✅ instalado · ⛔ **el demonio no ha arrancado nunca** | — |
 
-**Lo único pendiente: abrir Docker Desktop por primera vez.** La primera ejecución pide aceptar términos y puede exigir habilitar WSL 2 y reiniciar Windows. Hasta que el demonio corra, `supabase start` no levanta y la tarea 2 de Fase 1 sigue bloqueada.
+**Lo único pendiente: instalar WSL.** Docker Desktop arranca sus procesos y muere con «unable to start» porque **el servicio `LxssManager` no existe**: la característica de Windows nunca se habilitó, y en Windows 11 Home no hay alternativa —no existe el backend de Hyper-V—. La virtualización del firmware **ya está activa** (`HypervisorPresent: True`), así que no hay que tocar la BIOS.
+
+```powershell
+wsl --install      # PowerShell COMO ADMINISTRADOR, luego reiniciar Windows
+```
+
+Después del reinicio se abre Docker Desktop una vez y se comprueba con `docker info`. Hasta entonces, `supabase start` no levanta y la medición de rendimiento sigue bloqueada.
 
 Cómo se invocan las herramientas (no están en el `PATH`, y es deliberado):
 
@@ -117,8 +123,8 @@ Y una que no era trampa sino error de documentación: **`Supabase.CLI` no existe
 En este orden:
 
 1. ~~**Aplicar los cuatro hallazgos de la auditoría.**~~ ✅ **Hecho el 8 de septiembre** — ver § 4.4.
-2. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado solo por arrancar Docker Desktop** — el Supabase CLI y todo lo demás ya está (§ 4.2).
-3. Escribir la primera migración de Supabase. **Ya sale contra el esquema corregido**; debe llevar `WITH CHECK` en toda política de escritura ([`07_MODELO_DE_DATOS.md`](motsport/07_MODELO_DE_DATOS.md) § 7.1).
+2. ~~**Escribir la primera migración de Supabase.**~~ ✅ **Escrita el 8 de septiembre**, pero **sin aplicar todavía** — ver § 4.5. Se adelantó a la medición precisamente porque sin esquema aplicado no hay nada que medir.
+3. **Medir el rendimiento del esquema.** Es lo único que la auditoría no pudo juzgar: si los índices sirven de verdad a la consulta de percentiles con millones de filas, y si las vistas materializadas se pueden refrescar de forma incremental. **No se juzga leyendo SQL, se mide con datos.** ⛔ **Bloqueado por WSL** — ver § 4.2.
 4. Escribir el primer conector, con su licencia documentada **antes** en [`08_FUENTES_DE_DATOS.md`](motsport/08_FUENTES_DE_DATOS.md). **Debe escribir `periodo_clave` del catálogo, no texto libre**, y separar `resultado` de `resultado_reglamentario`.
 5. Llenar a mano el catálogo de sedes y nombrar a su responsable.
 6. Levantar `apps/web/` y el asistente v1.
@@ -135,6 +141,24 @@ Ninguno tocó la estructura del núcleo. El esquema pasó de **39 a 40 tablas**.
 | 4 | MENOR | Los catálogos son por tenant y no había procedimiento de siembra. En Fase 3 el primer cliente abriría con la base vacía | Orden de siembra de las trece tablas y las cuatro reglas del procedimiento en [`16_DISTRIBUCION_Y_PRECIOS.md`](motsport/16_DISTRIBUCION_Y_PRECIOS.md) § 2, punto 2. Se implementa en Fase 3 |
 
 **Lo que queda abierto de la auditoría es el rendimiento**, y solo se cierra midiendo con datos.
+
+### 4.5 La primera migración · escrita, **sin aplicar**
+
+En [`supabase/migrations/`](../supabase/migrations/):
+
+| Archivo | Contenido |
+|---|---|
+| `20260908000100_esquema_inicial.sql` | 40 tablas · 9 funciones · 18 triggers · 10 índices · 4 vistas de resolución |
+| `20260908000200_rls_lectura_aislada.sql` | 40 `ENABLE` · 40 `FORCE` · 40 políticas de lectura |
+| [`supabase/seed.sql`](../supabase/seed.sql) | El inquilino MOTRAE y los catálogos: fuentes, deportes, métricas, factores y periodos |
+
+**El orden de creación no se escribió a mano: se derivó de las llaves foráneas.** Hacía falta, porque el documento presenta las entidades (§3) antes que los catálogos (§4) y las entidades referencian catálogos — el orden de lectura no es un orden ejecutable. El resultado salió sin ciclos y sin una sola referencia a tabla inexistente, lo cual es, de paso, una verificación más del esquema.
+
+Dos colocaciones que llaman la atención y tienen motivo: las funciones `plpgsql` van arriba porque Postgres **no** valida su cuerpo al crearlas; `prioridad_de_fuente` y `dato_dentro_de_vigencia` van abajo porque son `LANGUAGE sql`, su cuerpo **sí** se valida, y consultan `clases_dato` y `preferencias_fuente`.
+
+Fuera del `seed.sql` quedaron los ejemplos de eventos de §5.5: referencian partidos, equipos y jugadores que nadie inserta. Sirven para leer, no para sembrar.
+
+> ⚠️ **Nadie las ha corrido contra un Postgres.** Están verificadas solo de forma estática —paréntesis balanceados, cuerpos `$$` pares, cero residuos de Markdown, orden sin ciclos—. Eso da confianza, no certeza: **la primera corrida seguramente falla en algo**, se arregla y se quita el aviso del README.
 
 ---
 
