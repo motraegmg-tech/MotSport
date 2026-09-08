@@ -9,9 +9,10 @@
 >
 > **Orden de lectura:**
 > 1. Este `README.md` — qué es el producto, en qué etapa está y cómo se trabaja aquí.
-> 2. [`CLAUDE.md`](CLAUDE.md) — las reglas que no se negocian, en corto.
-> 3. [`docs/motsport/00_INDICE.md`](docs/motsport/00_INDICE.md) — índice maestro; de ahí saltas al documento del tema que te toque.
-> 4. [`docs/MOTRAE_EMPRESA.md`](docs/MOTRAE_EMPRESA.md) — quién es la empresa que construye esto.
+> 2. [`docs/RELEVO-FASE-0.md`](docs/RELEVO-FASE-0.md) — **si vienes a retomar trabajo, este es el atajo**: qué está hecho, qué falta, qué está bloqueado y por qué.
+> 3. [`CLAUDE.md`](CLAUDE.md) — las reglas que no se negocian, en corto.
+> 4. [`docs/motsport/00_INDICE.md`](docs/motsport/00_INDICE.md) — índice maestro; de ahí saltas al documento del tema que te toque.
+> 5. [`docs/MOTRAE_EMPRESA.md`](docs/MOTRAE_EMPRESA.md) — quién es la empresa que construye esto.
 >
 > **Dos cosas antes de escribir una línea:**
 > - Empieza SIEMPRE las respuestas llamando al CEO por su nombre: **Gonzalo**.
@@ -340,6 +341,7 @@ Detalle completo en [`docs/BIENVENIDA-DESARROLLADOR.md`](docs/BIENVENIDA-DESARRO
 
 | Documento | Qué contiene |
 |---|---|
+| [`docs/RELEVO-FASE-0.md`](docs/RELEVO-FASE-0.md) | **Estado del proyecto**: avance, pendientes, bloqueos, requisitos de máquina y cómo subir el repo a GitHub |
 | [`docs/motsport/00_INDICE.md`](docs/motsport/00_INDICE.md) | Índice maestro de la suite |
 | [`docs/motsport/02_MASTER_PLAN.md`](docs/motsport/02_MASTER_PLAN.md) | Identidad, propuesta de valor, alcance, riesgos, gobierno |
 | [`docs/motsport/03_ARQUITECTURA.md`](docs/motsport/03_ARQUITECTURA.md) | Vista general y decisiones con justificación |

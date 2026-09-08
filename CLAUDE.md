@@ -1,6 +1,7 @@
 # CLAUDE.md — MotSport · Plataforma de análisis y control deportivo
 
 **Lee primero [`README.md`](README.md): es el contexto completo del proyecto.**
+**Si retomas trabajo, lee [`docs/RELEVO-FASE-0.md`](docs/RELEVO-FASE-0.md): qué está hecho, qué falta y qué está bloqueado.**
 Índice maestro de documentación: [`docs/motsport/00_INDICE.md`](docs/motsport/00_INDICE.md)
 
 ## Lo esencial para no equivocarse
@@ -35,6 +36,7 @@
 
 ## Documentos de referencia
 
+- [`docs/RELEVO-FASE-0.md`](docs/RELEVO-FASE-0.md) — **empieza aquí si retomas**: avance, pendientes, bloqueos y cómo subir el repo a GitHub
 - [`docs/motsport/00_INDICE.md`](docs/motsport/00_INDICE.md) — índice maestro de los 17 documentos
 - [`docs/motsport/08_FUENTES_DE_DATOS.md`](docs/motsport/08_FUENTES_DE_DATOS.md) — proveedores, costos y licencias
 - [`docs/motsport/09_CATALOGO_DE_FACTORES.md`](docs/motsport/09_CATALOGO_DE_FACTORES.md) — todo lo que afecta un partido
