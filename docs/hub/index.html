@@ -185,8 +185,8 @@ a.hub-acceso small { display: block; color: var(--texto-tenue); font-size: 12px;
       quién lo desbloquea.
     </p>
     <div class="hub-avisos">
-      <span class="hub-sello es-verde">Fase 0 cerrada</span>
-      <span class="hub-sello es-alerta">Fase 1 en curso</span>
+      <span class="hub-sello es-alerta">Fase 0 · 3 de 5 entregables</span>
+      <span class="hub-sello">Fase 1 · cimiento puesto, 0 de 9</span>
       <span class="hub-sello">Uso interno · confidencial</span>
       <span class="hub-sello">No se vende ni se distribuye</span>
     </div>
@@ -199,6 +199,64 @@ a.hub-acceso small { display: block; color: var(--texto-tenue); font-size: 12px;
     <div class="hub-metrica"><b>2 453</b><small>líneas de migración</small></div>
     <div class="hub-metrica"><b>39 066</b><small>palabras de documentación</small></div>
     <div class="hub-metrica"><b>18</b><small>commits</small></div>
+  </section>
+
+  <!-- ───────────── Dónde vamos en el plan ───────────── -->
+  <section class="hub-seccion">
+    <h2>Dónde vamos en el plan</h2>
+    <p class="hub-nota">
+      Las cinco fases están en el <strong>Master Plan § 6</strong>. Lo hecho hoy
+      —entorno, migración aplicada, RLS verificada— es <strong>cimiento de la Fase 1,
+      no entregables de la Fase 1</strong>. Conviene no confundirlo: todavía no hay
+      una sola pantalla funcionando ni un dato real ingerido.
+    </p>
+    <div class="hub-tabla-caja">
+      <table class="hub-tabla">
+        <thead><tr><th>Fase</th><th>Entrega</th><th>Avance</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>0 · Fundación</strong><br><small>2–3 sem · interno</small></td>
+            <td>Repositorio y documentación ✅ · Esquema de datos ✅ · Mockups ✅ ·
+                <strong>Deportes y ligas ❌</strong> · <strong>Nombre comercial ❌</strong></td>
+            <td><span class="hub-punto curso" style="display:inline-block;margin-right:6px"></span>
+                <strong>3 de 5</strong><br><small>los 2 que faltan son decisiones</small></td>
+          </tr>
+          <tr>
+            <td><strong>1 · Núcleo</strong><br><small>10–12 sem · interno</small></td>
+            <td>Ingesta de fútbol y NBA · acceso por invitación · Radar ·
+                Centro de Partido · fichas de equipo y jugador · comparador ·
+                scouting · clima · <strong>Asistente IA v1</strong></td>
+            <td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>
+                <strong>0 de 9</strong><br><small>cimiento puesto</small></td>
+          </tr>
+          <tr>
+            <td><strong>2 · Inteligencia</strong><br><small>8–10 sem · interno</small></td>
+            <td>Modelos predictivos con backtesting · alertas en vivo · informes PDF ·
+                PWA y móvil · NFL y más ligas</td>
+            <td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>Sin empezar</td>
+          </tr>
+          <tr>
+            <td><strong>3 · Comercialización</strong><br><small>🔓 venta</small></td>
+            <td>Los ocho puntos de distribución y precios. Antes de esto
+                <strong>no se cobra un peso</strong>: las fuentes gratuitas dejan de
+                ser legales al haber un cliente pagando</td>
+            <td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>Sin empezar</td>
+          </tr>
+          <tr>
+            <td><strong>4 · Expansión</strong><br><small>venta</small></td>
+            <td>API para clientes · datos propios del club (GPS) · video, solo si el
+                mercado lo justifica</td>
+            <td><span class="hub-punto espera" style="display:inline-block;margin-right:6px"></span>Sin empezar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hub-nota" style="margin-top:var(--e3)">
+      <strong>El nudo:</strong> la ingesta de fútbol y NBA es el primer entregable de
+      la Fase 1, y no se puede escribir sin saber qué ligas sigue el equipo. El plan
+      lo dice en su § 4: esas dos decisiones se resuelven <em>antes</em> de arrancar
+      la Fase 1.
+    </p>
   </section>
 
   <!-- ───────────── Lo hecho ───────────── -->
