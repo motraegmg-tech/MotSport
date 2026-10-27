@@ -6,7 +6,7 @@
 
 ## Lo esencial para no equivocarse
 
-- Producto **propio de MOTRAE**, no de un cliente. CEO de MOTRAE: **Gonzalo** — empieza tus respuestas llamándolo por su nombre.
+- Producto **propio de MOTRAE**, no de un cliente. CEOs: **Gonzalo Jácome** (producto, arquitectura y tecnología) y **Gerson Rivera** (líder comercial de MotRest y de todos los productos). La cuenta de Claude es compartida: empieza tus respuestas llamando por su nombre a quien escribe y, si no sabes quién es, pregúntalo.
 - MotSport es la **mesa de trabajo del analista deportivo**: almacena, busca, compara y explica todo lo que rodea a un partido.
 - ⚠️ **Hoy es una herramienta de USO INTERNO** — la usan Gonzalo y su equipo. **No se distribuye, no se vende, no se le da acceso a nadie fuera del equipo.** La venta es la Fase 3 y tiene su propia lista de requisitos en [`docs/motsport/16_DISTRIBUCION_Y_PRECIOS.md`](docs/motsport/16_DISTRIBUCION_Y_PRECIOS.md).
 - **Costuras sí, fábrica no.** Se construyen hoy las costuras que costaría carísimo abrir después (`tenant_id` con RLS, proveedores intercambiables, procedencia por dato). **No** se construye maquinaria de venta: sin planes, sin facturación, sin alta de clientes.
