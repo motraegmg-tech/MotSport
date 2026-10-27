@@ -15,7 +15,7 @@
 > 5. [`docs/MOTRAE_EMPRESA.md`](docs/MOTRAE_EMPRESA.md) — quién es la empresa que construye esto.
 >
 > **Dos cosas antes de escribir una línea:**
-> - Empieza SIEMPRE las respuestas llamando al CEO por su nombre: **Gonzalo**.
+> - Empieza SIEMPRE las respuestas llamando por su nombre a quien escribe: **Gonzalo** o **Gerson** (los dos CEO de MOTRAE; la cuenta es compartida). Si no sabes quién es, pregúntalo.
 > - ⚠️ **Este producto todavía no se vende ni se distribuye.** Es una herramienta interna de MOTRAE. Si una tarea suena a "preparar el cobro", "dar de alta clientes" o "publicar en tiendas", eso es **Fase 3** y no se construye hoy. Ver [🔒 En qué etapa está](#-en-qué-etapa-está).
 
 ---
