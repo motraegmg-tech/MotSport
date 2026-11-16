@@ -355,7 +355,7 @@ Detalle completo en [`docs/BIENVENIDA-DESARROLLADOR.md`](docs/BIENVENIDA-DESARRO
 ## ☎️ Contacto
 
 **MOTRAE** · Xalapa, Veracruz · México
-motrae.gmg@gmail.com · 228 353 6911 · www.motrae.com
+motrae.gmg@gmail.com · 228 353 6911 · motrae.dev
 
 ---
 

@@ -43,8 +43,7 @@
 | **Slogan** | *Innovation already in motion* |
 | **Línea de negocio** | DELTA OPS — consultoría y optimización operativa |
 | **Producto tecnológico** | Plataforma SaaS empresarial de arquitectura agéntica |
-| **Web** | www.motrae.com |
-| **Contacto** | motrae.gmg@gmail.com · 228 353 6911 |
+| **Contacto** | motrae.gmg@gmail.com · 228 353 6911 · motrae.dev |
 
 ---
 
@@ -356,7 +355,7 @@ MOTRAE está estructurada para operar con capacidades de nivel *enterprise* desd
 | **Ubicación** | Xalapa, Veracruz · México |
 | **Email** | motrae.gmg@gmail.com |
 | **Teléfono** | 228 353 6911 |
-| **Web** | www.motrae.com |
+| **Sitio web** | motrae.dev |
 | **Horario de atención** | Lunes a viernes · 9:00 a 18:00 |
 
 ---
